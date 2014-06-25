@@ -47,6 +47,45 @@ module Validation {
             return s.length >= param[0] && s.length <=param[1];
         }
     }
+    /**
+     * Return true for valid identification number of CZE company,otherwise return false.
+     */
+    export class ICOValidator implements StringValidator {
+        public isAcceptable(input: string) {
+
+            if (input == undefined) return false;
+            if (input.length == 0) return false;
+
+            if (!/^\d+$/.test(input)) return false;
+
+            var Sci = new Array();
+            var Souc;
+            var Del = input.length;
+            var kon = parseInt(input.substring(Del, Del - 1), 10);// CLng(Right(strInput, 1));
+            //var Numer = parseInt(input.substring(0,Del - 1),10);
+            Del = Del - 1;
+            Souc = 0;
+            for (var a = 0; a < Del; a++) {
+                Sci[a] = parseInt(input.substr((Del - a) - 1, 1), 10);
+                Sci[a] = Sci[a] * (a + 2);
+                Souc = Souc + Sci[a];
+            }
+
+            if (Souc > 0) {
+                //var resul = 11 - (Souc % 11);
+                var resul = Souc % 11;
+                var mezi = Souc - resul;
+                resul = mezi + 11;
+                resul = resul - Souc;
+
+                if ((resul == 10 && kon == 0) || (resul == 11 && kon == 1) || (resul == kon))
+                    return true;
+            }
+            return false;
+        }
+    }
+
+
 
     export class CommonValidators
     {
@@ -80,17 +119,18 @@ module Validation {
             customFce: "{0}"
         };
 
-        private validators:{ [s: string]: Validation.StringValidator; } = {};
+        public Validators:{ [s: string]: StringValidator; } = {};
         constructor() {
-            this.validators["required"] = new RequiredValidator();
-            this.validators["minlength"] = new MinLengthValidator();
-            this.validators['maxlength'] = new MaxLengthValidator();
-            this.validators['zipCode'] = new Validation.ZipCodeValidator();
-            this.validators['lettersOnly'] = new Validation.LettersOnlyValidator();
+            this.Validators["required"] = new RequiredValidator();
+            this.Validators["minlength"] = new MinLengthValidator();
+            this.Validators['maxlength'] = new MaxLengthValidator();
+            this.Validators['zipCode'] = new ZipCodeValidator();
+            this.Validators['lettersOnly'] = new LettersOnlyValidator();
+            this.Validators['ico'] = new ICOValidator();
         }
 
         public CheckRule(rule:IRule):IError{
-            var validator = this.validators[rule.Method];
+            var validator = this.Validators[rule.Method];
             var hasError = false;
             var errMsg = "";
             if (validator == undefined) {
@@ -107,7 +147,6 @@ module Validation {
      * This class represents validator.
      */
     export interface IValidator extends IError {
-        Name: string;
         Validate(): boolean;
         Error: IError;
     }
@@ -152,7 +191,9 @@ module Validation {
             this.groupValidators.GetValue(key).push(item);
 
         }
-
+        public ValidateAll(){
+            this.Validate(Validators.ALL_GROUP_NAME);
+        }
         public Validate(key: string): void {
             if (key == undefined) return;
             if (key == "") {
@@ -194,9 +235,9 @@ module Validation {
      *  It represents a validation rule.
      */
     export class Validator implements IValidator {
-        public Error: IError = new Validation.Error();
+        public Error: IError = new Error();
 
-        constructor(public Name: string, private ValidateFce: IValidate) {
+        constructor(private ValidateFce: IValidate) {
 
         }
 

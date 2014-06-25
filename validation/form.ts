@@ -43,6 +43,7 @@ module Validation {
         public Validate():void
         {
             this.MetaRules.ValidateAll();
+            this.Validators.ValidateAll();
         }
     }
 }

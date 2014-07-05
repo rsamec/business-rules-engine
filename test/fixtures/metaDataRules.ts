@@ -1,7 +1,10 @@
 ///<reference path='../../typings/mocha/mocha.d.ts'/>
 ///<reference path='../../typings/node/node.d.ts'/>
+///<reference path='../../typings/underscore/underscore.d.ts'/>
+
 var f = require('../../validation/validation.js')
 var expect = require('expect.js');
+var _:UnderscoreStatic = require('underscore');
 
 describe('basic meta data validation rules', function () {
     var metaData = {
@@ -20,55 +23,59 @@ describe('basic meta data validation rules', function () {
         }
     };
 
-    var form;
 
     beforeEach(function(){
-
         //setup
-        form = new f.Validation.MetaForm(metaData);
+        this.MetaData = metaData;
+        this.Data = f.Validation.Util.generateData(this.MetaData);
+
+        this.MetaRules = new f.Validation.MetaDataRules(this.Data, this.MetaData);
+        this.Errors = new f.Validation.MetaRulesErrorInfo("Main", this.MetaRules);
+
     });
 
     it('fill correct data - no errors', function () {
 
         //excercise
-        var data = form.Data;
+        var data = this.Data;
         data.FirstName = "Jonh";
         data.LastName = "Smith";
 
-        form.Validate();
+        this.MetaRules.ValidateAll();
 
         //verify
-        expect(form.Errors.HasErrors).to.equal(false);
+        expect(this.Errors.HasErrors).to.equal(false);
     });
 
     it('fill incorrect data - no errors', function () {
 
-        //excercise
-        var data = form.Data;
+        //when
+        var data = this.Data;
         data.FirstName = "";
-        data.LastName = "Smith asdjflkasd fsajdfjlksajf sajfdsajdfj sadfjaslkjfdksajkfda";
+        data.LastName = "Smith toooooooooooooooooooooooooooooooo long";
 
-        form.Validate();
+        //excercise
+        this.MetaRules.ValidateAll();
 
         //verify
-        expect(form.Errors.HasErrors).to.equal(true);
+        expect(this.Errors.HasErrors).to.equal(true);
     });
 
     describe("fill incorrect data - rule optional", function() {
 
         beforeEach(function(){
             //setup
-            form = new f.Validation.MetaForm(metaData);
+
 
             //set rule optional when checked !=true;
             var optional = function () {
                 return !this.Checked;
-            }.bind(form.Data);
-            form.MetaRules.Rules["FirstName"].Error.Optional = optional;
-            form.MetaRules.Rules["LastName"].Error.Optional = optional;
+            }.bind(this.Data);
+            this.MetaRules.Rules["FirstName"].Error.Optional = optional;
+            this.MetaRules.Rules["LastName"].Error.Optional = optional;
 
-            form.Data.FirstName = "";
-            form.Data.LastName = "Smith asdjflkasd fsajdfjlksajf sajfdsajdfj sadfjaslkjfdksajkfda";
+            this.Data.FirstName = "";
+            this.Data.LastName = "Smith toooooooooooooooooooooooooooooooo long";
 
 
         });
@@ -76,27 +83,27 @@ describe('basic meta data validation rules', function () {
         it('is optional -> no errors', function () {
 
             //when
-            form.Data.Checked = false;
+            this.Data.Checked = false;
 
             //excercise
-            form.Validate();
+            this.MetaRules.ValidateAll();
 
             //verify
-            form.Errors.LogErrors();
-            expect(form.Errors.HasErrors).to.equal(false);
+            this.Errors.LogErrors();
+            expect(this.Errors.HasErrors).to.equal(false);
         });
 
         it('is not optional - some errors', function () {
 
             //when
-            form.Data.Checked = true;
+            this.Data.Checked = true;
 
             //excercise
-            form.Validate();
+            this.MetaRules.ValidateAll();
 
             //verify
-            form.Errors.LogErrors();
-            expect(form.Errors.HasErrors).to.equal(true);
+            this.Errors.LogErrors();
+            expect(this.Errors.HasErrors).to.equal(true);
         });
     });
 });

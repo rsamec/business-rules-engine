@@ -1,0 +1,37 @@
+<component name="libraryTable">
+  <library name="Generated files" type="javaScript">
+    <properties>
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/test/fixtures/rules.js" />
+        <item url="file://$PROJECT_DIR$/test/fixtures/validators.js" />
+        <item url="file://$PROJECT_DIR$/validation/errorInfo.js" />
+        <item url="file://$PROJECT_DIR$/validation/form.js" />
+        <item url="file://$PROJECT_DIR$/validation/util.js" />
+        <item url="file://$PROJECT_DIR$/validation/validation.js" />
+        <item url="file://$PROJECT_DIR$/test/fixtures/metaDataRules.js" />
+        <item url="file://$PROJECT_DIR$/validation/error.js" />
+        <item url="file://$PROJECT_DIR$/validation/rules.js" />
+        <item url="file://$PROJECT_DIR$/validation/validators.js" />
+        <item url="file://$PROJECT_DIR$/validation/common.js" />
+        <item url="file://$PROJECT_DIR$/test/fixtures/rulesNested.js" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/test/fixtures/validationFce.js" />
+      <root url="file://$PROJECT_DIR$/test/fixtures/validationFce.js" />
+      <root url="file://$PROJECT_DIR$/validation/errorInfo.js" />
+      <root url="file://$PROJECT_DIR$/validation/form.js" />
+      <root url="file://$PROJECT_DIR$/validation/util.js" />
+      <root url="file://$PROJECT_DIR$/validation/validation.js" />
+      <root url="file://$PROJECT_DIR$/test/fixtures/metaDataRules.js" />
+      <root url="file://$PROJECT_DIR$/test/fixtures/rules.js" />
+      <root url="file://$PROJECT_DIR$/test/fixtures/validators.js" />
+      <root url="file://$PROJECT_DIR$/validation/error.js" />
+      <root url="file://$PROJECT_DIR$/validation/rules.js" />
+      <root url="file://$PROJECT_DIR$/validation/validators.js" />
+      <root url="file://$PROJECT_DIR$/test/fixtures/rulesNested.js" />
+      <root url="file://$PROJECT_DIR$/validation/common.js" />
+    </CLASSES>
+    <SOURCES />
+  </library>
+</component>

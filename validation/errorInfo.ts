@@ -205,4 +205,20 @@ module Validation {
 
         }
     }
+
+    /**
+     *  It represents composition of error objects.
+     */
+    export class MetaRulesErrorInfo extends CompositeErrorInfo implements IErrorInfo {
+
+        constructor(public Name: string,public MetaRules:any) {
+
+            super(Name);
+
+            _.each(this.MetaRules.Rules, function(rule:any) {
+                this.Add(rule.Error);
+            },this);
+        }
+
+   }
 }

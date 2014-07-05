@@ -3,54 +3,77 @@
 ///<reference path='util.ts'/>
 ///<reference path='error.ts'/>
 ///<reference path='common.ts'/>
-///<reference path='rules.ts'/>
 
 module Validation {
 
+    /**
+     * It defines validation function.
+     */
+    export interface IValidate { (args: IError): void; }
 
-    export interface StringValidator {
-        isAcceptable(s: string,param?:any): boolean;
+
+    export interface IPropertyValidator{
+        isAcceptable(s: any): boolean;
+        metaTagName:string;
+    }
+    export interface IStringValidator extends IPropertyValidator{
+        isAcceptable(s: string): boolean;
     }
 
     var lettersRegexp = /^[A-Za-z]+$/;
-    export class LettersOnlyValidator implements StringValidator {
+    export class LettersOnlyValidator implements IStringValidator {
         isAcceptable(s: string) {
             return lettersRegexp.test(s);
         }
+        metaTagName = "lettersonly";
     }
 
     var numberRegexp = /^[0-9]+$/;
-    export class ZipCodeValidator implements StringValidator {
+    export class ZipCodeValidator implements IStringValidator {
         isAcceptable(s: string) {
             return s.length === 5 && numberRegexp.test(s);
         }
+        metaTagName = "zipcode";
     }
 
-    export class RequiredValidator implements StringValidator {
-        isAcceptable(s: string, param:number) {
+    export class RequiredValidator implements IStringValidator {
+        isAcceptable(s: string, param?:number) {
             return s != undefined && s != "";
         }
+        metaTagName = "required";
     }
 
-    export class MinLengthValidator implements StringValidator {
-        isAcceptable(s: string, param:number) {
-            return s.length >= param;
+    export class MinLengthValidator implements IStringValidator {
+        isAcceptable(s: string) {
+            return s.length >= this.MinLength;
         }
+        public MinLength:number = 0;
+
+        metaTagName = "minlength";
     }
-    export class MaxLengthValidator implements StringValidator {
-        isAcceptable(s: string, param:number) {
-            return s.length <= param;
+    export class MaxLengthValidator implements IStringValidator {
+        isAcceptable(s: string) {
+            return s.length <= this.MaxLength;
         }
+        public MaxLength:number = 0
+
+        metaTagName = "maxlength";
     }
-    export class RangeLengthValidator implements StringValidator {
-        isAcceptable(s: string, param:Array<number>) {
-            return s.length >= param[0] && s.length <=param[1];
+    export class RangeLengthValidator implements IStringValidator {
+        isAcceptable(s: string) {
+            return s.length >= this.MinLength && s.length <= this.MaxLength;
         }
+        public RangeLength:Array<number> = [0,0];
+
+        public get MinLength():number { return this.RangeLength[0]; }
+        public get MaxLength():number { return this.RangeLength[1]; }
+
+        metaTagName = "rangelength";
     }
     /**
      * Return true for valid identification number of CZE company,otherwise return false.
      */
-    export class ICOValidator implements StringValidator {
+    export class ICOValidator implements IStringValidator {
         public isAcceptable(input: string) {
 
             if (input == undefined) return false;
@@ -83,64 +106,8 @@ module Validation {
             }
             return false;
         }
-    }
 
-
-
-    export class CommonValidators
-    {
-        static messages = {
-            required: "Toto pole je povinné.",
-            remote: "Please fix this field.",
-            email: "Prosím, zadejte platnou emailovou adresu.",
-            url: "Prosím, zadejte validní url adresu.",
-            date: "Prosím, zadejte platné datum.",
-            dateISO: "Prosím, zadejte platné datum. (ISO).",
-            number: "Prosím, zadejte platné číslo.",
-            digits: "Prosím, zadejte platné přirozené číslo.",
-            signedDigits: "Prosím, zadejte platné celé číslo.",
-            creditcard: "Prosím, zadejte platné číslo karty.",
-            equalTo: "Prosím, zadejte stejnou hodnotu znovu.",
-            maxlength: "Prosím, zadejte méně než {0} znak(ů).",
-            minlength: "Prosím, zadejte více než {0} znak(ů).",
-            minlengthRokDiagnozy: "Prosím, zadejte rok ve správném formátu.",
-            rangelength: "Prosím, zadejte hodnotu s délkou mezi {0} a {1} znaků.",
-            range: "Prosím, zadejte hodnotu mezi {0} a {1}.",
-            max: "Prosím, zadejte hodnotu menší nebo rovno {0}.",
-            min: "Prosím, zadejte hodnotu větší nebo rovno {0}{1}.",
-            minCurrency: "Prosím, zadejte hodnotu větší nebo rovno {0}{1}.",
-            maxCurrency: "Prosím, zadejte hodnotu menší nebo rovno {0}{1}.",
-            step: "Prosím, zadejte hodnotu dělitelnou {0}.",
-            stepCurrency: "Prosím, zadejte hodnotu dělitelnou {0}{1}.",
-            param: "Prosím, zadejte hodnotu z číselníku {0}.",
-            mask: "Prosím, zadejte hodnotu ve tvaru {0}.",
-            dateCompare: "{0}",
-            dateCompareConst: "{0}",
-            customFce: "{0}"
-        };
-
-        public Validators:{ [s: string]: StringValidator; } = {};
-        constructor() {
-            this.Validators["required"] = new RequiredValidator();
-            this.Validators["minlength"] = new MinLengthValidator();
-            this.Validators['maxlength'] = new MaxLengthValidator();
-            this.Validators['zipCode'] = new ZipCodeValidator();
-            this.Validators['lettersOnly'] = new LettersOnlyValidator();
-            this.Validators['ico'] = new ICOValidator();
-        }
-
-        public CheckRule(rule:IRule):IError{
-            var validator = this.Validators[rule.Method];
-            var hasError = false;
-            var errMsg = "";
-            if (validator == undefined) {
-                hasError = true;
-                errMsg = "Validator for '"  + rule.Method +  "' not found.";
-            }
-            hasError = !validator.isAcceptable(rule.Context.Value, rule.Parameters);
-            errMsg =  StringFce.format(CommonValidators.messages[rule.Method],_.isArray(rule.Parameters)? rule.Parameters: [rule.Parameters]);
-            return { HasError: hasError, ErrorMessage: hasError ? errMsg: ""};
-        }
+        metaTagName = "ico";
     }
 
     /**

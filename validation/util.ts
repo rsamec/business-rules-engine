@@ -4,12 +4,12 @@ module Validation {
 
     export class StringFce{
         static format(s: string, args: any): string {
-            return s.replace(/{(\d+)}/g, function (match, number) {
-                return args[number] != undefined
-                    ? args[number]
-                    : ''
-                    ;
-            });
+            var formatted = s;
+            for (var prop in args) {
+                var regexp = new RegExp('\\{' + prop + '\\}', 'gi');
+                formatted = formatted.replace(regexp, args[prop]);
+            }
+            return formatted;
         }
     }
     /**
@@ -22,11 +22,18 @@ module Validation {
 
         public CLASS_NAME:string = 'util';
 
+        static RULE_PROPERTY_NAME:string = "rules";
+        static LABEL_PROPERTY_NAME:string = "label";
+
         constructor() {
 
         }
 
-
+        static generateData(metaData:any){
+            var data = {}
+            Util.generateDataEx(metaData,data);
+            return data;
+        }
 
         //TODO: find better way how to distinguish between data fields items and meta data information
         //TODO: better documentation

@@ -8,10 +8,6 @@ module Validation {
      */
     export interface IOptional { (): boolean; }
 
-    /**
-     * It defines validation function.
-     */
-    export interface IValidate { (args: IError): void; }
 
     /**
      *  This class represents simple generic dictinary.

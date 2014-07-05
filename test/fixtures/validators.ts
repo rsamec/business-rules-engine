@@ -4,7 +4,6 @@ var f = require('../../validation/validation.js')
 var expect = require('expect.js');
 
 describe('common validators', function () {
-    var validators = new f.Validation.CommonValidators().Validators;
 
     describe('checkICO', function () {
         var params = [
@@ -21,11 +20,12 @@ describe('common validators', function () {
             { input: "{}", result: false },
             { input: "fasdfa", result: false }
         ];
+        var icoValidator = new f.Validation.ICOValidator();
 
         for (var op in params) {
             (function (item) {
                 it('should check ico number ' + item.input + ' -> ' + item.result, function () {
-                    expect(item.result).to.equal(validators["ico"].isAcceptable(item.input));
+                    expect(item.result).to.equal(icoValidator.isAcceptable(item.input));
                 });
             })(params[op]);
         }
@@ -65,8 +65,11 @@ describe('custom validators', function () {
                 }
             }.bind(form.Data)
 
+            //add validator programatically - typically done declarative in directive
             var sameNameValidator = new f.Validation.Validator(customValidation);
             form.Validators.Add(sameNameValidator);
+
+            //add validator error
             var sameNameValidatorError = new f.Validation.ValidatorErrorInfo("SameNameValidator", sameNameValidator.Error);
             form.Errors.Add(sameNameValidatorError);
         });

@@ -49,7 +49,7 @@ describe('custom validators', function () {
         }
     }
     var form;
-    describe('the same names validator', function () {
+ /*   describe('the same names validator', function () {
         beforeEach(function () {
 
             //setup
@@ -103,5 +103,5 @@ describe('custom validators', function () {
             expect(form.Errors.HasErrors).to.equal(false);
 
         });
-    });
+    });*/
 });

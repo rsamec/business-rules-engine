@@ -1,12 +1,6 @@
-module Validation {
+///<reference path='abstract.ts'/>
 
-    /**
-     * basic error structure
-     */
-    export interface IError {
-        HasError: boolean;
-        ErrorMessage: string;
-    }
+module Validation {
 
     /**
      * basic error structure

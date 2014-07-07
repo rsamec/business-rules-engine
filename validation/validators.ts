@@ -1,24 +1,13 @@
 ///<reference path='../typings/underscore/underscore.d.ts'/>
+///<reference path='../typings/q/q.d.ts'/>
 
+///<reference path='abstract.ts'/>
 ///<reference path='util.ts'/>
 ///<reference path='error.ts'/>
+///<reference path='errorInfo.ts'/>
 ///<reference path='common.ts'/>
 
 module Validation {
-
-    /**
-     * It defines validation function.
-     */
-    export interface IValidate { (args: IError): void; }
-
-
-    export interface IPropertyValidator{
-        isAcceptable(s: any): boolean;
-        metaTagName:string;
-    }
-    export interface IStringValidator extends IPropertyValidator{
-        isAcceptable(s: string): boolean;
-    }
 
     var lettersRegexp = /^[A-Za-z]+$/;
     export class LettersOnlyValidator implements IStringValidator {
@@ -70,6 +59,26 @@ module Validation {
 
         metaTagName = "rangelength";
     }
+
+    export class ParamValidator implements IAsyncPropertyValidator {
+        isAcceptable(s: string):Q.Promise<boolean> {
+            var deferred = Q.defer<boolean>();
+
+            this.Options.then(function(result){
+                var hasSome = _.some(result, function(item){
+                    return item.text == s;
+                })
+                if (hasSome) deferred.resolve(true);
+                deferred.resolve(false);
+            })
+
+            return deferred.promise;
+        }
+        public ParamId:string;
+        public Options:Q.Promise<Array<any>>;
+
+        metaTagName = "param";
+    }
     /**
      * Return true for valid identification number of CZE company,otherwise return false.
      */
@@ -110,13 +119,6 @@ module Validation {
         metaTagName = "ico";
     }
 
-    /**
-     * This class represents validator.
-     */
-    export interface IValidator extends IError {
-        Validate(): boolean;
-        Error: IError;
-    }
 
     /**
      * It represents the collection of validators - it is grouped by validator groups.
@@ -124,10 +126,11 @@ module Validation {
      * @class validators
      * @constructor
      **/
-    export class Validators {
+    /*export class Validators {
 
         static NO_GROUP_NAME: string = "NoGroup";
         static ALL_GROUP_NAME: string = "All";
+
 
         validators: Array<IValidator> = [];
         groupValidators: IDictionary<string, Array<IValidator>> = new Dictionary<string, Array<IValidator>>();
@@ -195,33 +198,39 @@ module Validation {
             }
         }
 
-    }
+    }*/
 
 
     /**
      *  It represents a validation rule.
      */
-    export class Validator implements IValidator {
+    export class Validator extends ErrorInfo implements IValidator  {
         public Error: IError = new Error();
 
-        constructor(private ValidateFce: IValidate) {
-
+        constructor (public Name:string,private ValidateFce: IValidate) {
+            super(Name);
         }
-
-        public Validate() {
-
-            this.ValidateFce(this.Error);
+        public Optional:IOptional;
+        public Validate(context:any) {
+            this.ValidateFce.bind(context)(this.Error);
             return this.HasError;
         }
 
-        get HasErrors(): boolean {
+        public get HasError():boolean{
+            return this.HasErrors;
+        }
+
+
+        public get HasErrors(): boolean {
+            if (this.Optional != undefined && _.isFunction(this.Optional) && this.Optional()) return false;
             return this.Error.HasError;
         }
 
-        get HasError(): boolean {
-            return this.Error.HasError;
+        public get ErrorCount(): number {
+            return this.HasErrors ? 1 : 0;
         }
-        get ErrorMessage(): string {
+        public get ErrorMessage(): string {
+            if (!this.HasErrors) return "";
             return this.Error.ErrorMessage;
         }
     }

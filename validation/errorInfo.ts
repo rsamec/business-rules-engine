@@ -1,50 +1,10 @@
 ///<reference path='../typings/underscore/underscore.d.ts'/>
 
+///<reference path='abstract.ts'/>
 ///<reference path='common.ts'/>
 ///<reference path='error.ts'/>
 
-
 module Validation {
-
-    /**
-     * This class provides unit of information about error.
-     * Implements composite design pattern to enable nesting of error informations.
-     */
-    export interface IErrorInfo {
-        /**
-         * The name of error collection.
-         */
-        Name: string;
-
-        /**
-         * Add error information to child collection of errors.
-         * @param errorInfo - error information to be added
-         */
-        Add(errorInfo:IErrorInfo): void;
-
-
-        Remove(index:number): void;
-
-        /**
-         * Return collections of child errors information.
-         */
-        Children: Array<IErrorInfo>;
-
-        /**
-         * Return true if there is any error.
-         */
-        HasErrors: boolean;
-        /**
-         * Return error message, if there is no error, return empty string.
-         */
-        ErrorMessage: string;
-        /**
-         * Return number of errors.
-         */
-        ErrorCount: number;
-
-        Optional?: IOptional;
-    }
 
     /**
      *  It represents simple abstract error object.

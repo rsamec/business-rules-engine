@@ -9,6 +9,7 @@
         <item url="file://$PROJECT_DIR$/validation/util.js" />
         <item url="file://$PROJECT_DIR$/validation/validation.js" />
         <item url="file://$PROJECT_DIR$/test/fixtures/metaDataRules.js" />
+        <item url="file://$PROJECT_DIR$/validation/abstract.js" />
         <item url="file://$PROJECT_DIR$/validation/error.js" />
         <item url="file://$PROJECT_DIR$/validation/rules.js" />
         <item url="file://$PROJECT_DIR$/validation/validators.js" />
@@ -26,6 +27,7 @@
       <root url="file://$PROJECT_DIR$/test/fixtures/metaDataRules.js" />
       <root url="file://$PROJECT_DIR$/test/fixtures/rules.js" />
       <root url="file://$PROJECT_DIR$/test/fixtures/validators.js" />
+      <root url="file://$PROJECT_DIR$/validation/abstract.js" />
       <root url="file://$PROJECT_DIR$/validation/error.js" />
       <root url="file://$PROJECT_DIR$/validation/rules.js" />
       <root url="file://$PROJECT_DIR$/validation/validators.js" />

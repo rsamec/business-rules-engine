@@ -1,24 +1,9 @@
 ///<reference path='../typings/underscore/underscore.d.ts'/>
+
+///<reference path='abstract.ts'/>
 ///<reference path='error.ts'/>
 
 module Validation {
-
-    /**
-     * It defines conditional function.
-     */
-    export interface IOptional { (): boolean; }
-
-
-    /**
-     *  This class represents simple generic dictinary.
-     */
-    export interface IDictionary<K, V>
-    {
-        Add(key: K, value: V): void;
-        GetValue(key: K): V;
-        ContainsKey(key: K): boolean;
-        Values(): Array<V>;
-    }
 
     /**
      *  This class represents simple generic dictinary.

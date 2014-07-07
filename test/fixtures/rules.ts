@@ -5,6 +5,7 @@
 var f = require('../../validation/validation.js')
 var expect = require('expect.js');
 var _:UnderscoreStatic = require('underscore');
+var Q = require('q');
 
 interface IPerson{
     Checked:boolean;
@@ -21,13 +22,30 @@ describe('basic validation rules', function () {
     var maxLength = new f.Validation.MaxLengthValidator();
     maxLength.MaxLength = 15;
 
+    var param = new f.Validation.ParamValidator();
+    param.ParamId = "jobs";
+    var optionsFce = function() {
+        var deferral = Q.defer();
+        setTimeout(function () {
+            deferral.resolve([
+                { "value": 1, "text": "aranžér" },
+                { "value": 2, "text": "stavař" },
+                { "value": 3, "text": "programátor" },
+                { "value": 3, "text": "nezaměstnaný" }
+            ]);
+        }, 1000);
+        return deferral.promise;
+    };
+    param.Options = optionsFce();
+
+
     personValidator.RuleFor("FirstName", required);
     personValidator.RuleFor("FirstName",maxLength);
 
     personValidator.RuleFor("LastName", required);
     personValidator.RuleFor("LastName",maxLength);
 
-
+    personValidator.RuleFor("Job",param);
 
     var oneSpaceFce = function(args:any){
         args.HasError = false;
@@ -39,46 +57,71 @@ describe('basic validation rules', function () {
             return;
         }
     }
+    var validatorFce = {Name:"OneSpaceForbidden", ValidationFce:oneSpaceFce};
+    personValidator.ValidatorFor("FirstName",validatorFce);
+    personValidator.ValidatorFor("LastName",validatorFce);
+
+
 
 
     var person:IPerson = {
         Checked:true,
         FirstName:"Roman",
-        LastName:"Samec"
+        LastName:"Samec",
+        Job:"stavař"
     };
 
     beforeEach(function(){
         //setup
         this.Data = person;
         this.PersonValidator = personValidator.CreateRule("Person");
-        this.PersonValidator.AddValidation(new f.Validation.Validator(oneSpaceFce.bind(this.Data)),"FullNameOneSpace");
 
     });
 
-    it('fill correct data - no errors', function () {
+    it('fill correct data - no errors', function (done) {
 
-        //excercise
+        //when
         this.Data.FirstName = "Jonh";
         this.Data.LastName = "Smith";
+        this.Data.Job = "stavař";
 
+        //excercise
         var result = this.PersonValidator.Validate(this.Data);
+        var promiseResult = this.PersonValidator.ValidateAsync(this.Data);
 
+        var errorInfo = this.PersonValidator.ErrorInfo;
+        promiseResult.then(function (response) {
 
-        //verify
-        expect(this.PersonValidator.ErrorInfo.HasErrors).to.equal(false);
+           //verify
+           expect(errorInfo.HasErrors).to.equal(false);
+
+           done();
+
+        }).done(null,done);
     });
 
-    it('fill incorrect data - no errors', function () {
+    it('fill incorrect data - some errors', function (done) {
 
         //when
         this.Data.FirstName = "";
         this.Data.LastName = "Smith toooooooooooooooooooooooooooooooo long";
+        this.Data.Job ="unknow job";
 
         //excercise
         var result = this.PersonValidator.Validate(this.Data);
+        var promiseResult = this.PersonValidator.ValidateAsync(this.Data);
 
-        //verify
-        expect(this.PersonValidator.ErrorInfo.HasErrors).to.equal(true);
+        var selfValidator = this.PersonValidator;
+        promiseResult.then(function (response) {
+
+            selfValidator.ErrorInfo.LogErrors();
+
+            //verify
+            expect(selfValidator.ErrorInfo.HasErrors).to.equal(true);
+
+            done();
+
+        }).done(null,done);
     });
 
     describe("fill incorrect data - rule optional", function() {
@@ -91,39 +134,60 @@ describe('basic validation rules', function () {
                 return !this.Checked;
             }.bind(this.Data);
 
-            this.PersonValidator.Rules["FirstName"].Optional = optional;
-            this.PersonValidator.Rules["LastName"].Optional = optional;
+//            this.PersonValidator.Rules["FirstName"].Optional = optional;
+//            this.PersonValidator.Rules["LastName"].Optional = optional;
+//            this.PersonValidator.Rules["Job"].Optional = optional;
+
+            this.PersonValidator.SetOptional(optional);
 
             this.Data.FirstName = "";
             this.Data.LastName = "Smith toooooooooooooooooooooooooooooooo long";
+            this.Data.Job ="unknow job";
 
 
         });
 
-        it('is optional -> no errors', function () {
+        it('is optional -> no errors', function (done) {
 
             //when
             this.Data.Checked = false;
 
             //excercise
             var result = this.PersonValidator.Validate(this.Data);
+            var promiseResult = this.PersonValidator.ValidateAsync(this.Data);
 
-            //verify
-            this.PersonValidator.ErrorInfo.LogErrors();
-            expect(this.PersonValidator.ErrorInfo.HasErrors).to.equal(false);
+            var selfValidator = this.PersonValidator;
+            promiseResult.then(function (response) {
+
+                //verify
+                selfValidator.ErrorInfo.LogErrors();
+                expect(selfValidator.ErrorInfo.HasErrors).to.equal(false);
+
+                done();
+
+            }).done(null,done);
         });
 
-        it('is not optional - some errors', function () {
+        it('is not optional - some errors', function (done) {
 
             //when
             this.Data.Checked = true;
 
             //excercise
             var result = this.PersonValidator.Validate(this.Data);
+            var promiseResult = this.PersonValidator.ValidateAsync(this.Data);
 
             //verify
-            this.PersonValidator.ErrorInfo.LogErrors();
-            expect(this.PersonValidator.ErrorInfo.HasErrors).to.equal(true);
+            var selfValidator = this.PersonValidator;
+            promiseResult.then(function (response) {
+
+                //verify
+                selfValidator.ErrorInfo.LogErrors();
+                expect(selfValidator.ErrorInfo.HasErrors).to.equal(true);
+
+                done();
+
+            }).done(null,done);
         });
     });
 });

@@ -1,10 +1,61 @@
 ///<reference path='../typings/underscore/underscore.d.ts'/>
 
-///<reference path='abstract.ts'/>
-///<reference path='common.ts'/>
 ///<reference path='error.ts'/>
 
 module Validation {
+
+    /**
+     * It defines conditional function.
+     */
+    export interface IOptional { (): boolean; }
+
+
+    /**
+     * This class provides unit of information about error.
+     * Implements composite design pattern to enable nesting of error information.
+     */
+    export interface IErrorInfo {
+
+        /**
+         * The name of error collection.
+         */
+        Name: string;
+
+        /**
+         * Add error information to child collection of errors.
+         * @param errorInfo - error information to be added.
+         */
+        Add(errorInfo:IErrorInfo): void;
+
+        /**
+         * Remove error information from child collection of errors.
+         * @param index - index of error information to be removed.
+         */
+        Remove(index:number): void;
+
+        /**
+         * Return collections of child errors information.
+         */
+        Children: Array<IErrorInfo>;
+
+        /**
+         * Return true if there is any error.
+         */
+        HasErrors: boolean;
+        /**
+         * Return error message, if there is no error, return empty string.
+         */
+        ErrorMessage: string;
+        /**
+         * Return number of errors.
+         */
+        ErrorCount: number;
+
+        /**
+         * It enables to have errors optional.
+         */
+        Optional?: IOptional;
+    }
 
     /**
      *  It represents simple abstract error object.
@@ -63,29 +114,6 @@ module Validation {
             return _.reduce(_.values(this.MetaErrors), function (memo, error:IError) {
                 return memo + error.ErrorMessage;
             }, "");
-        }
-    }
-
-    /**
-     *  It represents simple validator error object.
-     */
-    export class ValidatorErrorInfo extends ErrorInfo implements IErrorInfo {
-
-        constructor(public Name: string,public Error: IError ) {
-            super(Name);
-        }
-
-        public get HasErrors(): boolean {
-            if (this.Optional != undefined && _.isFunction(this.Optional) && this.Optional()) return false;
-            return this.Error.HasError;
-        }
-
-        public get ErrorCount(): number {
-            return this.HasErrors ? 1 : 0;
-        }
-        public get ErrorMessage(): string {
-            if (!this.HasErrors) return "";
-            return this.Error.ErrorMessage;
         }
     }
 
@@ -165,20 +193,4 @@ module Validation {
 
         }
     }
-
-    /**
-     *  It represents composition of error objects.
-     */
-    export class MetaRulesErrorInfo extends CompositeErrorInfo implements IErrorInfo {
-
-        constructor(public Name: string,public MetaRules:any) {
-
-            super(Name);
-
-            _.each(this.MetaRules.Rules, function(rule:any) {
-                this.Add(rule.Error);
-            },this);
-        }
-
-   }
 }

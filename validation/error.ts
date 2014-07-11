@@ -1,6 +1,12 @@
-///<reference path='abstract.ts'/>
-
 module Validation {
+
+    /**
+     * basic error structure
+     */
+    export interface IError {
+        HasError: boolean;
+        ErrorMessage: string;
+    }
 
     /**
      * basic error structure
@@ -12,7 +18,7 @@ module Validation {
 
         public CLASS_NAME:string = 'error';
 
-        public HasError: boolean = false;
+        public HasError: boolean = true;
         public ErrorMessage: string = "";
 
         constructor() {

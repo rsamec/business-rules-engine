@@ -58,8 +58,8 @@ describe('basic validation rules', function () {
         }
     }
     var validatorFce = {Name:"OneSpaceForbidden", ValidationFce:oneSpaceFce};
-    personValidator.ValidatorFor("FirstName",validatorFce);
-    personValidator.ValidatorFor("LastName",validatorFce);
+    personValidator.ValidationFor("FirstName",validatorFce);
+    personValidator.ValidationFor("LastName",validatorFce);
 
 
 
@@ -70,6 +70,8 @@ describe('basic validation rules', function () {
         LastName:"Samec",
         Job:"stavař"
     };
+
+
 
     beforeEach(function(){
         //setup

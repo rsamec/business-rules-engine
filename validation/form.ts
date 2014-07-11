@@ -1,8 +1,8 @@
-///<reference path='abstract.ts'/>
 ///<reference path='errorInfo.ts'/>
 ///<reference path='validators.ts'/>
 ///<reference path='util.ts'/>
 ///<reference path='rules.ts'/>
+///<reference path='metaDataRules.ts'/>
 
 module Validation {
 

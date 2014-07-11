@@ -5,7 +5,7 @@ var expect = require('expect.js');
 
 describe('common validators', function () {
 
-    describe('checkICO', function () {
+   /* describe('checkICO', function () {
         var params = [
             { input: "70577200", result: true},
             { input: "3457890", result: false },
@@ -29,7 +29,7 @@ describe('common validators', function () {
                 });
             })(params[op]);
         }
-    });
+    });*/
 });
 
 describe('custom validators', function () {

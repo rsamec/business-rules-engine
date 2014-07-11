@@ -1,35 +1,96 @@
 ///<reference path='../typings/underscore/underscore.d.ts'/>
 ///<reference path='../typings/q/q.d.ts'/>
+///<reference path='../typings/moment/moment.d.ts'/>
 
-///<reference path='abstract.ts'/>
 ///<reference path='util.ts'/>
-///<reference path='error.ts'/>
-///<reference path='errorInfo.ts'/>
-///<reference path='common.ts'/>
 
 module Validation {
+
+    /**
+     * It represents a property validator for atomic object.
+     */
+    export interface IPropertyValidator{
+        isAcceptable(s: any): boolean;
+        tagName:string;
+    }
+
+    /**
+     * It represents a property validator for simple string value.
+     */
+    export interface IStringValidator extends IPropertyValidator{
+        isAcceptable(s: string): boolean;
+    }
+
+    /**
+     * It represents an async property validator for atomic object.
+     */
+    export interface IAsyncPropertyValidator{
+        isAcceptable(s: any): Q.Promise<boolean>;
+        isAsync:boolean;
+        tagName:string;
+    }
+
+    /**
+     * It represents an async property validator for simple string value.
+     */
+    export interface IAsyncStringPropertyValidator extends  IAsyncPropertyValidator{
+        isAcceptable(s: string): Q.Promise<boolean>;
+    }
+
+    /**
+     * It defines compare operators.
+     */
+    export enum CompareOperator {
+        //must be less than
+        LessThan,
+
+        //cannot be more than
+        LessThanEqual,
+
+        //must be the same as
+        Equal,
+
+        //must be different from
+        NotEqual,
+
+        //cannot be less than
+        GreaterThanEqual,
+
+        //must be more than
+        GreaterThan
+    }
+
 
     var lettersRegexp = /^[A-Za-z]+$/;
     export class LettersOnlyValidator implements IStringValidator {
         isAcceptable(s: string) {
             return lettersRegexp.test(s);
         }
-        metaTagName = "lettersonly";
+        tagName = "lettersonly";
     }
 
     var numberRegexp = /^[0-9]+$/;
     export class ZipCodeValidator implements IStringValidator {
-        isAcceptable(s: string) {
+        isAcceptable(s:string) {
             return s.length === 5 && numberRegexp.test(s);
         }
-        metaTagName = "zipcode";
+
+        tagName = "zipcode";
+    }
+
+    var emailRegexp = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i;
+    export class EmailValidator implements IStringValidator {
+        isAcceptable(s: string) {
+            return emailRegexp.test(s);
+        }
+        tagName = "email";
     }
 
     export class RequiredValidator implements IStringValidator {
         isAcceptable(s: string, param?:number) {
             return s != undefined && s != "";
         }
-        metaTagName = "required";
+        tagName = "required";
     }
 
     export class MinLengthValidator implements IStringValidator {
@@ -38,15 +99,16 @@ module Validation {
         }
         public MinLength:number = 0;
 
-        metaTagName = "minlength";
+        tagName = "minlength";
     }
     export class MaxLengthValidator implements IStringValidator {
+        constructor (public MaxLength?:number){
+            if (MaxLength == undefined) MaxLength = 0;
+        }
         isAcceptable(s: string) {
             return s.length <= this.MaxLength;
         }
-        public MaxLength:number = 0
-
-        metaTagName = "maxlength";
+        tagName = "maxlength";
     }
     export class RangeLengthValidator implements IStringValidator {
         isAcceptable(s: string) {
@@ -57,7 +119,7 @@ module Validation {
         public get MinLength():number { return this.RangeLength[0]; }
         public get MaxLength():number { return this.RangeLength[1]; }
 
-        metaTagName = "rangelength";
+        tagName = "rangelength";
     }
 
     export class ParamValidator implements IAsyncPropertyValidator {
@@ -77,161 +139,8 @@ module Validation {
         public ParamId:string;
         public Options:Q.Promise<Array<any>>;
 
-        metaTagName = "param";
-    }
-    /**
-     * Return true for valid identification number of CZE company,otherwise return false.
-     */
-    export class ICOValidator implements IStringValidator {
-        public isAcceptable(input: string) {
-
-            if (input == undefined) return false;
-            if (input.length == 0) return false;
-
-            if (!/^\d+$/.test(input)) return false;
-
-            var Sci = new Array();
-            var Souc;
-            var Del = input.length;
-            var kon = parseInt(input.substring(Del, Del - 1), 10);// CLng(Right(strInput, 1));
-            //var Numer = parseInt(input.substring(0,Del - 1),10);
-            Del = Del - 1;
-            Souc = 0;
-            for (var a = 0; a < Del; a++) {
-                Sci[a] = parseInt(input.substr((Del - a) - 1, 1), 10);
-                Sci[a] = Sci[a] * (a + 2);
-                Souc = Souc + Sci[a];
-            }
-
-            if (Souc > 0) {
-                //var resul = 11 - (Souc % 11);
-                var resul = Souc % 11;
-                var mezi = Souc - resul;
-                resul = mezi + 11;
-                resul = resul - Souc;
-
-                if ((resul == 10 && kon == 0) || (resul == 11 && kon == 1) || (resul == kon))
-                    return true;
-            }
-            return false;
-        }
-
-        metaTagName = "ico";
+        isAsync = true;
+        tagName = "param";
     }
 
-
-    /**
-     * It represents the collection of validators - it is grouped by validator groups.
-     *
-     * @class validators
-     * @constructor
-     **/
-    /*export class Validators {
-
-        static NO_GROUP_NAME: string = "NoGroup";
-        static ALL_GROUP_NAME: string = "All";
-
-
-        validators: Array<IValidator> = [];
-        groupValidators: IDictionary<string, Array<IValidator>> = new Dictionary<string, Array<IValidator>>();
-
-        public Add(item: IValidator, key: string) {
-            //pridam validator do obecne skupiny vsech validatoru
-            this.validators.push(item);
-
-            if (key == undefined || !_.isString(key) || key == "") {
-                this.AddGroup(item, Validators.NO_GROUP_NAME);
-                return;
-            }
-
-            var groups = key.split(",");
-
-            for (var i = 0; i != groups.length; i++) {
-                this.AddGroup(item, groups[i]);
-            }
-        }
-        private AddGroup(item: IValidator, key: string) {
-
-            //vytvorim skupinu validatoru
-            if (!this.groupValidators.ContainsKey(key)) {
-                this.groupValidators.Add(key, new Array());
-            }
-
-            //pridam validator do skupiny
-            this.groupValidators.GetValue(key).push(item);
-
-        }
-        public ValidateAll(){
-            this.Validate(Validators.ALL_GROUP_NAME);
-        }
-        public Validate(key: string): void {
-            if (key == undefined) return;
-            if (key == "") {
-                //volam vsechny nezařazené validatory
-                this.ValidateGroup(Validators.NO_GROUP_NAME);
-
-            }
-            else if (key == Validators.ALL_GROUP_NAME) {
-                //volam vsechny validatory
-                var validators = this.validators;
-                for (var i = 0; i != validators.length; i++) {
-                    validators[i].Validate();
-                }
-            }
-            else {
-                //volam vsechny nezařazené validatory
-                this.ValidateGroup(Validators.NO_GROUP_NAME);
-
-                //volam pouze validatory pro predane skupiny
-                var groups = key.split(",");
-                for (var i = 0; i != groups.length; i++) {
-                    this.ValidateGroup(groups[i]);
-                }
-            }
-        }
-        private ValidateGroup(key: string): void {
-            if (key == undefined || !_.isString(key) || key == "") return;
-            if (!this.groupValidators.ContainsKey(key)) return;
-            var validators = this.groupValidators.GetValue(key)
-            for (var i = 0; i != validators.length; i++) {
-                validators[i].Validate();
-            }
-        }
-
-    }*/
-
-
-    /**
-     *  It represents a validation rule.
-     */
-    export class Validator extends ErrorInfo implements IValidator  {
-        public Error: IError = new Error();
-
-        constructor (public Name:string,private ValidateFce: IValidate) {
-            super(Name);
-        }
-        public Optional:IOptional;
-        public Validate(context:any) {
-            this.ValidateFce.bind(context)(this.Error);
-            return this.HasError;
-        }
-
-        public get HasError():boolean{
-            return this.HasErrors;
-        }
-
-
-        public get HasErrors(): boolean {
-            if (this.Optional != undefined && _.isFunction(this.Optional) && this.Optional()) return false;
-            return this.Error.HasError;
-        }
-
-        public get ErrorCount(): number {
-            return this.HasErrors ? 1 : 0;
-        }
-        public get ErrorMessage(): string {
-            if (!this.HasErrors) return "";
-            return this.Error.ErrorMessage;
-        }
-    }
 }

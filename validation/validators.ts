@@ -2,17 +2,16 @@
 ///<reference path='../typings/q/q.d.ts'/>
 ///<reference path='../typings/moment/moment.d.ts'/>
 
-///<reference path='util.ts'/>
-
 module Validation {
 
-    /**
-     * It represents a property validator for atomic object.
-     */
-    export interface IPropertyValidator{
-        isAcceptable(s: any): boolean;
-        tagName:string;
-    }
+        /**
+         * It represents a property validator for atomic object.
+         */
+        export interface IPropertyValidator{
+            isAcceptable(s: any): boolean;
+            getErrorMessage?(localization:any):string;
+            tagName?:string;
+        }
 
     /**
      * It represents a property validator for simple string value.
@@ -26,8 +25,9 @@ module Validation {
      */
     export interface IAsyncPropertyValidator{
         isAcceptable(s: any): Q.Promise<boolean>;
+        getErrorMessage?(localization:any):string;
         isAsync:boolean;
-        tagName:string;
+        tagName?:string;
     }
 
     /**
@@ -60,6 +60,16 @@ module Validation {
         GreaterThan
     }
 
+    export class StringFce{
+        static format(s: string, args: any): string {
+            var formatted = s;
+            for (var prop in args) {
+                var regexp = new RegExp('\\{' + prop + '\\}', 'gi');
+                formatted = formatted.replace(regexp, args[prop]);
+            }
+            return formatted;
+        }
+    }
 
     var lettersRegexp = /^[A-Za-z]+$/;
     export class LettersOnlyValidator implements IStringValidator {

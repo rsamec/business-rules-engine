@@ -1,0 +1,75 @@
+@ngdoc overview
+@name Tutorial
+@step -1
+@description
+
+# Validation engine tutorial
+
+A great way to get introduced to work with validation engine is to work through this tutorial, which walks you through
+the construction of various types of validation rules.
+
+## Validation engine advantages
+
+* There is no dependencies on HTML DOM.
+* It enables to decorate custom objects with validation rules.
+* It enables to composite validation rules with custom object with nested structures.
+* Ease to create your own custom validators.
+* Support for async validation rules.
+* Support for array validation rules - enables to use validation for lists.
+* Support for AMD,CommonJS or plain script module pattern.
+* Extensible repository of custom validators.
+* Validation messages localization.
+
+## Types of validators and validation rules
+
+* Custom property validator
+* Custom object validator
+    *   with property validation rules
+    *   with property async validation rules
+    *   with shared validation rules
+*   Composite object validator
+
+## Dependencies
+
+The validation is not dependend on HTML DOM.
+The only depedency is on underscore.
+Some examples show custom validation rules that has other dependencies.
+
+## List of basic property validators
+
+
+
+## Localization messages
+
+  "required": "This field is required.",
+            "remote": "Please fix the field.",
+            "email": "Please enter a valid email address.",
+            "url": "Please enter a valid URL.",
+            "date": "Please enter a valid date.",
+            "dateISO": "Please enter a valid date ( ISO ).",
+            "number": "Please enter a valid number.",
+            "digits": "Please enter only digits.",
+            "signedDigits": "Please enter only signed digits.",
+            "creditcard": "Please enter a valid credit card number.",
+            "equalTo": "Please enter the same value again.",
+            "maxlength": "Please enter no more than {MaxLength} characters..",
+            "minlength": "Please enter at least {MinLength} characters.",
+            "rangelength": "Please enter a value between {MinLength} and {MaxLength} characters long.",
+            "range": "Please enter a value between {Min} and {Max}.",
+            "max": "Please enter a value less than or equal to {Max}.",
+            "min": "Please enter a value greater than or equal to {Min}.",
+            "step": "Please enter a value with step {Step}.",
+            "param": "Please enter a value from {ParamId}.",
+            "mask": "Please enter a value corresponding with {Mask}.",
+            "dateCompare": {
+                Format: "MM/DD/YYYY",
+                LessThan: "Please enter date less than {CompareTo}.",
+                LessThanEqual: "Please enter date less than or equal {CompareTo}.",
+                Equal: "Please enter date equal {CompareTo}.",
+                NotEqual: "Please enter date different than {CompareTo}.",
+                GreaterThanEqual: "Please enter date greater than or equal {CompareTo}.",
+                GreaterThan: "Please enter date greter than {CompareTo}."
+            },
+
+
+...

@@ -104,38 +104,37 @@ describe('nested validation rules', function () {
 
     var mainValidator = createMainValidator();
 
-    var contact = {
-        Email:'rsamec@csc.com',
-        Mobile:{
-            CountryCode:'CZE',
-            Number:'736483690'
-        },
-        FixedLine:{
-            CountryCode:'USA',
-            Number:'736483690'
-        }
-    };
-
-    var getData = function () {
-        return{
-            Person1: {
-                Checked:true,
-                FirstName: "John",
-                LastName: "Smith",
-                Contact: contact
-            },
-            Person2: {
-                Checked:true,
-                FirstName: "Adam",
-                LastName: "Novak",
-                Contact: contact
-            }
-        }
-    };
-
     beforeEach(function(){
 
         //setup
+        var getData = function () {
+            var contact = {
+                Email:'mail@gmail.com',
+                Mobile:{
+                    CountryCode:'CZE',
+                    Number:'736483690'
+                },
+                FixedLine:{
+                    CountryCode:'USA',
+                    Number:'736483690'
+                }
+            };
+            return{
+                Person1: {
+                    Checked:true,
+                    FirstName: "John",
+                    LastName: "Smith",
+                    Contact: contact
+                },
+                Person2: {
+                    Checked:true,
+                    FirstName: "Adam",
+                    LastName: "Novak",
+                    Contact: contact
+                }
+            }
+        };
+
         this.Data = getData();
         this.MainValidator =  mainValidator.CreateRule("Main");
 
@@ -145,7 +144,6 @@ describe('nested validation rules', function () {
 
         //when
 
-
         //excercise
         var result = this.MainValidator.Validate(this.Data);
         var promiseResult = this.MainValidator.ValidateAsync(this.Data);
@@ -154,10 +152,10 @@ describe('nested validation rules', function () {
         var selfValidator = this.MainValidator;
         promiseResult.then(function (response) {
 
-            selfValidator.ErrorInfo.LogErrors();
+            selfValidator.ValidationResult.LogErrors();
 
             //verify
-            expect(selfValidator.ErrorInfo.HasErrors).to.equal(false);
+            expect(selfValidator.ValidationResult.HasErrors).to.equal(false);
 
             done();
 
@@ -168,10 +166,10 @@ describe('nested validation rules', function () {
     it('fill incorrect data - some errors', function (done) {
 
         //when
-        //nested error
+        //nested property error
         this.Data.Person1.Contact.Email = "";
 
-        //async nested error
+        //async nested property error
         this.Data.Person1.Contact.Mobile.CountryCode = "BLA";
 
         //excercise
@@ -182,10 +180,10 @@ describe('nested validation rules', function () {
         var selfValidator = this.MainValidator;
         promiseResult.then(function (response) {
 
-            selfValidator.ErrorInfo.LogErrors();
+            selfValidator.ValidationResult.LogErrors();
 
             //verify
-            expect(selfValidator.ErrorInfo.HasErrors).to.equal(true);
+            expect(selfValidator.ValidationResult.HasErrors).to.equal(true);
 
             done();
 
@@ -228,10 +226,10 @@ describe('nested validation rules', function () {
             var selfValidator = this.MainValidator;
             promiseResult.then(function (response) {
 
-                selfValidator.ErrorInfo.LogErrors();
+                selfValidator.ValidationResult.LogErrors();
 
                 //verify
-                expect(selfValidator.ErrorInfo.HasErrors).to.equal(false);
+                expect(selfValidator.ValidationResult.HasErrors).to.equal(false);
 
                 done();
 
@@ -253,10 +251,10 @@ describe('nested validation rules', function () {
             var selfValidator = this.MainValidator;
             promiseResult.then(function (response) {
 
-                selfValidator.ErrorInfo.LogErrors();
+                selfValidator.ValidationResult.LogErrors();
 
                 //verify
-                expect(selfValidator.ErrorInfo.HasErrors).to.equal(false);
+                expect(selfValidator.ValidationResult.HasErrors).to.equal(false);
 
                 done();
 

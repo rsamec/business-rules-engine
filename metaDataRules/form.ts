@@ -1,13 +1,14 @@
-///<reference path='errorInfo.ts'/>
-///<reference path='validators.ts'/>
+///<reference path='../validation/errors.ts'/>
+///<reference path='../validation/validators.ts'/>
+///<reference path='../validation/rules.ts'/>
+
 ///<reference path='util.ts'/>
-///<reference path='rules.ts'/>
 ///<reference path='metaDataRules.ts'/>
 
 module Validation {
 
     export interface IForm {
-        Errors:IErrorInfo;
+        Errors:IValidationResult;
         //Validators:Validators;
 
         Validate():void;
@@ -23,7 +24,7 @@ module Validation {
 
         public CLASS_NAME:string = 'form';
 
-        public Errors:IErrorInfo = new CompositeErrorInfo("Main form");
+        public Errors:IValidationResult = new CompositeValidationResult("Main form");
         //public Validators:Validators = new Validators();
 
         public MetaRules:MetaDataRules;

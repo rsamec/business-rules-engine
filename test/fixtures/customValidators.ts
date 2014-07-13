@@ -141,7 +141,7 @@ describe('custom validators', function () {
         var result = this.Validator.Validate(this.Data);
         var promiseResult = this.Validator.ValidateAsync(this.Data);
 
-        var errorInfo = this.Validator.ErrorInfo;
+        var errorInfo = this.Validator.ValidationResult;
         promiseResult.then(function (response) {
 
            //verify
@@ -165,11 +165,11 @@ describe('custom validators', function () {
         var selfValidator = this.Validator;
         promiseResult.then(function (response) {
 
-            selfValidator.ErrorInfo.LogErrors();
+            selfValidator.ValidationResult.LogErrors();
 
             //verify
-            expect(selfValidator.ErrorInfo.HasErrors).to.equal(true);
-            expect(selfValidator.ErrorInfo.ErrorCount).to.equal(2);
+            expect(selfValidator.ValidationResult.HasErrors).to.equal(true);
+            expect(selfValidator.ValidationResult.ErrorCount).to.equal(2);
 
             done();
 

@@ -1,13 +1,25 @@
-///<reference path='../typings/underscore.string/underscore.string.d.ts'/>
-///<reference path='../typings/moment/moment.d.ts'/>
 
-///<reference path='../validation/validators.ts'/>
+///<reference path='../validators.ts'/>
 
 /**
+ * @ngdoc object
+ * @name ICOValidator
+ *
  * @description
  * Return true for valid identification number of CZE company (called ico), otherwise return false.
  *
- * To create a custom validator you have to implement IPropertyValidator interface.
+ * @example
+ * <pre>
+ *
+ *  //create validator
+ *  var validator = new IcoValidator(); *
+ *
+ *  //valid IC -> return true
+ *  var result = validator.isAcceptable('12312312');
+ *  //unvalid IC  -> return true
+ *  var result = validator.isAcceptable('11111111');
+ *
+ * </pre>
  */
 class ICOValidator {
 

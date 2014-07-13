@@ -1,7 +1,6 @@
 ///<reference path='util.ts'/>
-///<reference path='error.ts'/>
-///<reference path='errorInfo.ts'/>
-///<reference path='rules.ts'/>
+///<reference path='../validation/errors.ts'/>
+///<reference path='../validation/rules.ts'/>
 
 module Validation {
 
@@ -53,7 +52,7 @@ module Validation {
 
         public get MetaErrors() { return this.Rule.ValidationFailures;}
 
-        public get Error():IErrorInfo {return this.Rule;}
+        public get Error():IValidationResult {return this.Rule;}
 
         constructor(metaData: any, public Context:IValidationContext<any>) {
 
@@ -107,7 +106,7 @@ module Validation {
     /**
      *  It represents composition of error objects for rules defined with meta data.
      */
-    export class MetaRulesErrorInfo extends CompositeErrorInfo implements IErrorInfo {
+    export class MetaRulesValidationResult extends CompositeValidationResult implements IValidationResult {
 
         constructor(public Name: string,public MetaRules:any) {
 

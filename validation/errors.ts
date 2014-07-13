@@ -1,20 +1,42 @@
 ///<reference path='../typings/underscore/underscore.d.ts'/>
 
-///<reference path='error.ts'/>
+///<reference path='validators.ts'/>
 
 module Validation {
+
+    /**
+     * basic error structure
+     */
+    export interface IError {
+        HasError: boolean;
+        ErrorMessage: string;
+    }
 
     /**
      * It defines conditional function.
      */
     export interface IOptional { (): boolean; }
 
+    /**
+     * It represents the validation result.
+     */
+    export interface IValidationFailure {
+        Validator:IPropertyValidator
+        Error:IError;
+    }
+    /**
+     * It represents the validation result for validator.
+     */
+    export interface IAsyncValidationFailure {
+        Validator:IAsyncPropertyValidator
+        Error:IError;
+    }
 
     /**
      * This class provides unit of information about error.
      * Implements composite design pattern to enable nesting of error information.
      */
-    export interface IErrorInfo {
+    export interface IValidationResult {
 
         /**
          * The name of error collection.
@@ -23,9 +45,9 @@ module Validation {
 
         /**
          * Add error information to child collection of errors.
-         * @param errorInfo - error information to be added.
+         * @param validationResult - error information to be added.
          */
-        Add(errorInfo:IErrorInfo): void;
+        Add(validationResult:IValidationResult): void;
 
         /**
          * Remove error information from child collection of errors.
@@ -36,7 +58,7 @@ module Validation {
         /**
          * Return collections of child errors information.
          */
-        Children: Array<IErrorInfo>;
+        Children: Array<IValidationResult>;
 
         /**
          * Return true if there is any error.
@@ -58,21 +80,39 @@ module Validation {
     }
 
     /**
+     * basic error structure
+     *
+     * @class error
+     * @constructor
+     **/
+    export class Error implements IError{
+
+        public CLASS_NAME:string = 'error';
+
+        public HasError: boolean = true;
+        public ErrorMessage: string = "";
+
+        constructor() {
+
+        }
+    }
+
+    /**
      *  It represents simple abstract error object.
      */
-    export class ErrorInfo implements IErrorInfo {
+    export class ValidationResult implements IValidationResult {
 
         constructor(public Name: string) {}
 
-        public get Children(): Array<IErrorInfo> {
+        public get Children(): Array<IValidationResult> {
             return new Array();
         }
 
-        public Add(error: IErrorInfo) {
-            throw ("Cannot add to ErrorInfo to leaf node.");
+        public Add(error: IValidationResult) {
+            throw ("Cannot add to ValidationResult to leaf node.");
         }
         public Remove(index: number) {
-            throw ("Cannot remove ErrorInfo from leaf node.");
+            throw ("Cannot remove ValidationResult from leaf node.");
         }
 
         public Optional: IOptional;
@@ -92,7 +132,7 @@ module Validation {
      /**
      *  It represents simple field error object.
      */
-    export class FieldErrorInfo extends ErrorInfo implements IErrorInfo {
+    export class FieldValidationResult extends ValidationResult implements IValidationResult {
 
         constructor(public Name: string,public MetaErrors: { [index: string]: IError })
         {
@@ -120,19 +160,19 @@ module Validation {
     /**
      *  It represents composition of error objects.
      */
-    export class CompositeErrorInfo implements IErrorInfo {
+    export class CompositeValidationResult implements IValidationResult {
 
-        public Children: Array<IErrorInfo> = [];
+        public Children: Array<IValidationResult> = [];
 
         constructor(public Name: string) {
         }
 
         public Optional: IOptional;
 
-        public AddFirst(error: IErrorInfo) {
+        public AddFirst(error: IValidationResult) {
             this.Children.unshift(error);
         }
-        public Add(error: IErrorInfo) {
+        public Add(error: IValidationResult) {
             this.Children.push(error);
         }
         public Remove(index: number) {
@@ -147,7 +187,7 @@ module Validation {
         }
         public get ErrorCount(): number {
             if (!this.HasErrors) return 0;
-            return _.reduce(this.Children, function (memo, error:IErrorInfo) {
+            return _.reduce(this.Children, function (memo, error:IValidationResult) {
                 return memo + error.ErrorCount;
             }, 0);
 
@@ -155,7 +195,7 @@ module Validation {
         }
         public get ErrorMessage(): string {
             if (!this.HasErrors) return "";
-            return _.reduce(this.Children, function (memo, error:IErrorInfo) {
+            return _.reduce(this.Children, function (memo, error:IValidationResult) {
                 return memo + error.ErrorMessage;
             }, "");
         }
@@ -163,13 +203,20 @@ module Validation {
             this.traverse(this, 1);
         }
 
-        private get FlattenErros(): Array<IErrorInfo> {
-            var errors = new Array<IErrorInfo>();
+        public get Errors():{[name:string]:IValidationResult}{
+            var map:{[name:string]:IValidationResult} = {}
+            _.each(this.Children,function (val){
+                map[val.Name] = val;
+            });
+            return map;
+        }
+        private get FlattenErros(): Array<IValidationResult> {
+            var errors = new Array<IValidationResult>();
             this.flattenErrors(this, errors)
             return errors;
         }
 
-        private flattenErrors(node: IErrorInfo, errorCollection: Array<IErrorInfo>) {
+        private flattenErrors(node: IValidationResult, errorCollection: Array<IValidationResult>) {
             if (node.Children.length == 0) {
                 if (node.HasErrors) errorCollection.push(node);
             }
@@ -183,7 +230,7 @@ module Validation {
         }
 
         // recursively traverse a (sub)tree
-        private traverse(node: IErrorInfo, indent: number) {
+        private traverse(node: IValidationResult, indent: number) {
 
             console.log(Array(indent++).join("--") + node.Name + " (" + node.ErrorMessage + ")" + '\n\r');
 

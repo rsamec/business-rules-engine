@@ -1,16 +1,23 @@
-///<reference path='../typings/moment/moment.d.ts'/>
-///<reference path='../validation/validators.ts'/>
+///<reference path='../../typings/moment/moment.d.ts'/>
+///<reference path='../validators.ts'/>
 
 import moment = require("moment");
 import _ = require("underscore");
-
 /**
  * @ngdoc object
  * @name DateCompareValidator
  *
+ * @requires moment
+ * @requires underscore
  * @description
- * DateCompareValidator enables to compare date to another date.</br>
- * If CompareTo is not set, then comparison is done against actual datetime.
+ * DateCompareValidator enables to compare date to another date (CompareTo).</br>
+ *
+ * @property {Date} CompareTo
+ * The datetime against the compare is done.
+ * If  property is not set, then comparison is done against actual datetime.
+ *
+ * @property {boolean} IgnoreDate
+ * It forces to ignore time part of date by date compare.
  *
  * @example
  * <pre>
@@ -27,7 +34,7 @@ import _ = require("underscore");
  *  var result = validator.isAcceptable(new Date(2000,2,2));
  *
  * </pre>
- **/
+ */
 class DateCompareValidator implements Validation.IPropertyValidator{
 
     public isAcceptable(s:any){
@@ -79,41 +86,47 @@ class DateCompareValidator implements Validation.IPropertyValidator{
      */
     public IgnoreTime:boolean = false;
 
-    static customMessage(operator: Validation.CompareOperator, datum:Date) {
-        var msg = ""
-        var isToday = datum == undefined;
-        switch (operator) {
+    public getErrorMessage(localMessages:any) {
+        var msg = '';
+        var messages = localMessages[this.tagName];
+
+        var format:string = messages["Format"];
+        if (format != undefined) {
+            _.extend(this, {FormatedCompareTo: moment(this.CompareTo).format(format)})
+        }
+
+        switch (this.CompareOperator) {
             case Validation.CompareOperator.LessThan:
-                return isToday ? "Prosím, zadejte datum menší než aktuální datum." : "Prosím, zadejte datum menší než " + datum + ".";
+                msg = messages["LessThan"];
                 break;
             case Validation.CompareOperator.LessThanEqual:
-                return isToday ? "Prosím, zadejte datum menší nebo rovné aktuálnímu datu." : "Prosím, zadejte datum menší nebo rovné " + datum + ".";
-                //msg = "nesmí být větší než";
+                msg = messages["LessThanEqual"];
                 break;
             case Validation.CompareOperator.Equal:
-                return isToday ? "Prosím, zadejte aktuální datum." : "Prosím, zadejte " + datum + "."
-                //msg = "musí být stejné jako";
+                msg =  messages["Equal"];
                 break;
             case Validation.CompareOperator.NotEqual:
-                return isToday ? "Prosím, zadejte datum různé od aktuálního data" : "Prosím, zadejte datum různé od " + datum + "."
+                msg =  messages["NotEqual"];
                 break;
             case Validation.CompareOperator.GreaterThanEqual:
-                return isToday ? "Prosím, zadejte datum větší nebo rovné aktuálnímu datu." : "Prosím, zadejte datum větší nebo rovné " + datum + ".";
-                // msg = "nesmí být menší než";
+                msg =  messages["GreaterThanEqual"];
                 break;
             case Validation.CompareOperator.GreaterThan:
-                return isToday ? "Prosím, zadejte datum větší než aktuální datum." : "Prosím, zadejte datum větší než  " + datum + ".";
-                //msg = "musí být větší než";
-                break;
-            default:
-                msg = "???";
+                msg = messages["GreaterThan"];
                 break;
         }
-        return "Zadané datum " +  msg + " aktuální datum.";
-
+        return DateCompareValidator.format(msg.replace('CompareTo','FormatedCompareTo'),this);
     }
     tagName = 'dateCompare';
-}
 
+    static format(s: string, args: any): string {
+        var formatted = s;
+        for (var prop in args) {
+            var regexp = new RegExp('\\{' + prop + '\\}', 'gi');
+            formatted = formatted.replace(regexp, args[prop]);
+        }
+        return formatted;
+    }
+}
 
 export = DateCompareValidator;

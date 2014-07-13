@@ -10,7 +10,7 @@ module Validation {
      * Translated default messages for the validation engine.
      * Locale: CS (Czech; čeština, český jazyk)
      */
-    _.extend(ValidationService.ValidationMessages, {
+    _.extend(MessageLocalization.ValidationMessages, {
         required: "Tento údaj je povinný.",
         remote: "Prosím, opravte tento údaj.",
         email: "Prosím, zadejte platný e-mail.",
@@ -27,6 +27,14 @@ module Validation {
         rangelength: "Prosím, zadejte od {MinLength} do {MaxLength} znaků.",
         range: "Prosím, zadejte hodnotu od {Min} do {Max}.",
         max: "Prosím, zadejte hodnotu menší nebo rovnu {Max}.",
-        min: "Prosím, zadejte hodnotu větší nebo rovnu {Min}."
+        min: "Prosím, zadejte hodnotu větší nebo rovnu {Min}.",
+        dateCompare: {
+            LessThan: "Prosím, zadejte datum menší než {CompareTo}.",
+            LessThanEqual: "Prosím, zadejte datum menší nebo rovné {CompareTo}.",
+            Equal: "Prosím, zadejte {CompareTo}.",
+            NotEqual: "Prosím, zadejte datum různé od {CompareTo}.",
+            GreaterThanEqual: "Prosím, zadejte datum větší nebo rovné {CompareTo}.",
+            GreaterThan: "Prosím, zadejte datum větší než {CompareTo}."
+        }
     });
 }

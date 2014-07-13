@@ -7,7 +7,7 @@
 
 
 var expect = require('expect.js');
-import icoValidator = require('../../customValidators/ICOValidator');
+import icoValidator = require('../../validation/customValidators/ICOValidator');
 
 describe('ICOValidator', function () {
 

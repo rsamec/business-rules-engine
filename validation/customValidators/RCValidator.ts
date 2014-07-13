@@ -1,7 +1,7 @@
-///<reference path='../typings/underscore.string/underscore.string.d.ts'/>
-///<reference path='../typings/moment/moment.d.ts'/>
+///<reference path='../../typings/underscore.string/underscore.string.d.ts'/>
+///<reference path='../../typings/moment/moment.d.ts'/>
 
-///<reference path='../validation/validators.ts'/>
+///<reference path='../validators.ts'/>
 
 import moment = require("moment");
 import _s= require("underscore.string");
@@ -9,12 +9,25 @@ import _s= require("underscore.string");
 /**
  * @ngdoc object
  * @name RCValidator
+ *
+ * @requires moment
+ * @requires underscore.string
+ *
  * @description
+ * Return true for valid birth day number in Czech Republic, otherwise return false.
  *
- * Specific birth day number validation in Czech Republic.
- * Birth
- *  : hasfd
+ * @example
+ * <pre>
  *
+ *  //create validator
+ *  var validator = new RCValidator();
+ *
+ *  //valid RC -> return true
+ *  var result = validator.isAcceptable('800101/9999');
+ *  //unvalid RC  -> return true
+ *  var result = validator.isAcceptable('111111/1752');
+ *
+ * </pre>
  */
 class RCValidator implements Validation.IPropertyValidator {
 

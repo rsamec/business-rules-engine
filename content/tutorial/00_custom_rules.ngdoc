@@ -1,0 +1,230 @@
+@ngdoc overview
+@name 1 - Custom property validator
+@step 1
+@description
+
+## How to create a custom property validator.
+
+To create a custom validation rule you have to implement IPropertyValidator interface.
+
+<pre>
+        export interface IPropertyValidator{
+            isAcceptable(s: any): boolean;
+            getErrorMessage?(localization:any):string;
+            tagName?:string;
+        }
+</pre>
+
+Notice, that inteface has only one method required (isAccepable(any)->boolean).
+
+Let's create validator that enables to compare two dates. We want to parametrize the validator with operators less, equal or greater.
+
+First we create enumaration for compare operators that enables us to parametrize validator.
+<pre>
+    export enum CompareOperator {
+        //must be less than
+        LessThan,
+
+        //cannot be more than
+        LessThanEqual,
+
+        //must be the same as
+        Equal,
+
+        //must be different from
+        NotEqual,
+
+        //cannot be less than
+        GreaterThanEqual,
+
+        //must be more than
+        GreaterThan
+    }
+</pre>
+
+Next we import dependencies - we need only some utilities.
+<pre>
+    import moment = require("moment");
+    import moment = require("underscore");
+</pre>
+
+
+Now we create the validator and implements the method is isAcceptable(any)->boolean.
+<pre>
+class DateCompareValidator implements Validation.IPropertyValidator{
+
+    public isAcceptable(s:any){
+        var isValid = false;
+
+        //if value is not date -> there is nothing to compare
+        if (!_.isDate(s)) return false;
+
+        //if date to compare is not specified - defaults to compare against now
+        if (this.CompareTo == undefined) Date.now();
+
+        var now = moment(this.CompareTo);
+        var then =  moment(s);
+
+        var diffs:number = then.diff(now);
+        if (this.IgnoreTime) diffs = moment.duration(diffs).days();
+
+        if (diffs < 0) {
+            isValid = this.CompareOperator == Validation.CompareOperator.LessThan
+                || this.CompareOperator == Validation.CompareOperator.LessThanEqual
+                || this.CompareOperator == Validation.CompareOperator.NotEqual;
+        }
+        else if (diffs > 0) {
+            isValid = this.CompareOperator == Validation.CompareOperator.GreaterThan
+                || this.CompareOperator == Validation.CompareOperator.GreaterThanEqual
+                || this.CompareOperator == Validation.CompareOperator.NotEqual;
+        }
+        else {
+            isValid = this.CompareOperator == Validation.CompareOperator.LessThanEqual
+                || this.CompareOperator == Validation.CompareOperator.Equal
+                || this.CompareOperator == Validation.CompareOperator.GreaterThanEqual;
+        }
+        return isValid;
+    }
+
+    /**
+     * Set the time of compare between passed date and CompareTo date.
+     */
+    public CompareOperator:Validation.CompareOperator;
+
+    /**
+     * The datetime against the compare is done.
+     * If CompareTo is not set, then comparison is done against actual datetime.
+     */
+    public CompareTo:Date;
+
+    /**
+     * It forces to ignore time part of date by date compare.
+     * @type {boolean}
+     */
+    public IgnoreTime:boolean = false;
+
+    tagName = 'dateCompare';
+}
+
+export = DateCompareValidator;
+</pre>
+
+
+<div doc-tutorial-reset="1"></div>
+
+
+## Use custom validation rule
+
+Let`s use the validator
+<pre>
+    import dateCompareValidator = require('DateCompareValidator');
+
+    var validator = new dateCompareValidator();
+    validator.CompareTo = new Date(2000,2,2);
+    validator.CompareOperator = Validation.CompareOperator.LessThanEqual;
+
+    //less dates -> return true
+    var result = validator.isAcceptable(2000,1,1)
+
+    //greater dates -> return false
+    var result = validator.isAcceptable(2000,2,3)
+
+</pre>
+
+## Define custom error message
+Our validator compares to dates and gives us true/false information about validity.
+It would be nice if validator gives us more user-friedly validationn message except true/false.
+
+Let`s implement getErrorMessage(json)-> string method in DateCompareValidator.
+
+<pre>
+  public getErrorMessage(localMessages:any) {
+          var msg = '';
+          var messages = localMessages[this.tagName];
+
+          var format:string = messages["Format"];
+          if (format != undefined) {
+              _.extend(this, {FormatedCompareTo: moment(this.CompareTo).format(format)})
+          }
+
+          switch (this.CompareOperator) {
+              case Validation.CompareOperator.LessThan:
+                  msg = messages["LessThan"];
+                  break;
+              case Validation.CompareOperator.LessThanEqual:
+                  msg = messages["LessThanEqual"];
+                  break;
+              case Validation.CompareOperator.Equal:
+                  msg =  messages["Equal"];
+                  break;
+              case Validation.CompareOperator.NotEqual:
+                  msg =  messages["NotEqual"];
+                  break;
+              case Validation.CompareOperator.GreaterThanEqual:
+                  msg =  messages["GreaterThanEqual"];
+                  break;
+              case Validation.CompareOperator.GreaterThan:
+                  msg = messages["GreaterThan"];
+                  break;
+          }
+          return DateCompareValidator.format(msg.replace('CompareTo','FormatedCompareTo'),this);
+      }
+      tagName = 'dateCompare';
+
+      static format(s: string, args: any): string {
+          var formatted = s;
+          for (var prop in args) {
+              var regexp = new RegExp('\\{' + prop + '\\}', 'gi');
+              formatted = formatted.replace(regexp, args[prop]);
+          }
+          return formatted;
+      }
+</pre>
+
+Let`s test that our DateCompareValidator returns relevant error messages.
+
+<pre>
+
+  import dateCompareValidator = require('DateCompareValidator');
+
+  describe("error messsages", function () {
+
+          var czMesseges = {
+              dateCompare: {
+                  Format: "DD.MM.YYYY",
+                  LessThan: "Prosím, zadejte datum menší než {CompareTo}.",
+                  LessThanEqual: "Prosím, zadejte datum menší nebo rovné {CompareTo}.",
+                  Equal: "Prosím, zadejte {CompareTo}.",
+                  NotEqual: "Prosím, zadejte datum různé od {CompareTo}.",
+                  GreaterThanEqual: "Prosím, zadejte datum větší nebo rovné {CompareTo}.",
+                  GreaterThan: "Prosím, zadejte datum větší než {CompareTo}."
+              }
+          };
+
+          var enMesseges = {
+              dateCompare: {
+                  Format: "MM/DD/YYYY",
+                  LessThan: "Please enter date less than {CompareTo}.",
+                  LessThanEqual: "Please enter date less than or equal {CompareTo}.",
+                  Equal: "Please enter date equal {CompareTo}.",
+                  NotEqual: "Please enter date different than {CompareTo}.",
+                  GreaterThanEqual: "Please enter date greater than or equal {CompareTo}.",
+                  GreaterThan: "Please enter date greter than {CompareTo}."
+              }
+          };
+
+          var validator = new dateCompareValidator();
+          validator.CompareTo = new Date(2000, 2, 2);
+          validator.CompareOperator = Validation.CompareOperator.LessThan;
+
+          it('should show czMessage', function () {
+              expect("Prosím, zadejte datum menší než 02.03.2000.").to.equal(validator.getErrorMessage(czMesseges))
+          });
+          it('should show enMessage', function () {
+              expect("Please enter date less than 03/02/2000.").to.equal(validator.getErrorMessage(enMesseges));
+          });
+
+      });
+
+</pre>
+

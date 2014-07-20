@@ -26,11 +26,12 @@
     "test",
     "tests",
     "typings",
-    "validation/.*",
+    "validation",
     "docs",
     "content",
     "metaDataRules",
-    "typedDocs"
+    "typedDocs",
+    "index.js"
   ],
   "dependencies": {
     "underscore": "~1.6.0",

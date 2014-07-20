@@ -1,0 +1,93 @@
+<h1><code ng:non-bindable=""></code>
+<div><span class="hint"></span>
+</div>
+</h1>
+<div><div class="tutorial-page"><h2 id="validation-engine-tutorial">Validation engine tutorial</h2>
+<p>A great way to get introduced to work with validation engine is to work through this tutorial, which walks you through
+the construction of various types of validation rules.</p>
+<h3 id="validation-engine-tutorial_validation-engine-advantages">Validation engine advantages</h3>
+<ul>
+<li>There is no dependencies on HTML DOM.</li>
+<li>It enables to decorate custom objects and its properties with validation rules.</li>
+<li>It supports composition of validation rules, that enables to validate custom object with nested structures.</li>
+<li>It is ease to create your own custom validators.</li>
+<li>It supports asynchronous validation rules (uses promises).</li>
+<li>It supports assigning validation rules to collection-based structures - arrays and lists.</li>
+<li>It supports localization of error messages with TranslateArgs.</li>
+<li>You can use it as AMD,CommonJS or plain script module pattern.</li>
+<li>It offers basic build-in constrains validators. Other custom validators can be find in extensible repository of custom validators.</li>
+</ul>
+<p>The main benefit is that validation engine is not tight to HTML DOM or any other UI framework.
+<strong>This validation engine is UI agnostic</strong> and that is why it can be used as <strong>an independent representation of business rules</strong> of a product, contract, etc.
+It can be easily reused by different types of applications, libraries.</p>
+<p>Typical usage of validation engine can be:</p>
+<ul>
+<li>Client - server validation of business rules for an product.<ul>
+<li>UI application uses validation engine to enforce all validation rules with quick answer to client.</li>
+<li>Server non-UI application uses the same business rules to enforce validity of business rules of the product once again (according to rule no client is trusted).</li>
+</ul>
+</li>
+<li>Validation of business rules of automatically generated products, contracts, etc.<ul>
+<li>Server non-UI application can automatically generate the product or the contract. Validation engine enforce validation of business rules of the product, the contract, etc.</li>
+</ul>
+</li>
+</ul>
+<h3 id="validation-engine-tutorial_types-of-validators-and-validation-rules">Types of validators and validation rules</h3>
+<ul>
+<li>Custom property validator</li>
+<li>Custom object validator<ul>
+<li>with property validation rules (sync and async)</li>
+<li>with collection-valued, array-valued and generally Iterable fields and properties</li>
+<li>with shared validation rules</li>
+</ul>
+</li>
+<li>Composite object validator</li>
+</ul>
+<h3 id="validation-engine-tutorial_dependencies">Dependencies</h3>
+<p>The validation is not dependend on HTML DOM. <strong>The only depedency is on ECMAScript</strong>.</p>
+<p>Temporary there is dependency on the underscore javacript library.</p>
+<p>There can be other dependencies on other javascript libraries for custom validation rules found in repository of custom validators.</p>
+<p>Before using any custom validator found in repository, check the api for the custom validator for possible dependencies.
+E.g. DataCompareValidator requires underscore + moment javascript libraries.</p>
+<h3 id="validation-engine-tutorial_list-of-basic-property-validators">List of basic property validators</h3>
+<p>The Property validator is designed to validate objects against constraints. They are assertions that a condition is true.</p>
+<h4 id="validation-engine-tutorial_list-of-basic-property-validators_basic-constrains">Basic constrains</h4>
+<ul>
+<li>Required</li>
+<li>EqualTo</li>
+</ul>
+<h4 id="validation-engine-tutorial_list-of-basic-property-validators_string-constrains">String constrains</h4>
+<ul>
+<li>Email</li>
+<li>Url</li>
+<li>MaxLength,MinLength,RangeLength</li>
+<li>Pattern</li>
+</ul>
+<h4 id="validation-engine-tutorial_list-of-basic-property-validators_number-constrains">Number constrains</h4>
+<ul>
+<li>Number</li>
+<li>Digits, SignedDigits</li>
+<li>Max,Min,Range</li>
+<li>Step</li>
+</ul>
+<h4 id="validation-engine-tutorial_list-of-basic-property-validators_date-constrains">Date constrains</h4>
+<ul>
+<li>Date</li>
+<li>DateISO</li>
+<li>DateCompare</li>
+</ul>
+<h4 id="validation-engine-tutorial_list-of-basic-property-validators_financial-and-other-number-constraints">Financial and other Number Constraints</h4>
+<ul>
+<li>Currency</li>
+<li>CreditCard</li>
+<li>Luhn</li>
+</ul>
+<h4 id="validation-engine-tutorial_list-of-basic-property-validators_collection-constraints">Collection constraints</h4>
+<ul>
+<li>Contains</li>
+</ul>
+<h3 id="validation-engine-tutorial_localization-messages">Localization messages</h3>
+<p>It enables to localization of constrains messages. See the list of available localization messages</p>
+<p>Add reference to messages_cs.js to html page where you want to use CZ messages.</p>
+<p>...</p>
+</div></div>

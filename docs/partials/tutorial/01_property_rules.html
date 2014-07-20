@@ -1,0 +1,279 @@
+<h1><code ng:non-bindable=""></code>
+<div><span class="hint"></span>
+</div>
+</h1>
+<div><div class="2-custom-object-validator-page"><ul doc-tutorial-nav="1"></ul>
+
+<h2 id="custom-object-validator">Custom object validator</h2>
+<p>You will learn how to create custom validator for your own object and how to assign validation rules to its properties.
+You can assigned these rules</p>
+<ul>
+<li>property validation rules - use <em>RuleFor</em> property</li>
+<li>property async validation rules - use <em>RuleFor</em> property</li>
+<li>shared validation rules - use <em>ValidationFor</em> property</li>
+<li>custom object validator - use <em>ValidatorFor</em> property - enables composition of child custom validators</li>
+</ul>
+<h3 id="custom-object-validator_how-to-assign-property-validation-rules">How to assign  property validation rules</h3>
+<p>Let`s image your object has this structure.
+<pre class="prettyprint linenums">
+interface IPerson{
+    FirstName:string;
+    LastName:string;
+}
+</pre>
+<p>To create validator you have</p>
+<ul>
+<li>create AbstractValidator<IPerson> object</li>
+<li>assign some rules to object properties</li>
+</ul>
+<pre class="prettyprint linenums">
+          //create new validator for object with structure&lt;IPerson&gt;
+          var personValidator = new f.Validation.AbstractValidator&lt;IPerson&gt;();
+
+          //basic validators
+          var required =new f.Validation.RequiredValidator();
+          var maxLength = new f.Validation.MaxLengthValidator(15);
+
+          //assigned validators to property
+          personValidator.RuleFor("FirstName", required);
+          personValidator.RuleFor("FirstName",maxLength);
+
+          //assigned validators to property
+          personValidator.RuleFor("LastName", required);
+          personValidator.RuleFor("LastName",maxLength);
+
+</pre>
+<p>Use validator to get validation results
+<pre class="prettyprint linenums">
+    this.PersonValidator = personValidator.CreateRule("Person");
+    var result = this.PersonValidator.Validate(this.Data);
+    if (result.HasErrors){
+        console.log(result.ErrorMessage);
+    }
+</pre>
+<h4 id="custom-object-validator_how-to-assign-property-validation-rules_test---custom-object-validator-with-property-validation-rule-test">Test - custom object validator with property validation rule test</h4>
+<pre class="prettyprint linenums">
+describe('simple property validators', function() {
+
+        beforeEach(function(){
+            //setup
+            this.Data = {};
+            this.PersonValidator = personValidator.CreateRule("Person");
+
+        });
+
+        it('fill correct data - no errors', function () {
+
+            //when
+            this.Data.FirstName = "Jonh";
+            this.Data.LastName = "Smith";
+
+            //excercise
+            var result = this.PersonValidator.Validate(this.Data);
+
+            //verify
+            expect(this.PersonValidator.ValidationResult.HasErrors).to.equal(false);
+
+        });
+
+        it('fill incorrect data - some errors', function () {
+
+            //when
+            this.Data.FirstName = "";
+            this.Data.LastName = "Smith toooooooooooooooooooooooooooooooo long";
+
+            //excercise
+            var result = this.PersonValidator.Validate(this.Data);
+
+            //verify
+            expect(this.PersonValidator.ValidationResult.HasErrors).to.equal(true);
+        });
+
+    });
+</pre>
+<h3 id="custom-object-validator_how-to-assign-async-property-validation-rules">How to assign async property validation rules</h3>
+<p>Let`s image your object has this structure.
+<pre class="prettyprint linenums">
+interface IPerson{
+    Job:string
+}
+</pre>
+<p>To create validator you have</p>
+<ul>
+<li>create AbstractValidator<IPerson> object</li>
+<li>assign some async rules to object properties</li>
+</ul>
+<pre class="prettyprint linenums">
+         //create new validator for object with structure&lt;IPerson&gt;
+               var personValidator = new f.Validation.AbstractValidator&lt;IPerson&gt;();
+
+               //async functions returning list of values
+               var optionsFce = function() {
+                   var deferral = Q.defer();
+                   setTimeout(function () {
+                       deferral.resolve([
+                           { "value": 1, "text": "aranžér" },
+                           { "value": 2, "text": "stavař" },
+                           { "value": 3, "text": "programátor" },
+                           { "value": 3, "text": "nezaměstnaný" }
+                       ]);
+                   }, 1000);
+                   return deferral.promise;
+               };
+
+               //async basic validators - return true if specified param contains any value
+               var param = new f.Validation.ParamValidator();
+               param.ParamId = "jobs";
+               param.Options = optionsFce();
+
+               //assigned validator to property
+               personValidator.RuleFor("Job",param);
+
+</pre>
+<p>Use validator to get async validation results
+<pre class="prettyprint linenums">
+    this.PersonValidator = personValidator.CreateRule("Person");
+    var promiseResult = this.PersonValidator.ValidateAsync(this.Data);
+    promiseResult.then(function (result) {
+            if (result.HasErrors){
+                console.log(result.ErrorMessage);
+            }
+    })
+</pre>
+<h4 id="custom-object-validator_how-to-assign-async-property-validation-rules_test---custom-object-validator-with-async-property-validation-rule">Test - custom object validator with async property validation rule</h4>
+<pre class="prettyprint linenums">
+     beforeEach(function(){
+            //setup
+            this.Data = {};
+            this.PersonValidator = personValidator.CreateRule("Person");
+
+        });
+
+
+        it('fill correct data - no errors', function (done) {
+
+            //when
+            this.Data.Job = "stavař";
+
+            //excercise
+            var promiseResult = this.PersonValidator.ValidateAsync(this.Data);
+
+            var errorInfo = this.PersonValidator.ValidationResult;
+            promiseResult.then(function (response) {
+
+                //verify
+                expect(errorInfo.HasErrors).to.equal(false);
+
+                done();
+
+            }).done(null,done);
+        });
+
+        it('fill incorrect data - some errors', function (done) {
+
+            //when
+            this.Data.Job ="unknow job";
+
+            //excercise
+            var promiseResult = this.PersonValidator.ValidateAsync(this.Data);
+
+            var selfValidator = this.PersonValidator;
+            promiseResult.then(function (response) {
+
+                selfValidator.ValidationResult.LogErrors();
+
+                //verify
+                expect(selfValidator.ValidationResult.HasErrors).to.equal(true);
+
+                done();
+
+            }).done(null,done);
+        });
+</pre>
+<h3 id="custom-object-validator_how-to-assign-shared-validation-rule">How to assign shared validation rule</h3>
+<p>Let`s image your object has this structure.
+<pre class="prettyprint linenums">
+interface IPerson{
+    IsChecked:true;
+    FirstName:string;
+    LastName:string;
+
+}
+</pre>
+<p>To create shared validation rule</p>
+<ul>
+<li>create AbstractValidator<IPerson> object</li>
+<li>create validation function</li>
+<li>create named validation function</li>
+<li>use ValidationFor property to assign named validation function to object properties</li>
+</ul>
+<pre class="prettyprint linenums">
+            //create new validator for object with structure&lt;IPerson&gt;
+             var personValidator = new f.Validation.AbstractValidator&lt;IPerson&gt;();
+
+             //shared validation function
+             var oneSpaceFce = function (args:any) {
+                 args.HasError = false;
+                 if (!this.Checked) return;
+                 if (this.FirstName.indexOf(' ') != -1 || this.LastName.indexOf(' ') != -1) {
+                     args.HasError = true;
+                     args.ErrorMessage = "Full name can contain only one space.";
+                     return;
+                 }
+             }
+
+             //create named validation function
+             var validatorFce = {Name: "OneSpaceForbidden", ValidationFce: oneSpaceFce};
+
+             //assign validation function to properties
+             personValidator.ValidationFor("FirstName", validatorFce);
+             personValidator.ValidationFor("LastName", validatorFce);
+</pre>
+<p>Use validator to get validation results
+<pre class="prettyprint linenums">
+    this.PersonValidator = personValidator.CreateRule("Person");
+    var result = this.PersonValidator.Validate(this.Data);
+    if (result.HasErrors){
+        console.log(result.ErrorMessage);
+    }
+</pre>
+<h4 id="custom-object-validator_how-to-assign-shared-validation-rule_test---custom-validator-object-with-shared-validation-rule">Test - custom validator object with shared validation rule</h4>
+<pre class="prettyprint linenums">
+  beforeEach(function(){
+            //setup
+            this.Data = {};
+            this.PersonValidator = personValidator.CreateRule("Person");
+
+        });
+
+
+        it('fill correct data - no errors', function () {
+
+            //when
+            this.Data.Checked = true;
+            this.Data.FirstName = "John";
+            this.Data.LastName = "Smith";
+
+            //excercise
+            var result = this.PersonValidator.Validate(this.Data);
+
+            //verify
+            expect(this.PersonValidator.ValidationResult.HasErrors).to.equal(false);
+
+        });
+
+        it('fill incorrect data - some errors', function () {
+
+            //when
+            this.Data.Checked = true;
+            this.Data.FirstName = "John Junior";
+            this.Data.LastName = "Smith";
+
+            //excercise
+            var result = this.PersonValidator.Validate(this.Data);
+
+            //verify
+            expect(this.PersonValidator.ValidationResult.HasErrors).to.equal(true);
+        });
+</pre>
+</div></div>

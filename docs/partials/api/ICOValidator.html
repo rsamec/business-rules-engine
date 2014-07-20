@@ -1,0 +1,20 @@
+<h1><code ng:non-bindable="">ICOValidator</code>
+<div><span class="hint"></span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="icovalidator-page"><p>Return true for valid identification number of CZE company (called ico), otherwise return false.</p>
+</div></div>
+<h2 id="example">Example</h2>
+<div class="example"><div class="icovalidator-page"><pre class="prettyprint linenums">
+//create validator
+var validator = new IcoValidator();
+
+//valid IC -&gt; return true
+var result = validator.isAcceptable('12312312');
+//unvalid IC  -&gt; return true
+var result = validator.isAcceptable('11111111');
+
+</pre>
+</div></div>
+</div>

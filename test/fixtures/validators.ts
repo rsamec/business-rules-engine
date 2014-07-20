@@ -1,6 +1,6 @@
 ///<reference path='../../typings/mocha/mocha.d.ts'/>
 ///<reference path='../../typings/node/node.d.ts'/>
-var Validation = require('../../validation/validation.js');
+var Validation = require('../../dist/validation.js');
 var expect = require('expect.js');
 
 describe('common validators', function () {

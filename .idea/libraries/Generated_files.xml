@@ -40,7 +40,7 @@
       <root url="file://$PROJECT_DIR$/test/fixtures/rulesGroups.js" />
       <root url="file://$PROJECT_DIR$/localization/messages_cs.js" />
       <root url="file://$PROJECT_DIR$/test/customValidators/DataCompareValidator.js" />
-      <root url="file://$PROJECT_DIR$/validation/validation.js" />
+      <root url="file://$PROJECT_DIR$/dist/validation.js" />
       <root url="file://$PROJECT_DIR$/test/fixtures/rulesTranslate.js" />
       <root url="file://$PROJECT_DIR$/test/customValidators/ParamValidator.js" />
       <root url="file://$PROJECT_DIR$/validation/rules.js" />

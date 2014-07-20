@@ -2,7 +2,7 @@
 ///<reference path='../../typings/node/node.d.ts'/>
 ///<reference path='../../typings/underscore/underscore.d.ts'/>
 
-var Validation = require('../../validation/validation.js');
+var Validation = require('../../dist/validation.js');
 var expect = require('expect.js');
 var _:UnderscoreStatic = require('underscore');
 var Q = require('q');

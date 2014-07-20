@@ -42,7 +42,7 @@
       <root url="file://$PROJECT_DIR$/dist/i18n/messages_cs.js" />
       <root url="file://$PROJECT_DIR$/dist/i18n/messages_de.js" />
       <root url="file://$PROJECT_DIR$/test/fixtures/rulesGroups.js" />
-      <root url="file://$PROJECT_DIR$/localization/messages_cs.js" />
+      <root url="file://$PROJECT_DIR$/src/localization/messages_cs.js" />
       <root url="file://$PROJECT_DIR$/test/customValidators/DataCompareValidator.js" />
       <root url="file://$PROJECT_DIR$/dist/validation.js" />
       <root url="file://$PROJECT_DIR$/test/fixtures/rulesTranslate.js" />
@@ -60,11 +60,11 @@
       <root url="file://$PROJECT_DIR$/test/fixtures/rules.js" />
       <root url="file://$PROJECT_DIR$/validation/errors.js" />
       <root url="file://$PROJECT_DIR$/validation/validators.js" />
-      <root url="file://$PROJECT_DIR$/localization/messages_de.js" />
-      <root url="file://$PROJECT_DIR$/metaDataRules/form.js" />
-      <root url="file://$PROJECT_DIR$/metaDataRules/metaDataRules.js" />
+      <root url="file://$PROJECT_DIR$/src/localization/messages_de.js" />
+      <root url="file://$PROJECT_DIR$/src/metaDataRules/form.js" />
+      <root url="file://$PROJECT_DIR$/src/metaDataRules/metaDataRules.js" />
       <root url="file://$PROJECT_DIR$/validation/customValidators/DateCompareValidator.js" />
-      <root url="file://$PROJECT_DIR$/metaDataRules/util.js" />
+      <root url="file://$PROJECT_DIR$/src/metaDataRules/util.js" />
     </CLASSES>
     <SOURCES />
   </library>

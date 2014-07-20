@@ -1,0 +1,39 @@
+{
+  "name": "form",
+  "main": "dist/validation.js",
+  "version": "1.0.0",
+  "homepage": "https://github.com/rsamec/form",
+  "authors": [
+    "rsamec <roman.samec2@gmail.com>"
+  ],
+  "description": "Validation engine",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "validation",
+    "validators",
+    "business",
+    "rules"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "typings",
+    "validation/.*",
+    "docs",
+    "content",
+    "metaDataRules",
+    "typedDocs"
+  ],
+  "dependencies": {
+    "underscore": "~1.6.0",
+    "q": "~2.0.0"
+  }
+}

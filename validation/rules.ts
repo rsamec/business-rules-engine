@@ -2,8 +2,22 @@
 
 ///<reference path='errors.ts'/>
 ///<reference path='validators.ts'/>
-///<reference path='rulesList.ts'/>
+
 module Validation {
+
+    /**
+     * @ngdoc module
+     * @name Validation
+     *
+     *
+     * @description
+     * # Validation (core module)
+     * The module itself contains the essential components for an validation engine to function. The table below
+     * lists a high level breakdown of each of the components (object, functions) available within this core module.
+     *
+     * <div doc-module-components="Validation"></div>
+     */
+
 
     /**
      * It defines validation function.
@@ -21,11 +35,10 @@ module Validation {
     /**
      * This class represents custom validator.
      */
-    export interface IValidator extends IError {
+    export interface IValidator {
         Validate(context:any): boolean;
         Error: IError;
     }
-
 
     /**
      * It represents abstract validator for type of <T>.
@@ -40,12 +53,11 @@ module Validation {
         /**
          * It creates new concrete validation rule and assigned data context to this rule.
          * @param name of the rule
-         * @param data context
          * @constructor
          */
-        CreateRule(name:string, data:T):IValidationRule<T>;
-        CreateAbstractRule(name:string):AbstractValidationRule<any>;
-        CreateAbstractListRule(name:string):AbstractListValidationRule<any>;
+        CreateRule(name:string):IAbstractValidationRule<any>;
+        CreateAbstractRule(name:string):IAbstractValidationRule<any>;
+        CreateAbstractListRule(name:string):IAbstractValidationRule<any>;
 
         /**
          * return true if this validation rule is intended for list of items, otherwise true
@@ -53,28 +65,42 @@ module Validation {
         ForList:boolean;
     }
 
-
     /**
-     * It represents concrete validation rule for type of <T> with data context assigned to rule.
+     * It represents concrete validation rule for type of <T>.
      */
-    export interface IValidationRule<T> {
+    export interface IAbstractValidationRule<T> {
 
+        /**
+         * Performs validation using a validation context and returns a collection of Validation Failures.
+         */
+        Validate(context:T):IValidationResult
+
+        /**
+         * Performs validation using a validation context and returns a collection of Validation Failures asynchronoulsy.
+         */
+        ValidateAsync(context:T):Q.Promise<IValidationResult>
         /**
          * Performs validation and async validation using a validation context.
          */
-         ValidateAll():void;
+
+        ValidateAll(context:T):void;
 
         /**
          * Performs validation and async validation using a validation context for a passed field.
          */
-        ValidateField(propName:string):void;
+        ValidateField(context:T, propName:string):void;
 
         /**
          * Return validation results.
          */
         ValidationResult: IValidationResult
 
+
+        Rules:{ [name: string]: IPropertyValidationRule<T> ; }
+        Validators: { [name: string]: IValidator ; }
+        Children:{ [name: string]: AbstractValidationRule<any> ; }
     }
+
 
     /**
      * It represents property validation rule for type of <T>.
@@ -83,7 +109,8 @@ module Validation {
         /**
          *The validators that are grouped under this rule.
          */
-        Validators:Array<IPropertyValidator>;
+        Validators:{[name:string]:any};
+
 
         /**
          * Performs validation using a validation context and returns a collection of Validation Failures.
@@ -119,11 +146,20 @@ module Validation {
     }
 
     /**
+     *
      * @ngdoc object
      * @name  AbstractValidator
+     * @module Validation
+     *
      *
      * @description
-     * It represents abstract validator.
+     * It enables to create custom validator for your own abstract object (class) and to assign validation rules to its properties.
+     * You can assigned these rules
+     *
+     * +  property validation rules - use _RuleFor_ property
+     * +  property async validation rules - use _RuleFor_ property
+     * +  shared validation rules - use _ValidationFor_ property
+     * +  custom object validator - use _ValidatorFor_ property - enables composition of child custom validators
      */
     export class AbstractValidator<T> implements IAbstractValidator<T> {
 
@@ -160,8 +196,8 @@ module Validation {
             return new AbstractListValidationRule<T>(name, this);
         }
 
-        public CreateRule(name:string, data:T){
-            return new ValidationRule<T>(name, this, data);
+        public CreateRule(name:string){
+            return new AbstractValidationRule<T>(name, this);
         }
 
 
@@ -172,7 +208,17 @@ module Validation {
 
     }
 
-    export class AbstractValidationRule<T>{
+    /**
+     *
+     * @ngdoc object
+     * @name  AbstractValidationRule
+     * @module Validation
+     *
+     *
+     * @description
+     * It represents concreate validator for custom object. It enables to assign validation rules to custom object properties.
+     */
+    export class AbstractValidationRule<T> implements IAbstractValidationRule<T>{
         public ValidationResult:IValidationResult;
         public Rules:{ [name: string]: IPropertyValidationRule<T> ; } = {};
         public Validators: { [name: string]: IValidator ; } = {};
@@ -194,7 +240,7 @@ module Validation {
                     }, this);
                 }, this);
 
-                _.each(this.validator.ValidationFunctions, function (val:Array<IValidatorFce>, key) {
+                _.each(this.validator.ValidationFunctions, function (val:Array<IValidatorFce>) {
                     _.each(val, function (validation) {
                         var validator = this.Validators[validation.Name];
                         if (validator == undefined) {
@@ -225,13 +271,6 @@ module Validation {
 
         }
 
-        private createRuleFor(prop:string){
-            var propValidationRule = new PropertyValidationRule(prop);
-            this.Rules[prop] = propValidationRule;
-            this.ValidationResult.Add(propValidationRule);
-
-        }
-
         public SetOptional(fce:IOptional){
 
             this.ValidationResult.Optional = fce;
@@ -239,12 +278,21 @@ module Validation {
 //            _.each(this.Validators, function(value:any, key:string){value.Optional = fce;});
 //            _.each(this.Children, function(value:any, key:string){value.SetOptional(fce);});
         }
+
+        private createRuleFor(prop:string){
+            var propValidationRule = new PropertyValidationRule(prop);
+            this.Rules[prop] = propValidationRule;
+            this.ValidationResult.Add(propValidationRule);
+
+        }
+
         /**
          * Performs validation using a validation context and returns a collection of Validation Failures.
          */
         public Validate(context:T):IValidationResult{
 
             _.each(this.Children,function(val,key){
+                if (context[key] === undefined) context[key] = {};
                 val.Validate(context[key]);
             },this);
 
@@ -254,13 +302,12 @@ module Validation {
                 rule.Validate(new ValidationContext(propName,context));
             }
 
-            _.each (this.validator.ValidationFunctions, function (valFunctions:Array<IValidatorFce>, key:string) {
+            _.each (this.validator.ValidationFunctions, function (valFunctions:Array<IValidatorFce>) {
                 _.each(valFunctions, function (valFce) {
                     var validator = this.Validators[valFce.Name];
                     if (validator != undefined) validator.Validate(context);
                 },this)
             },this);
-
 
             return this.ValidationResult;
         }
@@ -285,15 +332,49 @@ module Validation {
 
             return deferred.promise;
         }
+
+        ValidateAll(context:T){
+            this.Validate(context);
+            this.ValidateAsync(context);
+        }
+        ValidateField(context:T, propName:string){
+            var childRule = this.Children[propName];
+            if (childRule != undefined) childRule.Validate(context[propName]);
+
+            var rule = this.Rules[propName];
+            if (rule != undefined) {
+                var valContext = new ValidationContext(propName, context);
+                rule.Validate(valContext);
+                rule.ValidateAsync(valContext);
+            }
+            var validationFces = this.validator.ValidationFunctions[propName];
+            if (validationFces != undefined) {
+                _.each(validationFces, function (valFce) {
+                    var validator = this.Validators[valFce.Name];
+                    if (validator != undefined) validator.Validate(context);
+                }, this);
+            }
+        }
+
     }
 
+
+    /**
+     *
+     * @ngdoc object
+     * @name  AbstractListValidationRule
+     * @module Validation
+     *
+     *
+     * @description
+     * It represents an validator for custom object. It enables to assign rules to custom object properties.
+     */
     export class AbstractListValidationRule<T> extends AbstractValidationRule<T> {
 
         constructor(public Name:string, public validator:AbstractValidator<T>) {
-            super(Name, validator,true);
+            super(Name, validator, true);
         }
 
-        public Items:Array<AbstractValidationRule<any>> = []
 
         /**
          * Performs validation using a validation context and returns a collection of Validation Failures.
@@ -351,71 +432,16 @@ module Validation {
             }
         }
     }
-    export class ValidationRule<T> extends AbstractValidationRule<T> implements  IValidationRule<T>{
-        public Fields:{ [name: string]: FieldRule ; } = {};
 
-
-        constructor(public Name:string,public validator:AbstractValidator<T>, public Data:T){
-            super(Name,validator);
-
-            _.each(this.Rules,function(val,key){
-                this.Fields[key] =  new FieldRule(key, this);
-            },this)
-        }
-
-        ValidateAll(){
-            this.Validate(this.Data);
-            this.ValidateAsync(this.Data);
-        }
-        ValidateField(propName:string){
-            var childRule = this.Children[propName];
-            if (childRule != undefined) childRule.Validate(this.Data[propName]);
-
-            var rule = this.Rules[propName];
-            if (rule != undefined) {
-                var context = new ValidationContext(propName, this.Data);
-                rule.Validate(context);
-                rule.ValidateAsync(context);
-            }
-            var validationFces = this.validator.ValidationFunctions[propName];
-            if (validationFces != undefined) {
-                _.each(validationFces, function (valFce) {
-                    var validator = this.Validators[valFce.Name];
-                    if (validator != undefined) validator.Validate(this.Data);
-                }, this);
-            }
-        }
-
-    }
-
-    export class FieldRule {
-
-        constructor(public PropName:string, private DataValidationRule){
-        }
-
-        public get Data():any {
-             return this.DataValidationRule.Data;
-        }
-        public get Value():any{
-            return this.Data[this.PropName];
-        }
-        public set Value(value:any){
-            this.Data[this.PropName] = value;
-        }
-
-        Validate(){
-            this.DataValidationRule.ValidateField(this.PropName);
-        }
-
-        public get ErrorMessage():string{
-            return this.DataValidationRule.Rules[this.PropName].ErrorMessage;
-        }
-    }
-
-
-
-    /**
-     *  It represents a data context for validation rule.
+     /**
+     *
+     * @ngdoc object
+     * @name  ValidationContext
+     * @module Validation
+     *
+     *
+     * @description
+     * It represents a data context for validation rule.
      */
     export class ValidationContext<T> implements IValidationContext<T> {
 
@@ -425,9 +451,11 @@ module Validation {
             return this.Data[this.Key];
         }
     }
-    class MessageLocalization{
 
-        static customMsg =  "Please, fix the field.";
+
+    export class MessageLocalization {
+
+        static customMsg = "Please, fix the field.";
 
         static defaultMessages = {
             "required": "This field is required.",
@@ -448,88 +476,61 @@ module Validation {
             "max": "Please enter a value less than or equal to {Max}.",
             "min": "Please enter a value greater than or equal to {Min}.",
             "step": "Please enter a value with step {Step}.",
-            "param": "Please enter a value from {ParamId}.",
+            "contains": "Please enter a value from list of values. Attempted value '{AttemptedValue}'.",
             "mask": "Please enter a value corresponding with {Mask}.",
-            "dateCompare": {
-                Format: "MM/DD/YYYY",
-                LessThan: "Please enter date less than {CompareTo}.",
-                LessThanEqual: "Please enter date less than or equal {CompareTo}.",
-                Equal: "Please enter date equal {CompareTo}.",
-                NotEqual: "Please enter date different than {CompareTo}.",
-                GreaterThanEqual: "Please enter date greater than or equal {CompareTo}.",
-                GreaterThan: "Please enter date greter than {CompareTo}."
-            },
             "custom": MessageLocalization.customMsg
         };
 
 
         static ValidationMessages = MessageLocalization.defaultMessages;
-        static GetValidationMessage(validator:any){
-            var msgText;
 
-            var existsCustomMessage = _.isFunction(validator.getErrorMessage);
-            if (existsCustomMessage) msgText = validator.getErrorMessage(MessageLocalization.ValidationMessages);
-
+        static GetValidationMessage(validator:any) {
             var msgText = MessageLocalization.ValidationMessages[validator.tagName];
-            if (msgText == undefined || msgText == "") { msgText = MessageLocalization.customMsg;}
-
-            return Validation.StringFce.format(msgText,validator);
-        }
-        static config(config:any){
-            if (config.Messages != undefined){
-                MessageLocalization.ValidationMessages = config.Messages;
+            if (msgText == undefined || msgText == "" || !_.isString(msgText)) {
+                msgText = MessageLocalization.customMsg;
             }
+
+            return Validation.StringFce.format(msgText, validator);
         }
     }
+
+    /**
+     *
+     * @ngdoc object
+     * @name  PropertyValidationRule
+     * @module Validation
+     *
+     *
+     * @description
+     * It represents a property validation rule. The property has assigned collection of property validators.
+     */
     export class PropertyValidationRule<T> extends ValidationResult implements  IPropertyValidationRule<T> {
 
+        public Validators:{[name:string]: any} = {};
         public ValidationFailures:{[name:string]: IValidationFailure} = {};
-        public AsyncValidationFailures:{[name:string]: IAsyncValidationFailure} = {};
+        //public AsyncValidationFailures:{[name:string]: IAsyncValidationFailure} = {};
 
         constructor(public Name:string, validatorsToAdd?:Array<IPropertyValidator>) {
             super(Name);
 
+
             for (var index in validatorsToAdd) {
-                this.AddPropertyValidator(validatorsToAdd[index]);
+                this.AddValidator(validatorsToAdd[index]);
             }
+
+
         }
         public AddValidator(validator:any){
-            if (validator.isAsync){
-                this.AddAsyncPropertyValidator(validator);
-            }
-            else {
-                this.AddPropertyValidator(validator);
-            }
-        }
-        public AddPropertyValidator(validator:IPropertyValidator):void {
-            this.ValidationFailures[validator.tagName] =
-            {
-                Validator: validator,
-                Error: new Error()
-            };
+            this.Validators[validator.tagName] = validator;
+            this.ValidationFailures[validator.tagName] = new ValidationFailure(new Error(),!!validator.isAsync);
         }
 
-        public AddAsyncPropertyValidator(validator:IAsyncPropertyValidator):void {
-            this.AsyncValidationFailures[validator.tagName] =
-            {
-                Validator: validator,
-                Error: new Error()
-            };
-        }
 
 
         public get Errors():Array<IError> {
-            return _.map(_.union(_.values(this.ValidationFailures),_.values(this.AsyncValidationFailures)), function (item:IValidationFailure) {
+            return _.map(_.values(this.ValidationFailures), function (item:IValidationFailure) {
                 return item.Error;
             });
-        }
-
-        public get Validators():Array<IPropertyValidator> {
-            var validators = _.map(_.values(this.ValidationFailures), function (item:IValidationFailure) {
-                return item.Validator;
-            });
-
-            return validators;
         }
 
         public get HasErrors():boolean {
@@ -538,6 +539,7 @@ module Validation {
                 return error.HasError;
             });
         }
+
 
         public get ErrorCount():number {
             return this.HasErrors ? 1 : 0;
@@ -548,6 +550,14 @@ module Validation {
             return _.reduce(_.values(this.Errors), function (memo, error:IError) {
                 return memo + error.ErrorMessage;
             }, "");
+        }
+        public get TranslateArgs():Array<IErrorTranslateArgs>{
+            if (!this.HasErrors) return [];
+            var newArray = [];
+             _.each(_.values(this.Errors), function (error:IError) {
+                if (error.HasError) newArray.push(error.TranslateArgs);
+            });
+            return newArray;
         }
 
         /**
@@ -571,21 +581,22 @@ module Validation {
             var shortCircuited:boolean = false;
 
             for (var index in this.ValidationFailures) {
+
                 var validation:IValidationFailure = this.ValidationFailures[index];
-                var validator:IPropertyValidator = validation.Validator;
+                if (validation.IsAsync) continue;
+                var validator:IPropertyValidator = this.Validators[index];
 
                 try {
                     var priority = 0;
                     if (shortCircuited && priority > lastPriority) {
                         validation.Error.HasError = false;
                     } else {
-                        var hasError = !validator.isAcceptable(value);
 
-
-                        var errMsg = MessageLocalization.GetValidationMessage(validator);
+                        var hasError = ((value===undefined || value === null) && validator.tagName!="required")?false: !validator.isAcceptable(value);
 
                         validation.Error.HasError = hasError;
-                        validation.Error.ErrorMessage = hasError ? errMsg : "";
+                        validation.Error.TranslateArgs = { TranslateId:validator.tagName, MessageArgs:_.extend(validator,{AttemptedValue: value})};
+                        validation.Error.ErrorMessage = hasError ? MessageLocalization.GetValidationMessage(validation.Error.TranslateArgs.MessageArgs) : "";
 
                         shortCircuited = hasError;
                         lastPriority = priority;
@@ -598,7 +609,7 @@ module Validation {
                     throw e;
                 }
             }
-            return _.values(this.ValidationFailures);
+            return _.filter(this.ValidationFailures,function(item){return !item.IsAsync;});
         }
 
 
@@ -614,19 +625,22 @@ module Validation {
         ValidateAsyncEx(value:string):Q.Promise<Array<IValidationFailure>> {
             var deferred = Q.defer<Array<IValidationFailure>>();
             var promises = [];
-            for (var index in this.AsyncValidationFailures) {
-                var validation:IAsyncValidationFailure = this.AsyncValidationFailures[index];
-                var validator:IAsyncPropertyValidator = validation.Validator;
+            for (var index in this.ValidationFailures) {
+                var validation:IValidationFailure = this.ValidationFailures[index];
+                if (!validation.IsAsync) continue;
+                var validator:IAsyncPropertyValidator = this.Validators[index];
 
                 try {
 
-                    var hasErrorPromise = validator.isAcceptable(value);
+                    var hasErrorPromise = ((value===undefined || value === null) && validator.tagName!="required")?Q.when(true):validator.isAcceptable(value);
                     hasErrorPromise.then(function (result) {
                         var hasError = !result;
-                        var errMsg = MessageLocalization.GetValidationMessage(validator);
 
                         validation.Error.HasError = hasError;
-                        validation.Error.ErrorMessage = hasError ? errMsg : "";
+                        validation.Error.TranslateArgs = { TranslateId:validator.tagName, MessageArgs:_.extend(validator,{AttemptedValue: value})};
+                        validation.Error.ErrorMessage = hasError ? MessageLocalization.GetValidationMessage(validation.Error.TranslateArgs.MessageArgs) : "";
+
+
                     });
 
                     promises.push(hasErrorPromise);
@@ -640,14 +654,22 @@ module Validation {
             }
 
             var self = this;
-            Q.all(promises).then(function(result){deferred.resolve(_.values(self.AsyncValidationFailures))});
+            Q.all(promises).then(function(result){deferred.resolve(_.filter(self.ValidationFailures,function(item){return item.IsAsync;}))});
             return deferred.promise;
 
         }
     }
 
+
     /**
-     *  It represents a validation rule.
+     *
+     * @ngdoc object
+     * @name  Validator
+     * @module Validation
+     *
+     *
+     * @description
+     * It represents a custom validator. It enables to define your own shared validation rules
      */
     export class Validator extends ValidationResult implements IValidator  {
         public Error: IError = new Error();
@@ -666,6 +688,7 @@ module Validation {
         }
 
 
+
         public get HasErrors(): boolean {
             if (this.Optional != undefined && _.isFunction(this.Optional) && this.Optional()) return false;
             return this.Error.HasError;
@@ -678,8 +701,15 @@ module Validation {
             if (!this.HasErrors) return "";
             return this.Error.ErrorMessage;
         }
+
+        public get TranslateArgs():Array<IErrorTranslateArgs> {
+            if (!this.HasErrors) return [];
+            var newArray = [];
+            newArray.push(this.Error.TranslateArgs);
+            return newArray;
+        }
     }
 }
 //var _ = require('underscore');
 //var Q = require('q');
-//exports.Validation = Validation
+//module.exports = Validation;

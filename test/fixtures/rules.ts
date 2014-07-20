@@ -2,7 +2,7 @@
 ///<reference path='../../typings/node/node.d.ts'/>
 ///<reference path='../../typings/underscore/underscore.d.ts'/>
 
-var f = require('../../validation/validation.js')
+var Validation = require('../../validation/validation.js');
 var expect = require('expect.js');
 var _:UnderscoreStatic = require('underscore');
 var Q = require('q');
@@ -26,11 +26,11 @@ describe('basic validation rules', function () {
         });
 
         //create new validator for object with structure<IPerson>
-        var personValidator = new f.Validation.AbstractValidator<IPerson>();
+        var personValidator = new Validation.AbstractValidator<IPerson>();
 
         //basic validators
-        var required =new f.Validation.RequiredValidator();
-        var maxLength = new f.Validation.MaxLengthValidator(15);
+        var required =new Validation.RequiredValidator();
+        var maxLength = new Validation.MaxLengthValidator(15);
 
         //assigned validators to property
         personValidator.RuleFor("FirstName", required);
@@ -80,25 +80,25 @@ describe('basic validation rules', function () {
         });
 
         //create new validator for object with structure<IPerson>
-        var personValidator = new f.Validation.AbstractValidator<IPerson>();
+        var personValidator = new Validation.AbstractValidator<IPerson>();
 
         //async functions return list of values
-        var optionsFce = function() {
+        var optionsFce = function () {
             var deferral = Q.defer();
             setTimeout(function () {
                 deferral.resolve([
-                    { "value": 1, "text": "aranžér" },
-                    { "value": 2, "text": "stavař" },
-                    { "value": 3, "text": "programátor" },
-                    { "value": 3, "text": "nezaměstnaný" }
+                    "business man",
+                    "unemployed",
+                    "construction worker",
+                    "programmer",
+                    "shop assistant"
                 ]);
             }, 1000);
             return deferral.promise;
         };
 
         //async basic validators - return true if specified param contains any value
-        var param = new f.Validation.ParamValidator();
-        param.ParamId = "jobs";
+        var param = new Validation.ContainsValidator();
         param.Options = optionsFce();
 
         //assigned validator to property
@@ -107,7 +107,7 @@ describe('basic validation rules', function () {
         it('fill correct data - no errors', function (done) {
 
             //when
-            this.Data.Job = "stavař";
+            this.Data.Job = "programmer";
 
             //excercise
             var promiseResult = this.PersonValidator.ValidateAsync(this.Data);
@@ -156,7 +156,7 @@ describe('basic validation rules', function () {
         });
 
         //create new validator for object with structure<IPerson>
-        var personValidator = new f.Validation.AbstractValidator<IPerson>();
+        var personValidator = new Validation.AbstractValidator<IPerson>();
 
         //shared validation function
         var oneSpaceFce = function (args:any) {
@@ -165,9 +165,8 @@ describe('basic validation rules', function () {
             if (this.FirstName.indexOf(' ') != -1 || this.LastName.indexOf(' ') != -1) {
                 args.HasError = true;
                 args.ErrorMessage = "Full name can contain only one space.";
-                return;
             }
-        }
+        };
 
         //create named validation function
         var validatorFce = {Name: "OneSpaceForbidden", ValidationFce: oneSpaceFce};
@@ -229,11 +228,11 @@ describe('basic validation rules', function () {
         });
 
         //create new validator for object with structure<IPerson>
-        var personValidator = new f.Validation.AbstractValidator<IPerson>();
+        var personValidator = new Validation.AbstractValidator<IPerson>();
 
         //basic validators
-        var required =new f.Validation.RequiredValidator();
-        var maxLength = new f.Validation.MaxLengthValidator(15);
+        var required =new Validation.RequiredValidator();
+        var maxLength = new Validation.MaxLengthValidator(15);
 
         //assigned validators to property
         personValidator.RuleFor("FirstName", required);

@@ -56,44 +56,4 @@ describe('DateCompareValidator', function () {
         }
 
     });
-
-    describe("error messsages", function () {
-
-        var czMesseges = {
-            dateCompare: {
-                Format: "DD.MM.YYYY",
-                LessThan: "Prosím, zadejte datum menší než {CompareTo}.",
-                LessThanEqual: "Prosím, zadejte datum menší nebo rovné {CompareTo}.",
-                Equal: "Prosím, zadejte {CompareTo}.",
-                NotEqual: "Prosím, zadejte datum různé od {CompareTo}.",
-                GreaterThanEqual: "Prosím, zadejte datum větší nebo rovné {CompareTo}.",
-                GreaterThan: "Prosím, zadejte datum větší než {CompareTo}."
-            }
-        };
-
-        var enMesseges = {
-            dateCompare: {
-                Format: "MM/DD/YYYY",
-                LessThan: "Please enter date less than {CompareTo}.",
-                LessThanEqual: "Please enter date less than or equal {CompareTo}.",
-                Equal: "Please enter date equal {CompareTo}.",
-                NotEqual: "Please enter date different than {CompareTo}.",
-                GreaterThanEqual: "Please enter date greater than or equal {CompareTo}.",
-                GreaterThan: "Please enter date greter than {CompareTo}."
-            }
-        };
-
-        var validator = new dateCompareValidator();
-        validator.CompareTo = new Date(2000, 2, 2);
-        validator.CompareOperator = Validation.CompareOperator.LessThan;
-
-        it('should show czMessage', function () {
-            expect("Prosím, zadejte datum menší než 02.03.2000.").to.equal(validator.getErrorMessage(czMesseges))
-        });
-        it('should show enMessage', function () {
-            expect("Please enter date less than 03/02/2000.").to.equal(validator.getErrorMessage(enMesseges));
-        });
-
-    });
-
 });

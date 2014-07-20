@@ -5,7 +5,6 @@
 ///<reference path='../../typings/node/node.d.ts'/>
 ///<reference path='../../typings/expect.js/expect.js.d.ts'/>
 
-
 var expect = require('expect.js');
 import icoValidator = require('../../validation/customValidators/ICOValidator');
 

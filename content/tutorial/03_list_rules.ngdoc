@@ -1,14 +1,11 @@
 @ngdoc overview
-@name 3 - Composite validator
-@step 3
+@name 4 - Validation rules with lists
+@step 4
 @description
 
-<ul doc-tutorial-nav="1"></ul>
 
-# Composite object validators
-You will learn how to create custom validator for your own object with nested structure.
-You will learn how to composite more custom validators to one main validator.
-
+# Validation rules for lists
+You will learn how to create custom validator for your own object with repeated structures -> lists, arrays.
 
 Let`s image your object has this structure.
 <pre>
@@ -36,10 +33,10 @@ interface IPhone{
 To create validator you have to
 
 
--   create AbstractValidator IData object
--   create AbstractValidator IPerson object
--   create AbstractValidator IContact object
--   create AbstractValidator IPhone object
+-   create AbstractValidator<IData> object
+-   create AbstractValidator<IPerson> object
+-   create AbstractValidator<IContact> object
+-   create AbstractValidator<IPhone> object
 -   compose these validators to match the object structure with ValidatorFor property
 
 <pre>

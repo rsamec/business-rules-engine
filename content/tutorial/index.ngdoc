@@ -11,65 +11,85 @@ the construction of various types of validation rules.
 ## Validation engine advantages
 
 * There is no dependencies on HTML DOM.
-* It enables to decorate custom objects with validation rules.
-* It enables to composite validation rules with custom object with nested structures.
-* Ease to create your own custom validators.
-* Support for async validation rules.
-* Support for array validation rules - enables to use validation for lists.
-* Support for AMD,CommonJS or plain script module pattern.
-* Extensible repository of custom validators.
-* Validation messages localization.
+* It enables to decorate custom objects and its properties with validation rules.
+* It supports composition of validation rules, that enables to validate custom object with nested structures.
+* It is ease to create your own custom validators.
+* It supports asynchronous validation rules (uses promises).
+* It supports assigning validation rules to collection-based structures - arrays and lists.
+* It supports localization of error messages with TranslateArgs.
+* You can use it as AMD,CommonJS or plain script module pattern.
+* It offers basic build-in constrains validators. Other custom validators can be find in extensible repository of custom validators.
+
+The main benefit is that validation engine is not tight to HTML DOM or any other UI framework.
+**This validation engine is UI agnostic** and that is why it can be used as **an independent representation of business rules** of a product, contract, etc.
+It can be easily reused by different types of applications, libraries.
+
+Typical usage of validation engine can be:
+
+* Client - server validation of business rules for an product.
+    *  UI application uses validation engine to enforce all validation rules with quick answer to client.
+    *  Server non-UI application uses the same business rules to enforce validity of business rules of the product once again (according to rule no client is trusted).
+* Validation of business rules of automatically generated products, contracts, etc.
+    * Server non-UI application can automatically generate the product or the contract. Validation engine enforce validation of business rules of the product, the contract, etc.
 
 ## Types of validators and validation rules
 
 * Custom property validator
 * Custom object validator
-    *   with property validation rules
-    *   with property async validation rules
+    *   with property validation rules (sync and async)
+    *   with collection-valued, array-valued and generally Iterable fields and properties
     *   with shared validation rules
 *   Composite object validator
 
 ## Dependencies
 
-The validation is not dependend on HTML DOM.
-The only depedency is on underscore.
-Some examples show custom validation rules that has other dependencies.
+The validation is not dependend on HTML DOM. **The only depedency is on ECMAScript**.
+
+Temporary there is dependency on the underscore javacript library.
+
+There can be other dependencies on other javascript libraries for custom validation rules found in repository of custom validators.
+
+Before using any custom validator found in repository, check the api for the custom validator for possible dependencies.
+E.g. DataCompareValidator requires underscore + moment javascript libraries.
 
 ## List of basic property validators
 
+The Property validator is designed to validate objects against constraints. They are assertions that a condition is true.
 
+
+### Basic constrains
+*   Required
+*   EqualTo
+
+### String constrains
+*   Email
+*   Url
+*   MaxLength,MinLength,RangeLength
+*   Pattern
+
+### Number constrains
+*   Number
+*   Digits, SignedDigits
+*   Max,Min,Range
+*   Step
+
+### Date constrains
+*   Date
+*   DateISO
+*   DateCompare
+
+### Financial and other Number Constraints
+*   Currency
+*   CreditCard
+*   Luhn
+
+### Collection constraints
+*   Contains
 
 ## Localization messages
 
-  "required": "This field is required.",
-            "remote": "Please fix the field.",
-            "email": "Please enter a valid email address.",
-            "url": "Please enter a valid URL.",
-            "date": "Please enter a valid date.",
-            "dateISO": "Please enter a valid date ( ISO ).",
-            "number": "Please enter a valid number.",
-            "digits": "Please enter only digits.",
-            "signedDigits": "Please enter only signed digits.",
-            "creditcard": "Please enter a valid credit card number.",
-            "equalTo": "Please enter the same value again.",
-            "maxlength": "Please enter no more than {MaxLength} characters..",
-            "minlength": "Please enter at least {MinLength} characters.",
-            "rangelength": "Please enter a value between {MinLength} and {MaxLength} characters long.",
-            "range": "Please enter a value between {Min} and {Max}.",
-            "max": "Please enter a value less than or equal to {Max}.",
-            "min": "Please enter a value greater than or equal to {Min}.",
-            "step": "Please enter a value with step {Step}.",
-            "param": "Please enter a value from {ParamId}.",
-            "mask": "Please enter a value corresponding with {Mask}.",
-            "dateCompare": {
-                Format: "MM/DD/YYYY",
-                LessThan: "Please enter date less than {CompareTo}.",
-                LessThanEqual: "Please enter date less than or equal {CompareTo}.",
-                Equal: "Please enter date equal {CompareTo}.",
-                NotEqual: "Please enter date different than {CompareTo}.",
-                GreaterThanEqual: "Please enter date greater than or equal {CompareTo}.",
-                GreaterThan: "Please enter date greter than {CompareTo}."
-            },
+It enables to localization of constrains messages. See the list of available localization messages
 
+Add reference to messages_cs.js to html page where you want to use CZ messages.
 
 ...

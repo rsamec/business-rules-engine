@@ -10,6 +10,16 @@ module Validation {
     export interface IError {
         HasError: boolean;
         ErrorMessage: string;
+        TranslateArgs?:IErrorTranslateArgs;
+    }
+
+    /**
+     *  support for localization of error messages
+     */
+    export interface IErrorTranslateArgs
+    {
+        TranslateId:string;
+        MessageArgs:any;
     }
 
     /**
@@ -20,15 +30,9 @@ module Validation {
     /**
      * It represents the validation result.
      */
-    export interface IValidationFailure {
-        Validator:IPropertyValidator
-        Error:IError;
-    }
-    /**
-     * It represents the validation result for validator.
-     */
-    export interface IAsyncValidationFailure {
-        Validator:IAsyncPropertyValidator
+    export interface IValidationFailure extends IError{
+        //Validator:IPropertyValidator
+        IsAsync:boolean;
         Error:IError;
     }
 
@@ -64,6 +68,12 @@ module Validation {
          * Return true if there is any error.
          */
         HasErrors: boolean;
+
+        /**
+         * Return true if there is any error and hasw dirty state.
+         */
+        HasErrorsDirty: boolean;
+
         /**
          * Return error message, if there is no error, return empty string.
          */
@@ -77,17 +87,24 @@ module Validation {
          * It enables to have errors optional.
          */
         Optional?: IOptional;
+
+        /**
+         * It enables support for localization of error messages.
+         */
+        TranslateArgs?:Array<IErrorTranslateArgs>
     }
 
-    /**
-     * basic error structure
+     /**
      *
-     * @class error
-     * @constructor
-     **/
+     * @ngdoc object
+     * @name  Error
+     * @module Validation
+     *
+     *
+     * @description
+     * It represents basic error structure.
+     */
     export class Error implements IError{
-
-        public CLASS_NAME:string = 'error';
 
         public HasError: boolean = true;
         public ErrorMessage: string = "";
@@ -97,15 +114,48 @@ module Validation {
         }
     }
 
+
     /**
-     *  It represents simple abstract error object.
+     *
+     * @ngdoc object
+     * @name  ValidationFailure
+     * @module Validation
+     *
+     *
+     * @description
+     * It represents validation failure.
      */
-    export class ValidationResult implements IValidationResult {
+    export class ValidationFailure implements IError
+    {
+        constructor(public Error:IError, public IsAsync:boolean) {
+
+        }
+        public get HasError(): boolean {return this.Error.HasError;}
+        public get ErrorMessage(): string {return this.Error.ErrorMessage;}
+        public get TranslateArgs():IErrorTranslateArgs {return this.Error.TranslateArgs;}
+
+
+    }
+
+    /**
+     *
+     * @ngdoc object
+     * @name  ValidationResult
+     * @module Validation
+     *
+     *
+     * @description
+     * It represents simple abstract error object.
+     */
+     export class ValidationResult implements IValidationResult {
 
         constructor(public Name: string) {}
 
+
+        public IsDirty:boolean;
+
         public get Children(): Array<IValidationResult> {
-            return new Array();
+            return [];
         }
 
         public Add(error: IValidationResult) {
@@ -116,6 +166,11 @@ module Validation {
         }
 
         public Optional: IOptional;
+        public TranslateArgs:Array<IErrorTranslateArgs>;
+
+        public get HasErrorsDirty():boolean {
+             return this.IsDirty && this.HasErrors;
+        }
 
         public get HasErrors(): boolean {
             return false;
@@ -127,38 +182,20 @@ module Validation {
         public get ErrorMessage(): string {
             return "";
         }
+
+
     }
 
-     /**
-     *  It represents simple field error object.
-     */
-    export class FieldValidationResult extends ValidationResult implements IValidationResult {
-
-        constructor(public Name: string,public MetaErrors: { [index: string]: IError })
-        {
-                 super(Name);
-        }
-
-        public get HasErrors(): boolean {
-            if (this.Optional != undefined && _.isFunction(this.Optional) && this.Optional()) return false;
-            return _.some(_.values(this.MetaErrors), function (error) {
-                return error.HasError;
-            });
-        }
-
-        public get ErrorCount(): number {
-            return this.HasErrors ? 1 : 0;
-        }
-        public get ErrorMessage(): string {
-            if (!this.HasErrors) return "";
-            return _.reduce(_.values(this.MetaErrors), function (memo, error:IError) {
-                return memo + error.ErrorMessage;
-            }, "");
-        }
-    }
 
     /**
-     *  It represents composition of error objects.
+     *
+     * @ngdoc object
+     * @name  CompositeValidationResult
+     * @module Validation
+     *
+     *
+     * @description
+     * It represents composite error object.
      */
     export class CompositeValidationResult implements IValidationResult {
 
@@ -177,6 +214,13 @@ module Validation {
         }
         public Remove(index: number) {
             this.Children.splice(index, 1);
+        }
+
+        public get HasErrorsDirty():boolean {
+            if (this.Optional != undefined && _.isFunction(this.Optional) && this.Optional()) return false;
+            return _.some(this.Children, function (error) {
+                return error.HasErrorsDirty;
+            });
         }
 
         get HasErrors(): boolean {
@@ -199,23 +243,49 @@ module Validation {
                 return memo + error.ErrorMessage;
             }, "");
         }
+
+        public get TranslateArgs():Array<IErrorTranslateArgs> {
+            if (!this.HasErrors) return [];
+            var newArgs = [];
+            _.each(this.Children, function (error:IValidationResult) {
+                newArgs = newArgs.concat(error.TranslateArgs);
+            });
+            return newArgs;
+        }
+
         public LogErrors() {
             this.traverse(this, 1);
         }
 
         public get Errors():{[name:string]:IValidationResult}{
-            var map:{[name:string]:IValidationResult} = {}
+            var map:{[name:string]:IValidationResult} = {};
             _.each(this.Children,function (val){
                 map[val.Name] = val;
             });
             return map;
         }
         private get FlattenErros(): Array<IValidationResult> {
-            var errors = new Array<IValidationResult>();
-            this.flattenErrors(this, errors)
+            var errors = [];
+            this.flattenErrors(this, errors);
             return errors;
         }
-
+        public SetDirty(){
+            this.SetDirtyEx(this,true);
+        }
+        public SetPristine(){
+            this.SetDirtyEx(this,false);
+        }
+        private SetDirtyEx(node: IValidationResult,  dirty:boolean){
+            if (node.Children.length == 0) {
+                node["IsDirty"] = dirty;
+            }
+            else {
+                for (var i = 0, len = node.Children.length; i < len; i++) {
+                    //stop if there are no children with errors
+                    this.SetDirtyEx(node.Children[i], dirty);
+                }
+            }
+        }
         private flattenErrors(node: IValidationResult, errorCollection: Array<IValidationResult>) {
             if (node.Children.length == 0) {
                 if (node.HasErrors) errorCollection.push(node);

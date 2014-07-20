@@ -17,6 +17,7 @@ import _s= require("underscore.string");
  * Return true for valid birth day number in Czech Republic, otherwise return false.
  *
  * @example
+ *
  * <pre>
  *
  *  //create validator
@@ -24,14 +25,13 @@ import _s= require("underscore.string");
  *
  *  //valid RC -> return true
  *  var result = validator.isAcceptable('800101/9999');
- *  //unvalid RC  -> return true
+ *  //unvalid RC  -> return false
  *  var result = validator.isAcceptable('111111/1752');
  *
  * </pre>
  */
 class RCValidator implements Validation.IPropertyValidator {
 
-    public CLASS_NAME:string = 'RCValidator';
     public tagName:string = 'rc';
 
     public isAcceptable(s:any):boolean {
@@ -90,9 +90,9 @@ class RCValidator implements Validation.IPropertyValidator {
         var datum = moment(_s.lpad(day.toString(), 2, '0') + "." + _s.lpad(month.toString(), 2, '0') + "." + year, "DD.MM.YYYY");
 
         if (!datum.isValid()) return false;
-        if (datum.toDate() > moment(Date.now()).toDate()) return false;
-        return true;
-    }
+        return datum.toDate() <= moment(Date.now()).toDate();
 
+    }
 }
+
 export = RCValidator;

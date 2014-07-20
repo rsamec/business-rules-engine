@@ -109,6 +109,4 @@ describe('RCValidator', function () {
             });
         })(unvalidParams[op]);
     }
-
-
 });

@@ -9,10 +9,10 @@
  * Return true for valid identification number of CZE company (called ico), otherwise return false.
  *
  * @example
- * <pre>
  *
+ * <pre>
  *  //create validator
- *  var validator = new IcoValidator(); *
+ *  var validator = new IcoValidator();
  *
  *  //valid IC -> return true
  *  var result = validator.isAcceptable('12312312');
@@ -35,7 +35,7 @@ class ICOValidator {
 
         if (!/^\d+$/.test(input)) return false;
 
-        var Sci = new Array();
+        var Sci = [];
         var Souc;
         var Del = input.length;
         var kon = parseInt(input.substring(Del, Del - 1), 10);// CLng(Right(strInput, 1));

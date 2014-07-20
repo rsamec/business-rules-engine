@@ -10,7 +10,6 @@ To create a custom validation rule you have to implement IPropertyValidator inte
 <pre>
         export interface IPropertyValidator{
             isAcceptable(s: any): boolean;
-            getErrorMessage?(localization:any):string;
             tagName?:string;
         }
 </pre>
@@ -130,101 +129,3 @@ Let`s use the validator
     var result = validator.isAcceptable(2000,2,3)
 
 </pre>
-
-## Define custom error message
-Our validator compares to dates and gives us true/false information about validity.
-It would be nice if validator gives us more user-friedly validationn message except true/false.
-
-Let`s implement getErrorMessage(json)-> string method in DateCompareValidator.
-
-<pre>
-  public getErrorMessage(localMessages:any) {
-          var msg = '';
-          var messages = localMessages[this.tagName];
-
-          var format:string = messages["Format"];
-          if (format != undefined) {
-              _.extend(this, {FormatedCompareTo: moment(this.CompareTo).format(format)})
-          }
-
-          switch (this.CompareOperator) {
-              case Validation.CompareOperator.LessThan:
-                  msg = messages["LessThan"];
-                  break;
-              case Validation.CompareOperator.LessThanEqual:
-                  msg = messages["LessThanEqual"];
-                  break;
-              case Validation.CompareOperator.Equal:
-                  msg =  messages["Equal"];
-                  break;
-              case Validation.CompareOperator.NotEqual:
-                  msg =  messages["NotEqual"];
-                  break;
-              case Validation.CompareOperator.GreaterThanEqual:
-                  msg =  messages["GreaterThanEqual"];
-                  break;
-              case Validation.CompareOperator.GreaterThan:
-                  msg = messages["GreaterThan"];
-                  break;
-          }
-          return DateCompareValidator.format(msg.replace('CompareTo','FormatedCompareTo'),this);
-      }
-      tagName = 'dateCompare';
-
-      static format(s: string, args: any): string {
-          var formatted = s;
-          for (var prop in args) {
-              var regexp = new RegExp('\\{' + prop + '\\}', 'gi');
-              formatted = formatted.replace(regexp, args[prop]);
-          }
-          return formatted;
-      }
-</pre>
-
-Let`s test that our DateCompareValidator returns relevant error messages.
-
-<pre>
-
-  import dateCompareValidator = require('DateCompareValidator');
-
-  describe("error messsages", function () {
-
-          var czMesseges = {
-              dateCompare: {
-                  Format: "DD.MM.YYYY",
-                  LessThan: "Prosím, zadejte datum menší než {CompareTo}.",
-                  LessThanEqual: "Prosím, zadejte datum menší nebo rovné {CompareTo}.",
-                  Equal: "Prosím, zadejte {CompareTo}.",
-                  NotEqual: "Prosím, zadejte datum různé od {CompareTo}.",
-                  GreaterThanEqual: "Prosím, zadejte datum větší nebo rovné {CompareTo}.",
-                  GreaterThan: "Prosím, zadejte datum větší než {CompareTo}."
-              }
-          };
-
-          var enMesseges = {
-              dateCompare: {
-                  Format: "MM/DD/YYYY",
-                  LessThan: "Please enter date less than {CompareTo}.",
-                  LessThanEqual: "Please enter date less than or equal {CompareTo}.",
-                  Equal: "Please enter date equal {CompareTo}.",
-                  NotEqual: "Please enter date different than {CompareTo}.",
-                  GreaterThanEqual: "Please enter date greater than or equal {CompareTo}.",
-                  GreaterThan: "Please enter date greter than {CompareTo}."
-              }
-          };
-
-          var validator = new dateCompareValidator();
-          validator.CompareTo = new Date(2000, 2, 2);
-          validator.CompareOperator = Validation.CompareOperator.LessThan;
-
-          it('should show czMessage', function () {
-              expect("Prosím, zadejte datum menší než 02.03.2000.").to.equal(validator.getErrorMessage(czMesseges))
-          });
-          it('should show enMessage', function () {
-              expect("Please enter date less than 03/02/2000.").to.equal(validator.getErrorMessage(enMesseges));
-          });
-
-      });
-
-</pre>
-

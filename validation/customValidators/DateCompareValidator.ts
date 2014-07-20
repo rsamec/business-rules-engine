@@ -3,12 +3,14 @@
 
 import moment = require("moment");
 import _ = require("underscore");
-/**
+
+ /**
  * @ngdoc object
  * @name DateCompareValidator
  *
  * @requires moment
  * @requires underscore
+ *
  * @description
  * DateCompareValidator enables to compare date to another date (CompareTo).</br>
  *
@@ -18,6 +20,7 @@ import _ = require("underscore");
  *
  * @property {boolean} IgnoreDate
  * It forces to ignore time part of date by date compare.
+ *
  *
  * @example
  * <pre>
@@ -34,7 +37,9 @@ import _ = require("underscore");
  *  var result = validator.isAcceptable(new Date(2000,2,2));
  *
  * </pre>
+ *
  */
+
 class DateCompareValidator implements Validation.IPropertyValidator{
 
     public isAcceptable(s:any){
@@ -86,47 +91,49 @@ class DateCompareValidator implements Validation.IPropertyValidator{
      */
     public IgnoreTime:boolean = false;
 
-    public getErrorMessage(localMessages:any) {
-        var msg = '';
-        var messages = localMessages[this.tagName];
-
-        var format:string = messages["Format"];
-        if (format != undefined) {
-            _.extend(this, {FormatedCompareTo: moment(this.CompareTo).format(format)})
-        }
-
-        switch (this.CompareOperator) {
-            case Validation.CompareOperator.LessThan:
-                msg = messages["LessThan"];
-                break;
-            case Validation.CompareOperator.LessThanEqual:
-                msg = messages["LessThanEqual"];
-                break;
-            case Validation.CompareOperator.Equal:
-                msg =  messages["Equal"];
-                break;
-            case Validation.CompareOperator.NotEqual:
-                msg =  messages["NotEqual"];
-                break;
-            case Validation.CompareOperator.GreaterThanEqual:
-                msg =  messages["GreaterThanEqual"];
-                break;
-            case Validation.CompareOperator.GreaterThan:
-                msg = messages["GreaterThan"];
-                break;
-        }
-        return DateCompareValidator.format(msg.replace('CompareTo','FormatedCompareTo'),this);
-    }
     tagName = 'dateCompare';
 
-    static format(s: string, args: any): string {
-        var formatted = s;
-        for (var prop in args) {
-            var regexp = new RegExp('\\{' + prop + '\\}', 'gi');
-            formatted = formatted.replace(regexp, args[prop]);
-        }
-        return formatted;
-    }
+//    public getErrorMessage(localMessages:any) {
+//        var msg = '';
+//        var messages = localMessages[this.tagName];
+//
+//        var format:string = messages["Format"];
+//        if (format != undefined) {
+//            _.extend(this, {FormatedCompareTo: moment(this.CompareTo).format(format)})
+//        }
+//
+//        switch (this.CompareOperator) {
+//            case Validation.CompareOperator.LessThan:
+//                msg = messages["LessThan"];
+//                break;
+//            case Validation.CompareOperator.LessThanEqual:
+//                msg = messages["LessThanEqual"];
+//                break;
+//            case Validation.CompareOperator.Equal:
+//                msg =  messages["Equal"];
+//                break;
+//            case Validation.CompareOperator.NotEqual:
+//                msg =  messages["NotEqual"];
+//                break;
+//            case Validation.CompareOperator.GreaterThanEqual:
+//                msg =  messages["GreaterThanEqual"];
+//                break;
+//            case Validation.CompareOperator.GreaterThan:
+//                msg = messages["GreaterThan"];
+//                break;
+//        }
+//        return DateCompareValidator.format(msg.replace('CompareTo','FormatedCompareTo'),this);
+//    }
+//    tagName = 'dateCompare';
+//
+//    static format(s: string, args: any): string {
+//        var formatted = s;
+//        for (var prop in args) {
+//            var regexp = new RegExp('\\{' + prop + '\\}', 'gi');
+//            formatted = formatted.replace(regexp, args[prop]);
+//        }
+//        return formatted;
+//    }
 }
 
 export = DateCompareValidator;

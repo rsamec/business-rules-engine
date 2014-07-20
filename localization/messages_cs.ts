@@ -1,9 +1,7 @@
 ///<reference path='../typings/underscore/underscore.d.ts'/>
 ///<reference path='../validation/rules.ts'/>
 
-/**
- * Created by rsamec on 9.7.2014.
- */
+
 module Validation {
 
     /*
@@ -28,7 +26,9 @@ module Validation {
         range: "Prosím, zadejte hodnotu od {Min} do {Max}.",
         max: "Prosím, zadejte hodnotu menší nebo rovnu {Max}.",
         min: "Prosím, zadejte hodnotu větší nebo rovnu {Min}.",
+        contains: "Prosím, zadejte hodnotu ze seznamu. Zadaná hodnota {AttemptedValue}.",
         dateCompare: {
+            Format: "DD.MM.YYYY",
             LessThan: "Prosím, zadejte datum menší než {CompareTo}.",
             LessThanEqual: "Prosím, zadejte datum menší nebo rovné {CompareTo}.",
             Equal: "Prosím, zadejte {CompareTo}.",

@@ -2,7 +2,7 @@
 ///<reference path='../../typings/node/node.d.ts'/>
 ///<reference path='../../typings/underscore/underscore.d.ts'/>
 
-var f = require('../../validation/validation.js')
+var Validation = require('../../validation/validation.js');
 var expect = require('expect.js');
 var _:UnderscoreStatic = require('underscore');
 var Q = require('q');
@@ -25,13 +25,13 @@ interface IPhone{
 
 describe('validation rules for lists', function () {
 
-    var required = new f.Validation.RequiredValidator();
+    var required = new Validation.RequiredValidator();
 
     var createPersonValidator = function() {
 
-        var maxLength = new f.Validation.MaxLengthValidator(15);
+        var maxLength = new Validation.MaxLengthValidator(15);
 
-        var validator = new f.Validation.AbstractValidator<IPerson>();
+        var validator = new Validation.AbstractValidator<IPerson>();
         validator.RuleFor("FirstName", required);
         validator.RuleFor("FirstName", maxLength);
 
@@ -42,52 +42,46 @@ describe('validation rules for lists', function () {
         validator.ValidatorFor("Contacts",contactValidator,true);
 
         return validator;
-    }
+    };
 
     var createContactValidator = function() {
 
-        var validator = new f.Validation.AbstractValidator<IContact>();
+        var validator = new Validation.AbstractValidator<IContact>();
         validator.RuleFor("Email", required);
-        validator.RuleFor("Email", new f.Validation.MaxLengthValidator(100));
-        validator.RuleFor("Email", new f.Validation.EmailValidator());
+        validator.RuleFor("Email", new Validation.MaxLengthValidator(100));
+        validator.RuleFor("Email", new Validation.EmailValidator());
 
         var phoneValidator = createPhoneValidator();
         validator.ValidatorFor("Mobile", phoneValidator);
         validator.ValidatorFor("FixedLine", phoneValidator);
 
         return validator;
-    }
+    };
 
     var createPhoneValidator = function() {
 
-        var validator = new f.Validation.AbstractValidator<IPhone>();
+        var validator = new Validation.AbstractValidator<IPhone>();
         validator.RuleFor("CountryCode", required);
-        validator.RuleFor("CountryCode", new f.Validation.MaxLengthValidator(3));
+        validator.RuleFor("CountryCode", new Validation.MaxLengthValidator(3));
 
         validator.RuleFor("Number", required);
-        validator.RuleFor("Number", new f.Validation.MaxLengthValidator(9));
+        validator.RuleFor("Number", new Validation.MaxLengthValidator(9));
 
         var optionsFce = function() {
             var deferral = Q.defer();
             setTimeout(function () {
-                deferral.resolve([
-                    { "value": 420, "text": "CZE" },
-                    { "value": 22, "text": "USA" },
-                    { "value": 33, "text": "GER" },
-                    { "value": 444, "text": "FRA" }
-                ]);
+                deferral.resolve(["FRA","CZE","USA","GER"]);
             }, 500);
             return deferral.promise;
         };
 
-        var param = new f.Validation.ParamValidator();
-        param.ParamId = "countryCodes";
+        var param = new Validation.ContainsValidator();
         param.Options = optionsFce();
 
         validator.RuleFor("CountryCode", param);
 
         return validator;
-    }
+    };
 
     var mainValidator = createPersonValidator();
 
@@ -158,10 +152,10 @@ describe('validation rules for lists', function () {
         this.Data.Contacts.push(getItemDataTemplate());
         this.Data.Contacts.push(getItemDataTemplate());
 
-        //item list property error
+        //simulate error at second item in list
         this.Data.Contacts[1].Email = "";
 
-        //item list async property error
+        //simulate async error at third item in list
         this.Data.Contacts[2].Mobile.CountryCode = "BLA";
 
         //excercise
@@ -237,7 +231,7 @@ describe('validation rules for lists', function () {
         this.Data.Contacts[2].Mobile.CountryCode = "BLA";
 
         //delete correct item
-        this.Data.Contacts.splice(1,1)
+        this.Data.Contacts.splice(1,1);
 
         //excercise
         var result = this.MainValidator.Validate(this.Data);

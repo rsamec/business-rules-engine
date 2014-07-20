@@ -39,8 +39,8 @@
       <root url="file://$PROJECT_DIR$/validation/error.js" />
       <root url="file://$PROJECT_DIR$/test/fixtures/metaDataRules.js" />
       <root url="file://$PROJECT_DIR$/validation/rulesList.js" />
-      <root url="file://$PROJECT_DIR$/dist/localization/messages_cs.js" />
-      <root url="file://$PROJECT_DIR$/dist/localization/messages_de.js" />
+      <root url="file://$PROJECT_DIR$/dist/i18n/messages_cs.js" />
+      <root url="file://$PROJECT_DIR$/dist/i18n/messages_de.js" />
       <root url="file://$PROJECT_DIR$/test/fixtures/rulesGroups.js" />
       <root url="file://$PROJECT_DIR$/localization/messages_cs.js" />
       <root url="file://$PROJECT_DIR$/test/customValidators/DataCompareValidator.js" />

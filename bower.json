@@ -31,7 +31,8 @@
     "content",
     "metaDataRules",
     "typedDocs",
-    "index.js"
+    "localization",
+    "app.js"
   ],
   "dependencies": {
     "underscore": "~1.6.0",

@@ -50,8 +50,17 @@ describe('basic validation rules', function () {
             //excercise
             var result = this.PersonValidator.Validate(this.Data);
 
-            //verify
+            //verify by return result
+            expect(result.HasErrors).to.equal(false);
+
+            //verify by concrete validator properties
             expect(this.PersonValidator.ValidationResult.HasErrors).to.equal(false);
+
+            //validator properties enables to check specific rule errors
+            expect(this.PersonValidator.Rules["FirstName"].ValidationFailures["required"].HasError).to.equal(false);
+            expect(this.PersonValidator.Rules["FirstName"].ValidationFailures["maxlength"].HasError).to.equal(false);
+            expect(this.PersonValidator.Rules["LastName"].ValidationFailures["required"].HasError).to.equal(false);
+            expect(this.PersonValidator.Rules["LastName"].ValidationFailures["maxlength"].HasError).to.equal(false);
 
         });
 
@@ -64,10 +73,19 @@ describe('basic validation rules', function () {
             //excercise
             var result = this.PersonValidator.Validate(this.Data);
 
-            //verify
-            expect(this.PersonValidator.ValidationResult.HasErrors).to.equal(true);
-        });
+            //verify by return result
+            expect(result.HasErrors).to.equal(true);
 
+            //verify by concrete validator properties
+            expect(this.PersonValidator.ValidationResult.HasErrors).to.equal(true);
+
+            //validator properties enables to check specific rule errors
+            expect(this.PersonValidator.Rules["FirstName"].ValidationFailures["required"].HasError).to.equal(true);
+            expect(this.PersonValidator.Rules["FirstName"].ValidationFailures["maxlength"].HasError).to.equal(false);
+            expect(this.PersonValidator.Rules["LastName"].ValidationFailures["required"].HasError).to.equal(false);
+            expect(this.PersonValidator.Rules["LastName"].ValidationFailures["maxlength"].HasError).to.equal(true);
+
+        });
     });
 
     describe('simple async validators', function() {
@@ -134,7 +152,7 @@ describe('basic validation rules', function () {
             var selfValidator = this.PersonValidator;
             promiseResult.then(function (response) {
 
-                selfValidator.ValidationResult.LogErrors();
+                selfValidator.ValidationResult.LogErrors("Output - job error");
 
                 //verify
                 expect(selfValidator.ValidationResult.HasErrors).to.equal(true);

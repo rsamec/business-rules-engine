@@ -20,18 +20,18 @@ TranslateArgs has this structure, where
 *   TranslateId is anchor to translation table.
 *   MessageArgs is arguments for string interpolation - typically it is a validator object itself
 
-<pre>
+```typescript
     export interface IErrorTranslateArgs
     {
         TranslateId:string;
         MessageArgs:any;
     }
-</pre>
+```
 
 
 ## See examples how to localizate error messages of validation rules
 
-<pre>
+```typescript
 
    describe('simple property validators', function () {
 
@@ -99,9 +99,9 @@ TranslateArgs has this structure, where
         });
 
     });
- </pre>
+ ```
 
- <pre>
+ ```typescript
     describe('simple async validators', function () {
 
         beforeEach(function () {
@@ -191,9 +191,9 @@ TranslateArgs has this structure, where
         });
 
     });
-</pre>
+```
 
- <pre>
+ ```typescript
     describe('shared validators', function () {
 
         beforeEach(function () {
@@ -263,9 +263,9 @@ TranslateArgs has this structure, where
 
         });
     });
-</pre>
+```
 
- <pre>
+ ```typescript
     describe('custom property validators', function () {
         beforeEach(function () {
             //setup
@@ -403,4 +403,4 @@ TranslateArgs has this structure, where
                 .to.equal(expectedMsg);
         });
     });
-</pre>
+```

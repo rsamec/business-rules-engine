@@ -1,7 +1,7 @@
 ///<reference path='../../typings/underscore.string/underscore.string.d.ts'/>
 ///<reference path='../../typings/moment/moment.d.ts'/>
 
-///<reference path='../validators.ts'/>
+///<reference path='../validation/validators.ts'/>
 
 import moment = require("moment");
 import _s= require("underscore.string");

@@ -9,7 +9,7 @@ var expect = require('expect.js');
 var _:UnderscoreStatic = require('underscore');
 var Q = require('q');
 
-import dateCompareValidator = require('../../validation/customValidators/DateCompareValidator');
+import dateCompareValidator = require('../../src/customValidators/DateCompareValidator');
 import moment = require('moment')
 
 

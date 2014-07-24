@@ -7,7 +7,7 @@
 
 
 var expect = require('expect.js');
-import rcValidator = require('../../validation/customValidators/RCValidator');
+import rcValidator = require('../../src/customValidators/RCValidator');
 
 describe('RCValidator', function () {
 

@@ -8,7 +8,7 @@
 
 
 var expect = require('expect.js');
-import paramValidator = require('../../validation/customValidators/ParamValidator');
+import paramValidator = require('../../src/customValidators/ParamValidator');
 var Q = require('q');
 
 describe('ParamValidator', function () {

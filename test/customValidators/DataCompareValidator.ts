@@ -7,7 +7,7 @@
 
 
 var expect = require('expect.js');
-import dateCompareValidator = require('../../validation/customValidators/DateCompareValidator');
+import dateCompareValidator = require('../../src/customValidators/DateCompareValidator');
 import moment = require('moment')
 
 describe('DateCompareValidator', function () {

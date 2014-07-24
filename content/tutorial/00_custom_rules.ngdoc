@@ -7,19 +7,19 @@
 
 To create a custom validation rule you have to implement IPropertyValidator interface.
 
-<pre>
+```typescript
         export interface IPropertyValidator{
             isAcceptable(s: any): boolean;
             tagName?:string;
         }
-</pre>
+```
 
 Notice, that inteface has only one method required (isAccepable(any)->boolean).
 
 Let's create validator that enables to compare two dates. We want to parametrize the validator with operators less, equal or greater.
 
 First we create enumaration for compare operators that enables us to parametrize validator.
-<pre>
+```typescript
     export enum CompareOperator {
         //must be less than
         LessThan,
@@ -39,17 +39,17 @@ First we create enumaration for compare operators that enables us to parametrize
         //must be more than
         GreaterThan
     }
-</pre>
+```
 
 Next we import dependencies - we need only some utilities.
-<pre>
+```typescript
     import moment = require("moment");
     import moment = require("underscore");
-</pre>
+```
 
 
 Now we create the validator and implements the method is isAcceptable(any)->boolean.
-<pre>
+```typescript
 class DateCompareValidator implements Validation.IPropertyValidator{
 
     public isAcceptable(s:any){
@@ -106,7 +106,7 @@ class DateCompareValidator implements Validation.IPropertyValidator{
 }
 
 export = DateCompareValidator;
-</pre>
+```
 
 
 <div doc-tutorial-reset="1"></div>
@@ -115,7 +115,7 @@ export = DateCompareValidator;
 ## Use custom validation rule
 
 Let`s use the validator
-<pre>
+```typescript
     import dateCompareValidator = require('DateCompareValidator');
 
     var validator = new dateCompareValidator();
@@ -128,4 +128,4 @@ Let`s use the validator
     //greater dates -> return false
     var result = validator.isAcceptable(2000,2,3)
 
-</pre>
+```

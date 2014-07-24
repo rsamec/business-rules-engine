@@ -1,4 +1,4 @@
-///<reference path='../typings/q/q.d.ts'/>
+///<reference path='../../typings/q/q.d.ts'/>
 
 ///<reference path='errors.ts'/>
 ///<reference path='validators.ts'/>

@@ -18,12 +18,12 @@ You can assigned these rules
 ## How to assign  property validation rules
 
 Let`s image your object has this structure.
-<pre>
+```typescript
 interface IPerson{
     FirstName:string;
     LastName:string;
 }
-</pre>
+```
 
 To create validator you have
 
@@ -31,13 +31,13 @@ To create validator you have
 -   create AbstractValidator<IPerson> object
 -   assign some rules to object properties
 
-<pre>
+```typescript
           //create new validator for object with structure<IPerson>
-          var personValidator = new f.Validation.AbstractValidator<IPerson>();
+          var personValidator = new Validation.AbstractValidator<IPerson>();
 
           //basic validators
-          var required =new f.Validation.RequiredValidator();
-          var maxLength = new f.Validation.MaxLengthValidator(15);
+          var required =new Validation.RequiredValidator();
+          var maxLength = new Validation.MaxLengthValidator(15);
 
           //assigned validators to property
           personValidator.RuleFor("FirstName", required);
@@ -47,19 +47,19 @@ To create validator you have
           personValidator.RuleFor("LastName", required);
           personValidator.RuleFor("LastName",maxLength);
 
-</pre>
+```
 
 Use validator to get validation results
-<pre>
+```typescript
     this.PersonValidator = personValidator.CreateRule("Person");
     var result = this.PersonValidator.Validate(this.Data);
     if (result.HasErrors){
         console.log(result.ErrorMessage);
     }
-</pre>
+```
 
 ### Test - custom object validator with property validation rule test
-<pre>
+```typescript
 describe('simple property validators', function() {
 
         beforeEach(function(){
@@ -97,16 +97,16 @@ describe('simple property validators', function() {
         });
 
     });
-</pre>
+```
 
 ## How to assign async property validation rules
 
 Let`s image your object has this structure.
-<pre>
+```typescript
 interface IPerson{
     Job:string
 }
-</pre>
+```
 
 To create validator you have
 
@@ -114,9 +114,9 @@ To create validator you have
 *   create AbstractValidator<IPerson> object
 *   assign some async rules to object properties
 
-<pre>
+```typescript
          //create new validator for object with structure<IPerson>
-               var personValidator = new f.Validation.AbstractValidator<IPerson>();
+               var personValidator = new Validation.AbstractValidator<IPerson>();
 
                //async functions returning list of values
                var optionsFce = function() {
@@ -133,17 +133,17 @@ To create validator you have
                };
 
                //async basic validators - return true if specified param contains any value
-               var param = new f.Validation.ParamValidator();
+               var param = new Validation.ParamValidator();
                param.ParamId = "jobs";
                param.Options = optionsFce();
 
                //assigned validator to property
                personValidator.RuleFor("Job",param);
 
-</pre>
+```
 
 Use validator to get async validation results
-<pre>
+```typescript
     this.PersonValidator = personValidator.CreateRule("Person");
     var promiseResult = this.PersonValidator.ValidateAsync(this.Data);
     promiseResult.then(function (result) {
@@ -151,11 +151,11 @@ Use validator to get async validation results
                 console.log(result.ErrorMessage);
             }
     })
-</pre>
+```
 
 
 ### Test - custom object validator with async property validation rule
-<pre>
+```typescript
      beforeEach(function(){
             //setup
             this.Data = {};
@@ -203,20 +203,20 @@ Use validator to get async validation results
 
             }).done(null,done);
         });
-</pre>
+```
 
 
 ## How to assign shared validation rule
 
 Let`s image your object has this structure.
-<pre>
+```typescript
 interface IPerson{
     IsChecked:true;
     FirstName:string;
     LastName:string;
 
 }
-</pre>
+```
 
 To create shared validation rule
 
@@ -226,9 +226,9 @@ To create shared validation rule
 *   create named validation function
 *   use ValidationFor property to assign named validation function to object properties
 
-<pre>
+```typescript
             //create new validator for object with structure<IPerson>
-             var personValidator = new f.Validation.AbstractValidator<IPerson>();
+             var personValidator = new Validation.AbstractValidator<IPerson>();
 
              //shared validation function
              var oneSpaceFce = function (args:any) {
@@ -247,19 +247,19 @@ To create shared validation rule
              //assign validation function to properties
              personValidator.ValidationFor("FirstName", validatorFce);
              personValidator.ValidationFor("LastName", validatorFce);
-</pre>
+```
 
 Use validator to get validation results
-<pre>
+```typescript
     this.PersonValidator = personValidator.CreateRule("Person");
     var result = this.PersonValidator.Validate(this.Data);
     if (result.HasErrors){
         console.log(result.ErrorMessage);
     }
-</pre>
+```
 
 ### Test - custom validator object with shared validation rule
-<pre>
+```typescript
   beforeEach(function(){
             //setup
             this.Data = {};
@@ -296,7 +296,7 @@ Use validator to get validation results
             //verify
             expect(this.PersonValidator.ValidationResult.HasErrors).to.equal(true);
         });
-</pre>
+```
 
 
 

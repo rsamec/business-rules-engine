@@ -1,5 +1,4 @@
-
-///<reference path='../validators.ts'/>
+///<reference path='../validation/validators.ts'/>
 
 /**
  * @ngdoc object

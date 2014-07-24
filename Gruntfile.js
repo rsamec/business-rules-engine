@@ -106,12 +106,14 @@ module.exports = function (grunt) {
       },
       typescript: {
           base: {
-              src: ['validation/rules.ts'],
-              dest: '.dist/validation.js',
+              src: ['src/validation/rules.ts'],
+              dest: 'dist/validation.js',
               options: {
                   //module: 'amd',
                   target: 'es5',
-                  declaration: false
+                  declaration: false,
+                  comment:true,
+                  comments:true
 
               }
           }

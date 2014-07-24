@@ -1,6 +1,6 @@
-///<reference path='../typings/underscore/underscore.d.ts'/>
-///<reference path='../typings/q/q.d.ts'/>
-///<reference path='../typings/moment/moment.d.ts'/>
+///<reference path='../../typings/underscore/underscore.d.ts'/>
+///<reference path='../../typings/q/q.d.ts'/>
+///<reference path='../../typings/moment/moment.d.ts'/>
 var Validation;
 (function (Validation) {
     
@@ -353,7 +353,7 @@ var Validation;
     })();
     Validation.ContainsValidator = ContainsValidator;
 })(Validation || (Validation = {}));
-///<reference path='../typings/underscore/underscore.d.ts'/>
+///<reference path='../../typings/underscore/underscore.d.ts'/>
 ///<reference path='validators.ts'/>
 var Validation;
 (function (Validation) {
@@ -575,8 +575,14 @@ var Validation;
             configurable: true
         });
 
-        CompositeValidationResult.prototype.LogErrors = function () {
+        CompositeValidationResult.prototype.LogErrors = function (headerMessage) {
+            if (headerMessage == undefined)
+                headerMessage = "Output";
+            console.log("---------------\n");
+            console.log("--- " + headerMessage + " ----\n");
+            console.log("---------------\n");
             this.traverse(this, 1);
+            console.log("\n\n\n");
         };
 
         Object.defineProperty(CompositeValidationResult.prototype, "Errors", {
@@ -640,7 +646,7 @@ var Validation;
     })();
     Validation.CompositeValidationResult = CompositeValidationResult;
 })(Validation || (Validation = {}));
-///<reference path='../typings/q/q.d.ts'/>
+///<reference path='../../typings/q/q.d.ts'/>
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }

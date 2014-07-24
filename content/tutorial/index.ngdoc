@@ -5,8 +5,85 @@
 
 # Validation engine tutorial
 
-A great way to get introduced to work with validation engine is to work through this tutorial, which walks you through
-the construction of various types of validation rules.
+To participate in enterprise business process, employees, customers and partners need to interact with data stored in various enterprise applications – whether providing information or retrieving it.
+These stored data are typically structured data or semi-structured data that must correspond to specific business rules or validation rules.
+
+
+Validation engine offers a way how to define business rules of the product, the contract, or to define validation rules of the forms that captures this data.
+
+# Basic usage
+
+## 1. First define data structure
+```typescript
+    //data structure
+    interface IPerson{
+        FirstName:string;
+        LastName:string;
+    }
+```
+
+## 2. Define business rules
+```typescript
+    //create new validator for object with structure<IPerson>
+    var personValidator = new Validation.AbstractValidator<IPerson>();
+
+    //basic validators
+    var required =new Validation.RequiredValidator();
+    var maxLength = new Validation.MaxLengthValidator(15);
+
+    //assigned validators to property
+    personValidator.RuleFor("FirstName", required);
+    personValidator.RuleFor("FirstName",maxLength);
+
+    //assigned validators to property
+    personValidator.RuleFor("LastName", required);
+    personValidator.RuleFor("LastName",maxLength);
+```
+
+## 3. Use validation engine
+```typescript
+
+            //concrete validator
+            var concreteValidator = personValidator.CreateRule("Data");
+
+            //sample data with errors
+            var data = {
+                 FirstName : "",
+                 LastName: "Toooooooooooooooooooooooooooooooo long name"
+            };
+
+            //validate
+            var result = concreteValidator.Validate(data);
+
+            //verify by return result
+            expect(result.HasErrors).to.equal(true);
+            if (result.HasErrors) console.log(result.ErrorMessage);
+
+            //verify by concrete validator properties
+            expect(concreteValidator.ValidationResult.HasErrors).to.equal(true);
+            if (concreteValidator.ValidationResult.HasErrors) console.log(concreteValidator.ValidationResult.ErrorMessage);
+
+            //validator properties enables to check specific rule errors
+            expect(concreteValidator.Rules["FirstName"].ValidationFailures["required"].HasError).to.equal(true);
+            expect(concreteValidator.Rules["FirstName"].ValidationFailures["maxlength"].HasError).to.equal(false);
+            expect(concreteValidator.Rules["LastName"].ValidationFailures["required"].HasError).to.equal(false);
+            expect(concreteValidator.Rules["LastName"].ValidationFailures["maxlength"].HasError).to.equal(true);
+
+```
+
+The main benefit is that validation engine is not tight to HTML DOM or any other UI framework.
+**This validation engine is UI agnostic** and that is why it can be used as **an independent representation of business rules** of a product, contract, etc.
+It can be easily reused by different types of applications, libraries.
+
+## Typical usage of validation engine can be:
+
+* Client - server validation of business rules for an product.
+    *  UI application uses validation engine to enforce all validation rules with quick answer to client.
+    *  Server non-UI application uses the same business rules to enforce validity of business rules of the product once again (according to rule no client is trusted).
+* Validation of business rules of automatically generated products, contracts, etc.
+    * Server non-UI application can automatically generate the product or the contract. Validation engine enforce validation of business rules of the product, the contract, etc.
+* Forms application which uses business rules to capture structured or semi-structured data.
+
 
 ## Validation engine advantages
 
@@ -17,20 +94,10 @@ the construction of various types of validation rules.
 * It supports asynchronous validation rules (uses promises).
 * It supports assigning validation rules to collection-based structures - arrays and lists.
 * It supports localization of error messages with TranslateArgs.
-* You can use it as AMD,CommonJS or plain script module pattern.
+* It deploys as AMD, CommonJS or plain script module pattern.
 * It offers basic build-in constrains validators. Other custom validators can be find in extensible repository of custom validators.
 
-The main benefit is that validation engine is not tight to HTML DOM or any other UI framework.
-**This validation engine is UI agnostic** and that is why it can be used as **an independent representation of business rules** of a product, contract, etc.
-It can be easily reused by different types of applications, libraries.
 
-Typical usage of validation engine can be:
-
-* Client - server validation of business rules for an product.
-    *  UI application uses validation engine to enforce all validation rules with quick answer to client.
-    *  Server non-UI application uses the same business rules to enforce validity of business rules of the product once again (according to rule no client is trusted).
-* Validation of business rules of automatically generated products, contracts, etc.
-    * Server non-UI application can automatically generate the product or the contract. Validation engine enforce validation of business rules of the product, the contract, etc.
 
 ## Types of validators and validation rules
 
@@ -88,8 +155,9 @@ The Property validator is designed to validate objects against constraints. They
 
 ## Localization messages
 
-It enables to localization of constrains messages. See the list of available localization messages
+It enables to localization of constrains messages. See the list of available localization messages in i18n directory.
 
-Add reference to messages_cs.js to html page where you want to use CZ messages.
+Localization is enabled by default. It is enough to add reference to specific localization files.
+For Czech Republic localization add reference to dist/i18n/messages_cs.js to html page where you want to use CZ messages.
 
 ...

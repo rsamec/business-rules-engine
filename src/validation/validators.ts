@@ -1,6 +1,6 @@
-///<reference path='../typings/underscore/underscore.d.ts'/>
-///<reference path='../typings/q/q.d.ts'/>
-///<reference path='../typings/moment/moment.d.ts'/>
+///<reference path='../../typings/underscore/underscore.d.ts'/>
+///<reference path='../../typings/q/q.d.ts'/>
+///<reference path='../../typings/moment/moment.d.ts'/>
 
 module Validation {
 

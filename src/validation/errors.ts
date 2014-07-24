@@ -1,4 +1,4 @@
-///<reference path='../typings/underscore/underscore.d.ts'/>
+///<reference path='../../typings/underscore/underscore.d.ts'/>
 
 ///<reference path='validators.ts'/>
 
@@ -253,8 +253,13 @@ module Validation {
             return newArgs;
         }
 
-        public LogErrors() {
+        public LogErrors(headerMessage?:string) {
+            if (headerMessage == undefined) headerMessage = "Output";
+            console.log("---------------\n");
+            console.log("--- "  + headerMessage  + " ----\n");
+            console.log("---------------\n");
             this.traverse(this, 1);
+            console.log("\n\n\n");
         }
 
         public get Errors():{[name:string]:IValidationResult}{

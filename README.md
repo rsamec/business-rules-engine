@@ -2,15 +2,19 @@
 
 Validation module
 
-[![build status](https://secure.travis-ci.org/rsamec/form.png)](http://travis-ci.org/rsamec/form)
+![logo](rsamec.github.com/form/form_logo.gif)
+
+Validation module is a lightway JavaScript library that provides API for business rules definition of the product, the contract or validation rules of the form.
 
 ## Installation
 
 This module is installed via bower:
 
-``` bash
-$ bower install form
-```
++   Node.js - npm install form
++   Require.js - require(["form"], ...
++   Bower - bower install form
+
+
 
 ## Example Usage
 

@@ -1,6 +1,6 @@
 {
   "name": "form",
-  "main": "dist/validation.js",
+  "main": "dist/form.js",
   "version": "1.0.0",
   "homepage": "https://github.com/rsamec/form",
   "authors": [

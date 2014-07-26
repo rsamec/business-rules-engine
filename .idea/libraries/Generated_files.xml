@@ -5,7 +5,6 @@
         <item url="file://$PROJECT_DIR$/test/validation/rulesGroups.js" />
         <item url="file://$PROJECT_DIR$/src/localization/messages_cs.js" />
         <item url="file://$PROJECT_DIR$/test/customValidators/DataCompareValidator.js" />
-        <item url="file://$PROJECT_DIR$/dist/validation.js" />
         <item url="file://$PROJECT_DIR$/src/validation/rules.js" />
         <item url="file://$PROJECT_DIR$/test/customValidators/ParamValidator.js" />
         <item url="file://$PROJECT_DIR$/test/validation/rulesTranslate.js" />
@@ -22,7 +21,10 @@
         <item url="file://$PROJECT_DIR$/test/validation/rules.js" />
         <item url="file://$PROJECT_DIR$/src/validation/validators.js" />
         <item url="file://$PROJECT_DIR$/src/localization/messages_de.js" />
+        <item url="file://$PROJECT_DIR$/src/metaDataRules/form.js" />
+        <item url="file://$PROJECT_DIR$/src/metaDataRules/metaDataRules.js" />
         <item url="file://$PROJECT_DIR$/src/customValidators/DateCompareValidator.js" />
+        <item url="file://$PROJECT_DIR$/src/metaDataRules/util.js" />
       </sourceFilesUrls>
     </properties>
     <CLASSES>
@@ -41,10 +43,13 @@
       <root url="file://$PROJECT_DIR$/src/validation/validationNode.js" />
       <root url="file://$PROJECT_DIR$/dist/i18n/messages_cs.js" />
       <root url="file://$PROJECT_DIR$/dist/i18n/messages_de.js" />
+      <root url="file://$PROJECT_DIR$/dist/validation.js" />
+      <root url="file://$PROJECT_DIR$/dist/i18n/messages_cs.js" />
+      <root url="file://$PROJECT_DIR$/dist/i18n/messages_de.js" />
+      <root url="file://$PROJECT_DIR$/dist/validation.js" />
       <root url="file://$PROJECT_DIR$/test/validation/rulesGroups.js" />
       <root url="file://$PROJECT_DIR$/src/localization/messages_cs.js" />
       <root url="file://$PROJECT_DIR$/test/customValidators/DataCompareValidator.js" />
-      <root url="file://$PROJECT_DIR$/dist/validation.js" />
       <root url="file://$PROJECT_DIR$/test/validation/rulesTranslate.js" />
       <root url="file://$PROJECT_DIR$/test/customValidators/ParamValidator.js" />
       <root url="file://$PROJECT_DIR$/src/validation/rules.js" />

@@ -4,7 +4,6 @@
 
 module Validation {
 
-
     /**
      * This represents validation rule.
      */

@@ -5,8 +5,9 @@
 ///<reference path='util.ts'/>
 ///<reference path='metaDataRules.ts'/>
 
-module Validation {
 
+module Validation {
+    
     export interface IForm {
         Errors:IValidationResult;
         //Validators:Validators;

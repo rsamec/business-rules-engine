@@ -4,7 +4,7 @@ module.exports = function (grunt) {
       pkg: grunt.file.readJSON('package.json'),
       complexity: {
           generic: {
-              src: ['app/**/*.js'],
+              src: ['src/**/*.js'],
               options: {
                   errorsOnly: false,
                   cyclometric: 6,       // default is 3
@@ -16,7 +16,7 @@ module.exports = function (grunt) {
       jshint: {
           all: [
               'Gruntfile.js',
-              'app/**/*.js',
+              'src/**/*.js',
               'test/**/*.js'
           ],
           options: {
@@ -27,7 +27,7 @@ module.exports = function (grunt) {
           all: ['test/**/*.js'],
           options: {
               reporter: 'spec',
-              ui: 'tdd'
+              ui: 'bdd'
           }
       },
       watch: {
@@ -104,17 +104,40 @@ module.exports = function (grunt) {
               }
           ]
       },
+//      typescript: {
+//          base: {
+//              src: ['src/validation/rules.ts'],
+//              dest: 'dist/<%= pkg.name %>.js',
+//              options: {
+//                  //module: 'amd',
+//                  target: 'es5',
+//                  declaration: true,
+//                  comments:true
+//              }
+//          }
+//      },
       typescript: {
           base: {
-              src: ['src/validation/rules.ts'],
-              dest: 'dist/validation.js',
+              src: ['src/customValidators/*.ts','src/localization/*.ts'],
+              dest: 'distNode/lib',
               options: {
-                  //module: 'amd',
+                  module: 'commonjs',
                   target: 'es5',
                   declaration: false,
-                  comment:true,
-                  comments:true
-
+                  after:['uglify'],
+                  comments:false,
+                  basePath:'src'
+              }
+          }
+      },
+      uglify: {
+          options: {
+              // the banner is inserted at the top of the output
+              banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
+          },
+          dist: {
+              files: {
+                  'dist/<%= pkg.name %>.min.js': ['<%= typescript.base.dest %>']
               }
           }
       }
@@ -124,16 +147,17 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-complexity');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-mocha-cli');
   grunt.loadNpmTasks('grunt-ngdocs');
   grunt.loadNpmTasks('grunt-typedoc');
   grunt.loadNpmTasks('grunt-typescript');
 
-  grunt.registerTask('test', ['complexity', 'jshint', 'mochacli', 'watch']);
+
+  grunt.registerTask('test', [ 'mochacli', 'watch']);
   grunt.registerTask('ci', ['complexity', 'jshint', 'mochacli']);
   grunt.registerTask('default', ['test']);
-  grunt.registerTask('docular', ['docular']);
-  grunt.registerTask('tsc', ['typescript']);
+  grunt.registerTask('dist', ['typescript','uglify']);
+  grunt.registerTask('distNode', ['typescript']);
   grunt.registerTask('document', ['ngdocs']);
-  grunt.registerTask('documentTypescrip', ['typedoc']);
 };

@@ -2,7 +2,7 @@
 
 Validation module
 
-![logo](https://github.com/rsamec/form/form_logo.gif)
+![logo](https://github.com/rsamec/form/blob/master/form_logo.gif)
 
 Validation module is a lightway JavaScript library that provides API for business rules definition of the product, the contract or validation rules of the form.
 

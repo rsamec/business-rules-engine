@@ -8,7 +8,7 @@ Validation module is a lightweight JavaScript library for easy business rules de
 
 ## Key features
 The main benefit is that validation engine is not tight to HTML DOM or any other UI framework.
-This validation engine is *UI agnostic* and that is why it can be used as *an independent representation of business rules* of a product, contract, etc.
+This validation engine is **UI agnostic** and that is why it can be used as **an independent representation of business rules** of a product, contract, etc.
 It can be easily reused by different types of applications, libraries.
 
 +   It enables to decorate custom objects and its properties with validation rules.

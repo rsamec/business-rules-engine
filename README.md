@@ -4,21 +4,22 @@
 
 Validation module is a lightweight JavaScript library for easy business rules definition of the product, the contract, the form etc.
 
-[API + tutorial] (https://github.com/rsamec/form/wiki)
+[Tutorial] (https://github.com/rsamec/form/wiki)
 
 ## Installation
 
-This module is installed via bower:
+This module is installed:
 
-+   Node.js - npm install form
-+   Bower - bower install form
-
++   Node.js
+   +    npm install node-form
+   +    use require('node-form');
++   Bower
+   +   bower install form
+   +   add reference to dist/form.min.js file.
 
 ## Example Usage
 
-Add reference to dist/form.min.js file.
-
-To create abstract validator
+To define business rules for some object, you have to create abstract validator.
 ``` js
           //create new validator for object with structure<IPerson>
           var personValidator = new Validation.AbstractValidator();
@@ -37,7 +38,7 @@ To create abstract validator
 
 ```
 
-To create test data
+To use business rules and execute them on particular data
 ```js
           //create test data
           var data = {

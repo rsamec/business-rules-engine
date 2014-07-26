@@ -595,7 +595,7 @@ module Validation {
                         var hasError = ((value===undefined || value === null) && validator.tagName!="required")?false: !validator.isAcceptable(value);
 
                         validation.Error.HasError = hasError;
-                        validation.Error.TranslateArgs = { TranslateId:validator.tagName, MessageArgs:_.extend(validator,{AttemptedValue: value})};
+                        validation.Error.TranslateArgs = { TranslateId:validator.tagName, MessageArgs:_.extend(validator,{AttemptedValue: value}), CustomMessage: validator.customMessage};
                         validation.Error.ErrorMessage = hasError ? MessageLocalization.GetValidationMessage(validation.Error.TranslateArgs.MessageArgs) : "";
 
                         shortCircuited = hasError;

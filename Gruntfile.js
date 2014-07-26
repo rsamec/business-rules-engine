@@ -111,7 +111,7 @@ module.exports = function (grunt) {
               options: {
                   //module: 'amd',
                   target: 'es5',
-                  declaration: false,
+                  declaration: true,
                   comments:true
               }
           }

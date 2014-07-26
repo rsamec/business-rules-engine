@@ -9,7 +9,7 @@ module Validation {
      */
     export interface IPropertyValidator {
         isAcceptable(s:any): boolean;
-        getErrorMessage?(localization:any):string;
+        customMessage?(config:any, args:any):string;
         tagName?:string;
     }
 
@@ -25,7 +25,7 @@ module Validation {
      */
     export interface IAsyncPropertyValidator {
         isAcceptable(s:any): Q.Promise<boolean>;
-        getErrorMessage?(localization:any):string;
+        customMessage?(config:any, args:any):string;
         isAsync:boolean;
         tagName?:string;
     }

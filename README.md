@@ -9,14 +9,12 @@ Validation module is a lightweight JavaScript library for easy business rules de
 This module is installed via bower:
 
 +   Node.js - npm install form
-+   Require.js - require(["form"], ...
 +   Bower - bower install form
-
 
 
 ## Example Usage
 
-Add reference to dist/validation.js file.
+Add reference to dist/form.min.js file.
 
 ``` js
           //create new validator for object with structure<IPerson>

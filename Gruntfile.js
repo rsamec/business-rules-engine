@@ -104,32 +104,32 @@ module.exports = function (grunt) {
               }
           ]
       },
-//      typescript: {
-//          base: {
-//              src: ['src/validation/rules.ts'],
-//              dest: 'dist/<%= pkg.name %>.js',
-//              options: {
-//                  //module: 'amd',
-//                  target: 'es5',
-//                  declaration: true,
-//                  comments:true
-//              }
-//          }
-//      },
       typescript: {
           base: {
-              src: ['src/customValidators/*.ts','src/localization/*.ts'],
-              dest: 'distNode/lib',
+              src: ['src/validation/rules.ts'],
+              dest: 'dist/<%= pkg.name %>.js',
               options: {
-                  module: 'commonjs',
+                  //module: 'amd',
                   target: 'es5',
                   declaration: false,
-                  after:['uglify'],
-                  comments:false,
-                  basePath:'src'
+                  comments:true
               }
           }
       },
+//      typescript: {
+//          base: {
+//              src: ['src/customValidators/*.ts','src/localization/*.ts'],
+//              dest: 'distNode/lib',
+//              options: {
+//                  module: 'commonjs',
+//                  target: 'es5',
+//                  declaration: false,
+//                  after:['uglify'],
+//                  comments:false,
+//                  basePath:'src'
+//              }
+//          }
+//      },
       uglify: {
           options: {
               // the banner is inserted at the top of the output

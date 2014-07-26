@@ -26,12 +26,11 @@
     "test",
     "tests",
     "typings",
-    "validation",
+    "src",
     "docs",
+    "distNode",
     "content",
-    "metaDataRules",
     "typedDocs",
-    "localization",
     "app.js"
   ],
   "dependencies": {

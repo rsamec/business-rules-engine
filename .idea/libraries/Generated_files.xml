@@ -2,29 +2,27 @@
   <library name="Generated files" type="javaScript">
     <properties>
       <sourceFilesUrls>
-        <item url="file://$PROJECT_DIR$/dist/localization/messages_cs.js" />
-        <item url="file://$PROJECT_DIR$/dist/localization/messages_de.js" />
-        <item url="file://$PROJECT_DIR$/test/fixtures/rulesGroups.js" />
-        <item url="file://$PROJECT_DIR$/localization/messages_cs.js" />
+        <item url="file://$PROJECT_DIR$/test/validation/rulesGroups.js" />
+        <item url="file://$PROJECT_DIR$/src/localization/messages_cs.js" />
         <item url="file://$PROJECT_DIR$/test/customValidators/DataCompareValidator.js" />
         <item url="file://$PROJECT_DIR$/dist/validation.js" />
+        <item url="file://$PROJECT_DIR$/src/validation/rules.js" />
         <item url="file://$PROJECT_DIR$/test/customValidators/ParamValidator.js" />
-        <item url="file://$PROJECT_DIR$/validation/rules.js" />
-        <item url="file://$PROJECT_DIR$/test/fixtures/rulesTranslate.js" />
+        <item url="file://$PROJECT_DIR$/test/validation/rulesTranslate.js" />
         <item url="file://$PROJECT_DIR$/test/customValidators/ICOValidator.js" />
         <item url="file://$PROJECT_DIR$/test/customValidators/RCValidator.js" />
-        <item url="file://$PROJECT_DIR$/test/fixtures/validators.js" />
-        <item url="file://$PROJECT_DIR$/test/fixtures/customValidators.js" />
-        <item url="file://$PROJECT_DIR$/test/fixtures/rulesNested.js" />
-        <item url="file://$PROJECT_DIR$/validation/customValidators/ICOValidator.js" />
-        <item url="file://$PROJECT_DIR$/test/fixtures/rulesLists.js" />
-        <item url="file://$PROJECT_DIR$/validation/customValidators/ParamValidator.js" />
-        <item url="file://$PROJECT_DIR$/validation/customValidators/RCValidator.js" />
-        <item url="file://$PROJECT_DIR$/validation/errors.js" />
-        <item url="file://$PROJECT_DIR$/test/fixtures/rules.js" />
-        <item url="file://$PROJECT_DIR$/validation/validators.js" />
-        <item url="file://$PROJECT_DIR$/localization/messages_de.js" />
-        <item url="file://$PROJECT_DIR$/validation/customValidators/DateCompareValidator.js" />
+        <item url="file://$PROJECT_DIR$/test/validation/validators.js" />
+        <item url="file://$PROJECT_DIR$/test/validation/customValidators.js" />
+        <item url="file://$PROJECT_DIR$/test/validation/rulesNested.js" />
+        <item url="file://$PROJECT_DIR$/src/customValidators/ICOValidator.js" />
+        <item url="file://$PROJECT_DIR$/test/validation/rulesLists.js" />
+        <item url="file://$PROJECT_DIR$/src/customValidators/ParamValidator.js" />
+        <item url="file://$PROJECT_DIR$/src/customValidators/RCValidator.js" />
+        <item url="file://$PROJECT_DIR$/src/validation/errors.js" />
+        <item url="file://$PROJECT_DIR$/test/validation/rules.js" />
+        <item url="file://$PROJECT_DIR$/src/validation/validators.js" />
+        <item url="file://$PROJECT_DIR$/src/localization/messages_de.js" />
+        <item url="file://$PROJECT_DIR$/src/customValidators/DateCompareValidator.js" />
       </sourceFilesUrls>
     </properties>
     <CLASSES>
@@ -39,6 +37,8 @@
       <root url="file://$PROJECT_DIR$/validation/error.js" />
       <root url="file://$PROJECT_DIR$/test/fixtures/metaDataRules.js" />
       <root url="file://$PROJECT_DIR$/validation/rulesList.js" />
+      <root url="file://$PROJECT_DIR$/src/validation/validationNode.js" />
+      <root url="file://$PROJECT_DIR$/src/validation/validationNode.js" />
       <root url="file://$PROJECT_DIR$/dist/i18n/messages_cs.js" />
       <root url="file://$PROJECT_DIR$/dist/i18n/messages_de.js" />
       <root url="file://$PROJECT_DIR$/test/validation/rulesGroups.js" />
@@ -46,8 +46,8 @@
       <root url="file://$PROJECT_DIR$/test/customValidators/DataCompareValidator.js" />
       <root url="file://$PROJECT_DIR$/dist/validation.js" />
       <root url="file://$PROJECT_DIR$/test/validation/rulesTranslate.js" />
-      <root url="file://$PROJECT_DIR$/src/validation/rules.js" />
       <root url="file://$PROJECT_DIR$/test/customValidators/ParamValidator.js" />
+      <root url="file://$PROJECT_DIR$/src/validation/rules.js" />
       <root url="file://$PROJECT_DIR$/test/customValidators/ICOValidator.js" />
       <root url="file://$PROJECT_DIR$/test/customValidators/RCValidator.js" />
       <root url="file://$PROJECT_DIR$/test/validation/validators.js" />

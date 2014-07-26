@@ -1,8 +1,10 @@
 # Form validation module
 
-![logo](https://github.com/rsamec/form/blob/master/form_logo.gif)
+![logo](https://github.com/rsamec/form/blob/master/form_logo.jpg)
 
-Validation module is a lightweight JavaScript library for easy business rules definition of the product, the contract or validation rules of the form.
+Validation module is a lightweight JavaScript library for easy business rules definition of the product, the contract, the form etc.
+
+[API + tutorial] (https://github.com/rsamec/form/wiki)
 
 ## Installation
 
@@ -16,6 +18,7 @@ This module is installed via bower:
 
 Add reference to dist/form.min.js file.
 
+To create abstract validator
 ``` js
           //create new validator for object with structure<IPerson>
           var personValidator = new Validation.AbstractValidator();
@@ -32,12 +35,52 @@ Add reference to dist/form.min.js file.
           personValidator.RuleFor("LastName", required);
           personValidator.RuleFor("LastName",maxLength);
 
-          personValidator = personValidator.CreateRule("Person");
+```
 
-          var result = this.PersonValidator.Validate(this.Data);
+To create test data
+```js
+          //create test data
+          var data = {
+                Person1:
+                {
+                    FirstName:'John',
+                    LastName: 'Smith'
+                },
+                Person2:{}
+
+          }
+
+          //create concrete rule
+          var person1Validator = personValidator.CreateRule("Person 1");
+
+          //execute validation
+          var result = person1Validator.Validate(this.Data.Person1);
+
+          //verify results
           if (result.HasErrors){
               console.log(result.ErrorMessage);
           }
+          //---------
+          //--outputs
+          //---------
+
+          //create concrete rule
+          var person2Validator = personValidator.CreateRule("Person 2");
+
+          //execute validation
+          var result = person2Validator.Validate(this.Data.Person1);
+
+           //verify results
+          if (result.HasErrors){
+              console.log(result.ErrorMessage);
+          }
+
+          //---------
+          //--outputs
+          //---------
+          // FirstName: Field is required.
+          // LastName: Field is required.
+
 ```
 
 ## Source code

@@ -1,4 +1,3 @@
-define(["require", "exports"], function(require, exports) {
     var ICOValidator = (function () {
         function ICOValidator() {
             this.tagName = "ico";
@@ -38,7 +37,3 @@ define(["require", "exports"], function(require, exports) {
         };
         return ICOValidator;
     })();
-
-    
-    return ICOValidator;
-});

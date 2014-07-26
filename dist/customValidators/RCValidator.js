@@ -1,4 +1,3 @@
-define(["require", "exports", "moment", "underscore.string"], function(require, exports, moment, _s) {
     var RCValidator = (function () {
         function RCValidator() {
             this.tagName = 'rc';
@@ -72,7 +71,3 @@ define(["require", "exports", "moment", "underscore.string"], function(require, 
         };
         return RCValidator;
     })();
-
-    
-    return RCValidator;
-});

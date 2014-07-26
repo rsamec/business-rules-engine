@@ -1,4 +1,4 @@
-define(["require", "exports", "moment", "underscore"], function(require, exports, moment, _) {
+
     var DateCompareValidator = (function () {
         function DateCompareValidator() {
             this.IgnoreTime = false;
@@ -31,7 +31,3 @@ define(["require", "exports", "moment", "underscore"], function(require, exports
         };
         return DateCompareValidator;
     })();
-
-    
-    return DateCompareValidator;
-});

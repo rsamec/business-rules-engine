@@ -1,4 +1,4 @@
-define(["require", "exports", "q", "underscore"], function(require, exports, Q, _) {
+
     var ParamValidator = (function () {
         function ParamValidator() {
             this.isAsync = true;
@@ -20,6 +20,3 @@ define(["require", "exports", "q", "underscore"], function(require, exports, Q, 
         };
         return ParamValidator;
     })();
-    
-    return ParamValidator;
-});

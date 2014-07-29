@@ -80,30 +80,30 @@ module.exports = function (grunt) {
               src: ['./validation/**/*']
           }
       },
-      docular: {
-          groups: [],
-          showAngularDocs: true,
-          groupTitle: 'Validation engine', //Title used in the UI
-          groupId: 'angular', //identifier and determines directory
-          groupIcon: 'icon-book', //Icon to use for this group
-          sections: [
-              {
-                  id: "api",
-                  title: "Angular API",
-                  scripts: ['./validation/**/*.js']
-              },
-              {
-                  id: "guide",
-                  title: "Developers Guide",
-                  docs: ["./content/guide"]
-              },
-              {
-                  id: "tutorial",
-                  title: "Tutorial",
-                  docs: ["./content/tutorial"]
-              }
-          ]
-      },
+          docular: {
+              groups: [],
+              showAngularDocs: true,
+              groupTitle: 'Validation engine', //Title used in the UI
+              groupId: 'angular', //identifier and determines directory
+              groupIcon: 'icon-book', //Icon to use for this group
+              sections: [
+                  {
+                      id: "api",
+                      title: "Angular API",
+                      scripts: ['./validation/**/*.js']
+                  },
+                  {
+                      id: "guide",
+                      title: "Developers Guide",
+                      docs: ["./content/guide"]
+                  },
+                  {
+                      id: "tutorial",
+                      title: "Tutorial",
+                      docs: ["./content/tutorial"]
+                  }
+              ]
+          },
       typescript: {
           base: {
               src: ['src/validation/rules.ts'],
@@ -155,6 +155,24 @@ module.exports = function (grunt) {
               cmd: ['tsc src/validation/rules.ts -t ES5 -out typings/node-form/node-form.js -d']
               //cmd: ['mkdir jjj']
           }
+      },
+      copy: {
+          main: {
+              files: [
+                  // includes files within path
+                  {expand: true, src: ['src/localization/*.js'], dest: 'dist/i18n', filter: 'isFile',flatten:true},
+                  {expand: true, src: ['src/customValidators/*.js'], dest: 'dist/customValidators', filter: 'isFile',flatten:true}
+
+                  // includes files within path and its sub-directories
+                  //{expand: true, src: ['src/models/vacationApproval/locales/**'], dest: 'dest/'},
+
+                  // makes all src relative to cwd
+                  //{expand: true, cwd: 'path/', src: ['**'], dest: 'dest/'},
+
+                  // flattens results to a single level
+                  //{expand: true, flatten: true, src: ['path/**'], dest: 'dest/', filter: 'isFile'}
+              ]
+          }
       }
   });
 
@@ -168,11 +186,11 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-typedoc');
   grunt.loadNpmTasks('grunt-typescript');
   grunt.loadNpmTasks('grunt-contrib-commands');
+  grunt.loadNpmTasks('grunt-contrib-copy');
 
   grunt.registerTask('test', [ 'mochacli', 'watch']);
   grunt.registerTask('ci', ['complexity', 'jshint', 'mochacli']);
   grunt.registerTask('default', ['test']);
-  grunt.registerTask('dist', ['typescript','uglify','command']);
-  grunt.registerTask('distNode', ['typescript']);
+  grunt.registerTask('dist', ['typescript','uglify','command','copy']);
   grunt.registerTask('document', ['ngdocs']);
 };

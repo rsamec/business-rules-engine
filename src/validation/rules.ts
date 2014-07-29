@@ -567,8 +567,8 @@ module Validation {
         public get TranslateArgs():Array<IErrorTranslateArgs>{
             if (!this.HasErrors) return [];
             var newArray = [];
-             _.each(_.values(this.Errors), function (error:IError) {
-                if (error.HasError) newArray.push(error.TranslateArgs);
+             _.each(_.values(this.Errors), function (error:IValidationFailure) {
+                if (error.HasError) newArray.push(error.Error.TranslateArgs);
             });
             return newArray;
         }

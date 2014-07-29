@@ -1,6 +1,6 @@
 {
   "name": "node-form",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "form validation engine",
   "main": "./node-form",
   "repository": {

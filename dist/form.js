@@ -1119,7 +1119,7 @@ var Validation;
                 var newArray = [];
                 _.each(_.values(this.Errors), function (error) {
                     if (error.HasError)
-                        newArray.push(error.TranslateArgs);
+                        newArray.push(error.Error.TranslateArgs);
                 });
                 return newArray;
             },

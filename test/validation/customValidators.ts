@@ -3,7 +3,7 @@
 ///<reference path='../../typings/underscore/underscore.d.ts'/>
 ///<reference path='../../typings/q/q.d.ts'/>
 
-var Validation = require('../../src/validation/validation.js');
+var Validation = require('../../dist/node-form.js');
 var expect = require('expect.js');
 var _:UnderscoreStatic = require('underscore');
 import Q = require('q');

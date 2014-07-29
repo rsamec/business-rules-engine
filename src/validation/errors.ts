@@ -20,6 +20,7 @@ module Validation {
     {
         TranslateId:string;
         MessageArgs:any;
+        CustomMessage?:IErrorCustomMessage;
     }
 
     /**

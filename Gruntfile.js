@@ -111,7 +111,7 @@ module.exports = function (grunt) {
               options: {
                   //module: 'amd',
                   target: 'es5',
-                  declaration: true,
+                  declaration: false,
                   comments:true
               }
           }
@@ -140,6 +140,21 @@ module.exports = function (grunt) {
                   'dist/<%= pkg.name %>.min.js': ['<%= typescript.base.dest %>']
               }
           }
+      },
+      // this task
+      command : {
+//          run_shell: {
+//              type : 'shell',
+//              cmd  : './test.sh'
+//          },
+//          run_bat: {
+//              type : 'bat',
+//              cmd  : 'test.bat'
+//          },
+          run_cmd: {
+              cmd: ['tsc src/validation/rules.ts -t ES5 -out typings/node-form/node-form.js -d']
+              //cmd: ['mkdir jjj']
+          }
       }
   });
 
@@ -152,12 +167,12 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-ngdocs');
   grunt.loadNpmTasks('grunt-typedoc');
   grunt.loadNpmTasks('grunt-typescript');
-
+  grunt.loadNpmTasks('grunt-contrib-commands');
 
   grunt.registerTask('test', [ 'mochacli', 'watch']);
   grunt.registerTask('ci', ['complexity', 'jshint', 'mochacli']);
   grunt.registerTask('default', ['test']);
-  grunt.registerTask('dist', ['typescript','uglify']);
+  grunt.registerTask('dist', ['typescript','uglify','command']);
   grunt.registerTask('distNode', ['typescript']);
   grunt.registerTask('document', ['ngdocs']);
 };

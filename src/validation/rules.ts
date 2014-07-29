@@ -24,19 +24,27 @@ module Validation {
      */
     export interface IValidate { (args: IError): void; }
 
+
+    /**
+     * It defines async validation function.
+     */
+    export interface IAsyncValidate { (args: IError): Q.Promise<any>; }
+
     /**
      * It represents named validation function.
      */
     export interface IValidatorFce {
         Name:string;
-        ValidationFce: IValidate;
+        ValidationFce?: IValidate;
+        AsyncValidationFce?:IAsyncValidate;
     }
 
     /**
      * This class represents custom validator.
      */
     export interface IValidator {
-        Validate(context:any): boolean;
+        Validate(context:any): IValidationFailure;
+        ValidateAsync(context:any):Q.Promise<IValidationFailure>;
         Error: IError;
     }
 
@@ -244,7 +252,7 @@ module Validation {
                     _.each(val, function (validation) {
                         var validator = this.Validators[validation.Name];
                         if (validator == undefined) {
-                            validator = new Validator(validation.Name, validation.ValidationFce);
+                            validator = new Validator(validation.Name, validation.ValidationFce, validation.AsyncValidationFce);
                             this.Validators[validation.Name] = validator;
                             this.ValidationResult.Add(validator);
                         }
@@ -253,7 +261,6 @@ module Validation {
 
                 this.addChildren();
             }
-
         }
 
         public addChildren(){
@@ -327,6 +334,14 @@ module Validation {
                 var rule = this.Rules[propName];
                 promises.push(rule.ValidateAsync(new ValidationContext(propName,context)));
             }
+
+            _.each (this.validator.ValidationFunctions, function (valFunctions:Array<IValidatorFce>) {
+                _.each(valFunctions, function (valFce) {
+                    var validator = this.Validators[valFce.Name];
+                    if (validator != undefined) promises.push(validator.ValidateAsync(context));
+                },this)
+            },this);
+
             var self = this;
             Q.all(promises).then(function(result){deferred.resolve(self.ValidationResult);});
 
@@ -469,7 +484,7 @@ module Validation {
             "signedDigits": "Please enter only signed digits.",
             "creditcard": "Please enter a valid credit card number.",
             "equalTo": "Please enter the same value again.",
-            "maxlength": "Please enter no more than {MaxLength} characters..",
+            "maxlength": "Please enter no more than {MaxLength} characters.",
             "minlength": "Please enter at least {MinLength} characters.",
             "rangelength": "Please enter a value between {MinLength} and {MaxLength} characters long.",
             "range": "Please enter a value between {Min} and {Max}.",
@@ -527,10 +542,8 @@ module Validation {
 
 
 
-        public get Errors():Array<IError> {
-            return _.map(_.values(this.ValidationFailures), function (item:IValidationFailure) {
-                return item.Error;
-            });
+        public get Errors():{[name:string]: IValidationFailure} {
+            return this.ValidationFailures;
         }
 
         public get HasErrors():boolean {
@@ -673,14 +686,34 @@ module Validation {
      */
     export class Validator extends ValidationResult implements IValidator  {
         public Error: IError = new Error();
+        public ValidationFailures:{[name:string]: IValidationFailure} = {};
 
-        constructor (public Name:string,private ValidateFce: IValidate) {
+        constructor (public Name:string,private ValidateFce?: IValidate, private AsyncValidationFce?:IAsyncValidate) {
             super(Name);
+            this.ValidationFailures[this.Name] = new ValidationFailure(this.Error,false);
+
         }
         public Optional:IOptional;
-        public Validate(context:any) {
-            this.ValidateFce.bind(context)(this.Error);
-            return this.HasError;
+
+        public Validate(context:any):IValidationFailure {
+            if (this.ValidateFce != undefined)  this.ValidateFce.bind(context)(this.Error);
+            return this.ValidationFailures[this.Name];
+        }
+
+        public ValidateAsync(context:any):Q.Promise<IValidationFailure>{
+            var deferred = Q.defer<IValidationFailure>();
+
+            if (this.AsyncValidationFce == undefined) {
+                deferred.resolve(this.ValidationFailures[this.Name]);
+            }
+            else {
+                var self = this;
+                this.AsyncValidationFce.bind(context)(this.Error).then(function () {
+                    deferred.resolve(self.ValidationFailures[self.Name]);
+                });
+            }
+
+            return deferred.promise;
         }
 
         public get HasError():boolean{
@@ -688,7 +721,9 @@ module Validation {
         }
 
 
-
+        public get Errors():{[name:string]: IValidationFailure} {
+            return this.ValidationFailures;
+        }
         public get HasErrors(): boolean {
             if (this.Optional != undefined && _.isFunction(this.Optional) && this.Optional()) return false;
             return this.Error.HasError;

@@ -2,7 +2,7 @@
 ///<reference path='../../typings/node/node.d.ts'/>
 ///<reference path='../../typings/underscore/underscore.d.ts'/>
 
-var Validation = require('  ../../src/validation/validation.js');
+var Validation = require('../../dist/node-form.js');
 var expect = require('expect.js');
 var _:UnderscoreStatic = require('underscore');
 var Q = require('q');
@@ -223,7 +223,95 @@ describe('basic validation rules', function () {
         });
     });
 
+    describe('shared validators - async', function() {
 
+        beforeEach(function(){
+            //setup
+            this.Data = {};
+            this.PersonValidator = personValidator.CreateRule("Person");
+
+        });
+
+        //create new validator for object with structure<IPerson>
+        var personValidator = new Validation.AbstractValidator<IPerson>();
+
+        //shared validation function
+        var oneSpaceFce = function (args:any) {
+            var deferred = Q.defer();
+
+            var self = this;
+            setTimeout(function () {
+                args.HasError = false;
+                args.ErrorMessage = "";
+
+                if (!self.Checked) {
+                    deferred.resolve();
+                    return;
+                }
+                if (self.FirstName.indexOf(' ') != -1 || self.LastName.indexOf(' ') != -1) {
+                    args.HasError = true;
+                    args.ErrorMessage = "Full name can contain only one space.";
+                    deferred.resolve();
+                    return;
+                }
+                deferred.resolve();
+
+            },100);
+
+            return deferred.promise;
+        };
+
+        //create named validation function
+        var validatorFce = {Name: "OneSpaceForbidden", AsyncValidationFce: oneSpaceFce};
+
+        //assign validation function to properties
+        personValidator.ValidationFor("FirstName", validatorFce);
+        personValidator.ValidationFor("LastName", validatorFce);
+
+        it('fill correct data - no errors', function (done) {
+
+            //when
+            this.Data.Checked = true;
+            this.Data.FirstName = "John";
+            this.Data.LastName = "Smith";
+
+            //excercise
+            var promiseResult = this.PersonValidator.ValidateAsync(this.Data);
+
+            var selfValidator = this.PersonValidator;
+            promiseResult.then(function (response) {
+
+                //verify
+                expect(selfValidator.ValidationResult.HasErrors).to.equal(false);
+
+                done();
+
+            }).done(null,done);
+
+        });
+
+        it('fill incorrect data - some errors', function (done) {
+
+            //when
+            this.Data.Checked = true;
+            this.Data.FirstName = "John Junior";
+            this.Data.LastName = "Smith";
+
+            //excercise
+            var promiseResult = this.PersonValidator.ValidateAsync(this.Data);
+
+            var selfValidator = this.PersonValidator;
+            promiseResult.then(function (response) {
+
+                //verify
+                expect(selfValidator.ValidationResult.HasErrors).to.equal(true);
+
+                done();
+
+            }).done(null,done);
+
+        });
+    });
 
     describe("fill incorrect data - rule optional", function() {
 

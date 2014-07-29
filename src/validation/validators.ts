@@ -1,3 +1,8 @@
+// Type definitions for node-form v1.0.6
+// Project: https://github.com/rsamec/form
+// Definitions by: Roman Samec <https://github.com/rsamec>
+// Definitions: https://github.com/borisyankov/DefinitelyTyped
+
 ///<reference path='../../typings/underscore/underscore.d.ts'/>
 ///<reference path='../../typings/q/q.d.ts'/>
 ///<reference path='../../typings/moment/moment.d.ts'/>
@@ -5,11 +10,16 @@
 module Validation {
 
     /**
+     * Custom message functions.
+     */
+    export interface IErrorCustomMessage { (config:any,args:any):string; }
+
+    /**
      * It represents a property validator for atomic object.
      */
     export interface IPropertyValidator {
         isAcceptable(s:any): boolean;
-        customMessage?(config:any, args:any):string;
+        customMessage?: IErrorCustomMessage;
         tagName?:string;
     }
 
@@ -25,7 +35,7 @@ module Validation {
      */
     export interface IAsyncPropertyValidator {
         isAcceptable(s:any): Q.Promise<boolean>;
-        customMessage?(config:any, args:any):string;
+        customMessage?: IErrorCustomMessage;
         isAsync:boolean;
         tagName?:string;
     }
@@ -301,5 +311,7 @@ module Validation {
         isAsync = true;
         tagName = "contains";
     }
-
 }
+//declare module "node-form" {
+//    export = Validation ;
+//}

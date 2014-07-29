@@ -1,8 +1,14 @@
+// Type definitions for node-form v1.0.6
+// Project: https://github.com/rsamec/form
+// Definitions by: Roman Samec <https://github.com/rsamec>
+// Definitions: https://github.com/borisyankov/DefinitelyTyped
 ///<reference path='../../typings/underscore/underscore.d.ts'/>
 ///<reference path='../../typings/q/q.d.ts'/>
 ///<reference path='../../typings/moment/moment.d.ts'/>
 var Validation;
 (function (Validation) {
+    
+
     
 
     
@@ -353,6 +359,9 @@ var Validation;
     })();
     Validation.ContainsValidator = ContainsValidator;
 })(Validation || (Validation = {}));
+//declare module "node-form" {
+//    export = Validation ;
+//}
 ///<reference path='../../typings/underscore/underscore.d.ts'/>
 ///<reference path='validators.ts'/>
 var Validation;
@@ -671,6 +680,8 @@ var Validation;
 
     
 
+    
+
     /**
     *
     * @ngdoc object
@@ -767,7 +778,7 @@ var Validation;
                     _.each(val, function (validation) {
                         var validator = this.Validators[validation.Name];
                         if (validator == undefined) {
-                            validator = new Validator(validation.Name, validation.ValidationFce);
+                            validator = new Validator(validation.Name, validation.ValidationFce, validation.AsyncValidationFce);
                             this.Validators[validation.Name] = validator;
                             this.ValidationResult.Add(validator);
                         }
@@ -844,6 +855,15 @@ var Validation;
                 var rule = this.Rules[propName];
                 promises.push(rule.ValidateAsync(new ValidationContext(propName, context)));
             }
+
+            _.each(this.validator.ValidationFunctions, function (valFunctions) {
+                _.each(valFunctions, function (valFce) {
+                    var validator = this.Validators[valFce.Name];
+                    if (validator != undefined)
+                        promises.push(validator.ValidateAsync(context));
+                }, this);
+            }, this);
+
             var self = this;
             Q.all(promises).then(function (result) {
                 deferred.resolve(self.ValidationResult);
@@ -1008,7 +1028,7 @@ var Validation;
             "signedDigits": "Please enter only signed digits.",
             "creditcard": "Please enter a valid credit card number.",
             "equalTo": "Please enter the same value again.",
-            "maxlength": "Please enter no more than {MaxLength} characters..",
+            "maxlength": "Please enter no more than {MaxLength} characters.",
             "minlength": "Please enter at least {MinLength} characters.",
             "rangelength": "Please enter a value between {MinLength} and {MaxLength} characters long.",
             "range": "Please enter a value between {Min} and {Max}.",
@@ -1055,9 +1075,7 @@ var Validation;
 
         Object.defineProperty(PropertyValidationRule.prototype, "Errors", {
             get: function () {
-                return _.map(_.values(this.ValidationFailures), function (item) {
-                    return item.Error;
-                });
+                return this.ValidationFailures;
             },
             enumerable: true,
             configurable: true
@@ -1221,15 +1239,34 @@ var Validation;
     */
     var Validator = (function (_super) {
         __extends(Validator, _super);
-        function Validator(Name, ValidateFce) {
+        function Validator(Name, ValidateFce, AsyncValidationFce) {
             _super.call(this, Name);
             this.Name = Name;
             this.ValidateFce = ValidateFce;
+            this.AsyncValidationFce = AsyncValidationFce;
             this.Error = new Validation.Error();
+            this.ValidationFailures = {};
+            this.ValidationFailures[this.Name] = new Validation.ValidationFailure(this.Error, false);
         }
         Validator.prototype.Validate = function (context) {
-            this.ValidateFce.bind(context)(this.Error);
-            return this.HasError;
+            if (this.ValidateFce != undefined)
+                this.ValidateFce.bind(context)(this.Error);
+            return this.ValidationFailures[this.Name];
+        };
+
+        Validator.prototype.ValidateAsync = function (context) {
+            var deferred = Q.defer();
+
+            if (this.AsyncValidationFce == undefined) {
+                deferred.resolve(this.ValidationFailures[this.Name]);
+            } else {
+                var self = this;
+                this.AsyncValidationFce.bind(context)(this.Error).then(function () {
+                    deferred.resolve(self.ValidationFailures[self.Name]);
+                });
+            }
+
+            return deferred.promise;
         };
 
         Object.defineProperty(Validator.prototype, "HasError", {
@@ -1240,6 +1277,13 @@ var Validation;
             configurable: true
         });
 
+        Object.defineProperty(Validator.prototype, "Errors", {
+            get: function () {
+                return this.ValidationFailures;
+            },
+            enumerable: true,
+            configurable: true
+        });
         Object.defineProperty(Validator.prototype, "HasErrors", {
             get: function () {
                 if (this.Optional != undefined && _.isFunction(this.Optional) && this.Optional())

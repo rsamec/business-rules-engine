@@ -39,3 +39,5 @@ class Localization {
         }
     }
 }
+
+export = Localization;

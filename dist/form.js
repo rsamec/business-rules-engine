@@ -1,10 +1,3 @@
-// Type definitions for node-form v1.0.6
-// Project: https://github.com/rsamec/form
-// Definitions by: Roman Samec <https://github.com/rsamec>
-// Definitions: https://github.com/borisyankov/DefinitelyTyped
-///<reference path='../../typings/underscore/underscore.d.ts'/>
-///<reference path='../../typings/q/q.d.ts'/>
-///<reference path='../../typings/moment/moment.d.ts'/>
 var Validation;
 (function (Validation) {
     
@@ -17,26 +10,17 @@ var Validation;
 
     
 
-    /**
-    * It defines compare operators.
-    */
     (function (CompareOperator) {
-        //must be less than
         CompareOperator[CompareOperator["LessThan"] = 0] = "LessThan";
 
-        //cannot be more than
         CompareOperator[CompareOperator["LessThanEqual"] = 1] = "LessThanEqual";
 
-        //must be the same as
         CompareOperator[CompareOperator["Equal"] = 2] = "Equal";
 
-        //must be different from
         CompareOperator[CompareOperator["NotEqual"] = 3] = "NotEqual";
 
-        //cannot be less than
         CompareOperator[CompareOperator["GreaterThanEqual"] = 4] = "GreaterThanEqual";
 
-        //must be more than
         CompareOperator[CompareOperator["GreaterThan"] = 5] = "GreaterThan";
     })(Validation.CompareOperator || (Validation.CompareOperator = {}));
     var CompareOperator = Validation.CompareOperator;
@@ -96,7 +80,6 @@ var Validation;
     })();
     Validation.ZipCodeValidator = ZipCodeValidator;
 
-    // contributed by Scott Gonzalez: http://projects.scottsplayground.com/email_address_validation/
     var emailRegexp = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i;
     var EmailValidator = (function () {
         function EmailValidator() {
@@ -109,7 +92,6 @@ var Validation;
     })();
     Validation.EmailValidator = EmailValidator;
 
-    // contributed by Scott Gonzalez: http://projects.scottsplayground.com/iri/
     var urlRegexp = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i;
     var UrlValidator = (function () {
         function UrlValidator() {
@@ -359,11 +341,6 @@ var Validation;
     })();
     Validation.ContainsValidator = ContainsValidator;
 })(Validation || (Validation = {}));
-//declare module "node-form" {
-//    export = Validation ;
-//}
-///<reference path='../../typings/underscore/underscore.d.ts'/>
-///<reference path='validators.ts'/>
 var Validation;
 (function (Validation) {
     
@@ -376,16 +353,6 @@ var Validation;
 
     
 
-    /**
-    *
-    * @ngdoc object
-    * @name  Error
-    * @module Validation
-    *
-    *
-    * @description
-    * It represents basic error structure.
-    */
     var Error = (function () {
         function Error() {
             this.HasError = true;
@@ -395,16 +362,6 @@ var Validation;
     })();
     Validation.Error = Error;
 
-    /**
-    *
-    * @ngdoc object
-    * @name  ValidationFailure
-    * @module Validation
-    *
-    *
-    * @description
-    * It represents validation failure.
-    */
     var ValidationFailure = (function () {
         function ValidationFailure(Error, IsAsync) {
             this.Error = Error;
@@ -435,16 +392,6 @@ var Validation;
     })();
     Validation.ValidationFailure = ValidationFailure;
 
-    /**
-    *
-    * @ngdoc object
-    * @name  ValidationResult
-    * @module Validation
-    *
-    *
-    * @description
-    * It represents simple abstract error object.
-    */
     var ValidationResult = (function () {
         function ValidationResult(Name) {
             this.Name = Name;
@@ -498,16 +445,6 @@ var Validation;
     })();
     Validation.ValidationResult = ValidationResult;
 
-    /**
-    *
-    * @ngdoc object
-    * @name  CompositeValidationResult
-    * @module Validation
-    *
-    *
-    * @description
-    * It represents composite error object.
-    */
     var CompositeValidationResult = (function () {
         function CompositeValidationResult(Name) {
             this.Name = Name;
@@ -553,7 +490,6 @@ var Validation;
                 return _.reduce(this.Children, function (memo, error) {
                     return memo + error.ErrorCount;
                 }, 0);
-                //return _.filter(this.children, function (error) { return error.HasErrors; }).length;
             },
             enumerable: true,
             configurable: true
@@ -625,7 +561,6 @@ var Validation;
                 node["IsDirty"] = dirty;
             } else {
                 for (var i = 0, len = node.Children.length; i < len; i++) {
-                    //stop if there are no children with errors
                     this.SetDirtyEx(node.Children[i], dirty);
                 }
             }
@@ -636,14 +571,12 @@ var Validation;
                     errorCollection.push(node);
             } else {
                 for (var i = 0, len = node.Children.length; i < len; i++) {
-                    //stop if there are no children with errors
                     if (node.Children[i].HasErrors)
                         this.flattenErrors(node.Children[i], errorCollection);
                 }
             }
         };
 
-        // recursively traverse a (sub)tree
         CompositeValidationResult.prototype.traverse = function (node, indent) {
             console.log(Array(indent++).join("--") + node.Name + " (" + node.ErrorMessage + ")" + '\n\r');
 
@@ -655,15 +588,12 @@ var Validation;
     })();
     Validation.CompositeValidationResult = CompositeValidationResult;
 })(Validation || (Validation = {}));
-///<reference path='../../typings/q/q.d.ts'/>
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-///<reference path='errors.ts'/>
-///<reference path='validators.ts'/>
 var Validation;
 (function (Validation) {
     
@@ -682,30 +612,11 @@ var Validation;
 
     
 
-    /**
-    *
-    * @ngdoc object
-    * @name  AbstractValidator
-    * @module Validation
-    *
-    *
-    * @description
-    * It enables to create custom validator for your own abstract object (class) and to assign validation rules to its properties.
-    * You can assigned these rules
-    *
-    * +  property validation rules - use _RuleFor_ property
-    * +  property async validation rules - use _RuleFor_ property
-    * +  shared validation rules - use _ValidationFor_ property
-    * +  custom object validator - use _ValidatorFor_ property - enables composition of child custom validators
-    */
     var AbstractValidator = (function () {
         function AbstractValidator() {
             this.Validators = {};
             this.AbstractValidators = {};
             this.ValidationFunctions = {};
-            /**
-            * Return true if this validation rule is intended for list of items, otherwise true.
-            */
             this.ForList = false;
         }
         AbstractValidator.prototype.RuleFor = function (prop, validator) {
@@ -743,16 +654,6 @@ var Validation;
     })();
     Validation.AbstractValidator = AbstractValidator;
 
-    /**
-    *
-    * @ngdoc object
-    * @name  AbstractValidationRule
-    * @module Validation
-    *
-    *
-    * @description
-    * It represents concreate validator for custom object. It enables to assign validation rules to custom object properties.
-    */
     var AbstractValidationRule = (function () {
         function AbstractValidationRule(Name, validator, forList) {
             this.Name = Name;
@@ -760,9 +661,6 @@ var Validation;
             this.Rules = {};
             this.Validators = {};
             this.Children = {};
-            /**
-            * Return true if this validation rule is intended for list of items, otherwise true.
-            */
             this.ForList = false;
             this.ValidationResult = new Validation.CompositeValidationResult(this.Name);
 
@@ -803,9 +701,6 @@ var Validation;
 
         AbstractValidationRule.prototype.SetOptional = function (fce) {
             this.ValidationResult.Optional = fce;
-            //            _.each(this.Rules, function(value:IValidationResult, key:string){value.Optional = fce;});
-            //            _.each(this.Validators, function(value:any, key:string){value.Optional = fce;});
-            //            _.each(this.Children, function(value:any, key:string){value.SetOptional(fce);});
         };
 
         AbstractValidationRule.prototype.createRuleFor = function (prop) {
@@ -814,9 +709,6 @@ var Validation;
             this.ValidationResult.Add(propValidationRule);
         };
 
-        /**
-        * Performs validation using a validation context and returns a collection of Validation Failures.
-        */
         AbstractValidationRule.prototype.Validate = function (context) {
             _.each(this.Children, function (val, key) {
                 if (context[key] === undefined)
@@ -840,9 +732,6 @@ var Validation;
             return this.ValidationResult;
         };
 
-        /**
-        * Performs validation using a validation context and returns a collection of Validation Failures asynchronoulsy.
-        */
         AbstractValidationRule.prototype.ValidateAsync = function (context) {
             var deferred = Q.defer();
 
@@ -900,16 +789,6 @@ var Validation;
     })();
     Validation.AbstractValidationRule = AbstractValidationRule;
 
-    /**
-    *
-    * @ngdoc object
-    * @name  AbstractListValidationRule
-    * @module Validation
-    *
-    *
-    * @description
-    * It represents an validator for custom object. It enables to assign rules to custom object properties.
-    */
     var AbstractListValidationRule = (function (_super) {
         __extends(AbstractListValidationRule, _super);
         function AbstractListValidationRule(Name, validator) {
@@ -917,11 +796,7 @@ var Validation;
             this.Name = Name;
             this.validator = validator;
         }
-        /**
-        * Performs validation using a validation context and returns a collection of Validation Failures.
-        */
         AbstractListValidationRule.prototype.Validate = function (context) {
-            //super.Validate(context);
             this.NotifyListChanged(context);
             for (var i = 0; i != context.length; i++) {
                 var validationRule = this.getValidationRule(i);
@@ -932,9 +807,6 @@ var Validation;
             return this.ValidationResult;
         };
 
-        /**
-        * Performs validation using a validation context and returns a collection of Validation Failures asynchronoulsy.
-        */
         AbstractListValidationRule.prototype.ValidateAsync = function (context) {
             var deferred = Q.defer();
 
@@ -977,16 +849,6 @@ var Validation;
     })(AbstractValidationRule);
     Validation.AbstractListValidationRule = AbstractListValidationRule;
 
-    /**
-    *
-    * @ngdoc object
-    * @name  ValidationContext
-    * @module Validation
-    *
-    *
-    * @description
-    * It represents a data context for validation rule.
-    */
     var ValidationContext = (function () {
         function ValidationContext(Key, Data) {
             this.Key = Key;
@@ -1045,19 +907,8 @@ var Validation;
     })();
     Validation.MessageLocalization = MessageLocalization;
 
-    /**
-    *
-    * @ngdoc object
-    * @name  PropertyValidationRule
-    * @module Validation
-    *
-    *
-    * @description
-    * It represents a property validation rule. The property has assigned collection of property validators.
-    */
     var PropertyValidationRule = (function (_super) {
         __extends(PropertyValidationRule, _super);
-        //public AsyncValidationFailures:{[name:string]: IAsyncValidationFailure} = {};
         function PropertyValidationRule(Name, validatorsToAdd) {
             _super.call(this, Name);
             this.Name = Name;
@@ -1127,14 +978,10 @@ var Validation;
             configurable: true
         });
 
-        /**
-        * Performs validation using a validation context and returns a collection of Validation Failures.
-        */
         PropertyValidationRule.prototype.Validate = function (context) {
             try  {
                 return this.ValidateEx(context.Value);
             } catch (e) {
-                //if (this.settings.debug && window.console) {
                 console.log("Exception occurred when checking element " + context.Key + ".", e);
 
                 throw e;
@@ -1166,7 +1013,6 @@ var Validation;
                         lastPriority = priority;
                     }
                 } catch (e) {
-                    //if (this.settings.debug && window.console) {
                     console.log("Exception occurred when checking element'" + validator.tagName + "' method.", e);
 
                     throw e;
@@ -1177,16 +1023,10 @@ var Validation;
             });
         };
 
-        /**
-        * Performs validation using a validation context and returns a collection of Validation Failures asynchronoulsy.
-        */
         PropertyValidationRule.prototype.ValidateAsync = function (context) {
             return this.ValidateAsyncEx(context.Value);
         };
 
-        /**
-        * Performs validation using a validation context and returns a collection of Validation Failures asynchronoulsy.
-        */
         PropertyValidationRule.prototype.ValidateAsyncEx = function (value) {
             var deferred = Q.defer();
             var promises = [];
@@ -1208,7 +1048,6 @@ var Validation;
 
                     promises.push(hasErrorPromise);
                 } catch (e) {
-                    //if (this.settings.debug && window.console) {
                     console.log("Exception occurred when checking element'" + validator.tagName + "' method.", e);
 
                     throw e;
@@ -1227,16 +1066,6 @@ var Validation;
     })(Validation.ValidationResult);
     Validation.PropertyValidationRule = PropertyValidationRule;
 
-    /**
-    *
-    * @ngdoc object
-    * @name  Validator
-    * @module Validation
-    *
-    *
-    * @description
-    * It represents a custom validator. It enables to define your own shared validation rules
-    */
     var Validator = (function (_super) {
         __extends(Validator, _super);
         function Validator(Name, ValidateFce, AsyncValidationFce) {
@@ -1326,6 +1155,3 @@ var Validation;
     })(Validation.ValidationResult);
     Validation.Validator = Validator;
 })(Validation || (Validation = {}));
-//var _ = require('underscore');
-//var Q = require('q');
-//module.exports = Validation;

@@ -73,37 +73,13 @@ module.exports = function (grunt) {
           build: {
               options: {
                   module: 'commonjs',
-                  out: './typedDocs',
+                  out: './docs',
                   name: 'ValidationEngine',
                   target: 'es5'
               },
-              src: ['./validation/**/*']
+              src: ['src/validation/**/*','src/customValidators/**/*']
           }
       },
-          docular: {
-              groups: [],
-              showAngularDocs: true,
-              groupTitle: 'Validation engine', //Title used in the UI
-              groupId: 'angular', //identifier and determines directory
-              groupIcon: 'icon-book', //Icon to use for this group
-              sections: [
-                  {
-                      id: "api",
-                      title: "Angular API",
-                      scripts: ['./validation/**/*.js']
-                  },
-                  {
-                      id: "guide",
-                      title: "Developers Guide",
-                      docs: ["./content/guide"]
-                  },
-                  {
-                      id: "tutorial",
-                      title: "Tutorial",
-                      docs: ["./content/tutorial"]
-                  }
-              ]
-          },
       typescript: {
           base: {
               src: ['src/validation/rules.ts'],
@@ -112,7 +88,7 @@ module.exports = function (grunt) {
                   //module: 'amd',
                   target: 'es5',
                   declaration: false,
-                  comments:true
+                  comments:false
               }
           }
       },
@@ -137,7 +113,8 @@ module.exports = function (grunt) {
           },
           dist: {
               files: {
-                  'dist/<%= pkg.name %>.min.js': ['<%= typescript.base.dest %>']
+                  'dist/<%= pkg.name %>.min.js': ['<%= typescript.base.dest %>'],
+                  'dist/node-<%= pkg.name %>.min.js': ['dist/node-<%= pkg.name %>.js']
               }
           }
       },
@@ -173,10 +150,23 @@ module.exports = function (grunt) {
                   //{expand: true, flatten: true, src: ['path/**'], dest: 'dest/', filter: 'isFile'}
               ]
           }
+      },
+      concat: {
+          dist: {
+              files: {
+                  //'dist/basic.js': ['src/main.js'],
+                  'dist/node-form.js': ['<%= typescript.base.dest %>', 'src/validation/commonjs.js']
+
+              }
+          },
+          typings:{
+              files: {
+                  'typings/node-form/node-form.d.ts': ['typings/node-form/header.d.js', 'typings/node-form/node-form.d.ts', 'typings/node-form/footer.d.js']
+              }
+          }
       }
   });
 
-  grunt.loadNpmTasks('grunt-docular');
   grunt.loadNpmTasks('grunt-complexity');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
@@ -187,10 +177,13 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-typescript');
   grunt.loadNpmTasks('grunt-contrib-commands');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-concat');
 
   grunt.registerTask('test', [ 'mochacli', 'watch']);
   grunt.registerTask('ci', ['complexity', 'jshint', 'mochacli']);
   grunt.registerTask('default', ['test']);
-  grunt.registerTask('dist', ['typescript','uglify','command','copy']);
-  grunt.registerTask('document', ['ngdocs']);
+  grunt.registerTask('dist', ['typescript','concat:dist','uglify','copy']);
+  grunt.registerTask('typings',['command']);
+  grunt.registerTask('typings-concat',['concat:typings']);
+  grunt.registerTask('document', ['typedoc']);
 };

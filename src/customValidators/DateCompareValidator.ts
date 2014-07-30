@@ -12,7 +12,7 @@ import _ = require("underscore");
  * @requires underscore
  *
  * @description
- * DateCompareValidator enables to compare date to another date (CompareTo).</br>
+ * DateCompareValidator enables to compare date to another date (CompareTo).
  *
  * @property {Date} CompareTo
  * The datetime against the compare is done.

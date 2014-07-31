@@ -29,9 +29,9 @@ var ICOValidator = (function () {
     * @returns {boolean} return true for valid value, otherwise false
     */
     ICOValidator.prototype.isAcceptable = function (input) {
-        if (input == undefined)
+        if (input === undefined)
             return false;
-        if (input.length == 0)
+        if (input.length === 0)
             return false;
 
         if (!/^\d+$/.test(input))
@@ -58,7 +58,7 @@ var ICOValidator = (function () {
             resul = mezi + 11;
             resul = resul - Souc;
 
-            if ((resul == 10 && kon == 0) || (resul == 11 && kon == 1) || (resul == kon))
+            if ((resul === 10 && kon === 0) || (resul === 11 && kon === 1) || (resul === kon))
                 return true;
         }
         return false;

@@ -43,7 +43,7 @@ var Validation;
         function NumberFce() {
         }
         NumberFce.GetNegDigits = function (value) {
-            if (value == undefined)
+            if (value === undefined)
                 return 0;
             var digits = value.toString().split('.');
             if (digits.length > 1) {
@@ -109,7 +109,7 @@ var Validation;
             this.tagName = "required";
         }
         RequiredValidator.prototype.isAcceptable = function (s) {
-            return s != undefined && s != "";
+            return s !== undefined && s !== "";
         };
         return RequiredValidator;
     })();
@@ -170,7 +170,7 @@ var Validation;
         function MinLengthValidator(MinLength) {
             this.MinLength = MinLength;
             this.tagName = "minlength";
-            if (MinLength == undefined)
+            if (MinLength === undefined)
                 this.MinLength = MinimalDefaultValue;
         }
         MinLengthValidator.prototype.isAcceptable = function (s) {
@@ -184,7 +184,7 @@ var Validation;
         function MaxLengthValidator(MaxLength) {
             this.MaxLength = MaxLength;
             this.tagName = "maxlength";
-            if (MaxLength == undefined)
+            if (MaxLength === undefined)
                 this.MaxLength = MaximalDefaultValue;
         }
         MaxLengthValidator.prototype.isAcceptable = function (s) {
@@ -198,7 +198,7 @@ var Validation;
         function RangeLengthValidator(RangeLength) {
             this.RangeLength = RangeLength;
             this.tagName = "rangelength";
-            if (RangeLength == undefined)
+            if (RangeLength === undefined)
                 this.RangeLength = [MinimalDefaultValue, MaximalDefaultValue];
         }
         RangeLengthValidator.prototype.isAcceptable = function (s) {
@@ -227,7 +227,7 @@ var Validation;
         function MinValidator(Min) {
             this.Min = Min;
             this.tagName = "min";
-            if (Min == undefined)
+            if (Min === undefined)
                 this.Min = MinimalDefaultValue;
         }
         MinValidator.prototype.isAcceptable = function (s) {
@@ -242,7 +242,7 @@ var Validation;
         function MaxValidator(Max) {
             this.Max = Max;
             this.tagName = "max";
-            if (Max == undefined)
+            if (Max === undefined)
                 this.Max = MaximalDefaultValue;
         }
         MaxValidator.prototype.isAcceptable = function (s) {
@@ -258,7 +258,7 @@ var Validation;
         function RangeValidator(Range) {
             this.Range = Range;
             this.tagName = "range";
-            if (Range == undefined)
+            if (Range === undefined)
                 this.Range = [MinimalDefaultValue, MaximalDefaultValue];
         }
         RangeValidator.prototype.isAcceptable = function (s) {
@@ -290,13 +290,13 @@ var Validation;
         function StepValidator(Step) {
             this.Step = Step;
             this.tagName = "step";
-            if (Step == undefined)
+            if (Step === undefined)
                 this.Step = StepDefaultValue;
         }
         StepValidator.prototype.isAcceptable = function (s) {
             var maxNegDigits = Math.max(NumberFce.GetNegDigits(s), NumberFce.GetNegDigits(this.Step));
             var multiplier = Math.pow(10, maxNegDigits);
-            return (parseInt(s) * multiplier) % (parseInt(this.Step) * multiplier) == 0;
+            return (parseInt(s, 10) * multiplier) % (parseInt(this.Step, 10) * multiplier) === 0;
         };
         return StepValidator;
     })();
@@ -306,7 +306,7 @@ var Validation;
         function PatternValidator(Pattern) {
             this.Pattern = Pattern;
             this.tagName = "pattern";
-            if (Pattern == undefined)
+            if (Pattern === undefined)
                 this.Pattern = PatternDefaultValue;
         }
         PatternValidator.prototype.isAcceptable = function (s) {
@@ -320,7 +320,7 @@ var Validation;
             this.Options = Options;
             this.isAsync = true;
             this.tagName = "contains";
-            if (Options == undefined)
+            if (Options === undefined)
                 this.Options = Q.when([]);
         }
         ContainsValidator.prototype.isAcceptable = function (s) {
@@ -328,7 +328,7 @@ var Validation;
 
             this.Options.then(function (result) {
                 var hasSome = _.some(result, function (item) {
-                    return item == s;
+                    return item === s;
                 });
                 if (hasSome)
                     deferred.resolve(true);
@@ -462,7 +462,7 @@ var Validation;
 
         Object.defineProperty(CompositeValidationResult.prototype, "HasErrorsDirty", {
             get: function () {
-                if (this.Optional != undefined && _.isFunction(this.Optional) && this.Optional())
+                if (this.Optional !== undefined && _.isFunction(this.Optional) && this.Optional())
                     return false;
                 return _.some(this.Children, function (error) {
                     return error.HasErrorsDirty;
@@ -474,7 +474,7 @@ var Validation;
 
         Object.defineProperty(CompositeValidationResult.prototype, "HasErrors", {
             get: function () {
-                if (this.Optional != undefined && _.isFunction(this.Optional) && this.Optional())
+                if (this.Optional !== undefined && _.isFunction(this.Optional) && this.Optional())
                     return false;
                 return _.some(this.Children, function (error) {
                     return error.HasErrors;
@@ -521,7 +521,7 @@ var Validation;
         });
 
         CompositeValidationResult.prototype.LogErrors = function (headerMessage) {
-            if (headerMessage == undefined)
+            if (headerMessage === undefined)
                 headerMessage = "Output";
             console.log("---------------\n");
             console.log("--- " + headerMessage + " ----\n");
@@ -557,7 +557,7 @@ var Validation;
             this.SetDirtyEx(this, false);
         };
         CompositeValidationResult.prototype.SetDirtyEx = function (node, dirty) {
-            if (node.Children.length == 0) {
+            if (node.Children.length === 0) {
                 node["IsDirty"] = dirty;
             } else {
                 for (var i = 0, len = node.Children.length; i < len; i++) {
@@ -566,7 +566,7 @@ var Validation;
             }
         };
         CompositeValidationResult.prototype.flattenErrors = function (node, errorCollection) {
-            if (node.Children.length == 0) {
+            if (node.Children.length === 0) {
                 if (node.HasErrors)
                     errorCollection.push(node);
             } else {

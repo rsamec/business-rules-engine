@@ -42,19 +42,19 @@ class RCValidator implements Validation.IPropertyValidator {
         var day:number;
         var numrc:any;
         var dbg = false;
-        if (s == undefined) return false;
-        if (s.toString().length == 0) {
+        if (s === undefined) return false;
+        if (s.toString().length === 0) {
             return false;
         }
 
         if (!s.match(/^\d{6}\/?\d{3,4}$/)) return false;
 
         if (s.indexOf('/') != -1)
-            old = s.length == 10;
+            old = s.length === 10;
         else
-            old = s.length == 9;
+            old = s.length === 9;
 
-        if (s.indexOf('/') != -1) {
+        if (s.indexOf('/') !== -1) {
             numrc = s.split("/");
             numrc = numrc.join("");
         } else {
@@ -70,10 +70,10 @@ class RCValidator implements Validation.IPropertyValidator {
         }
 
         if (!old && !dbg) {
-            if (numrc % 11 != 0 && s.substr(s.length - 1) == "0") {
-                if (parseInt(numrc.substr(0, 9), 10) % 11 != 10) return false;
+            if (numrc % 11 !== 0 && s.substr(s.length - 1) === "0") {
+                if (parseInt(numrc.substr(0, 9), 10) % 11 !== 10) return false;
             }
-            else if (numrc % 11 != 0) return false;
+            else if (numrc % 11 !== 0) return false;
         }
 
         if (year > 54 && old && !dbg) return false;

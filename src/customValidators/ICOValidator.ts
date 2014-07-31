@@ -29,8 +29,8 @@ class ICOValidator {
      */
     public isAcceptable(input: string) {
 
-        if (input == undefined) return false;
-        if (input.length == 0) return false;
+        if (input === undefined) return false;
+        if (input.length === 0) return false;
 
         if (!/^\d+$/.test(input)) return false;
 
@@ -54,7 +54,7 @@ class ICOValidator {
             resul = mezi + 11;
             resul = resul - Souc;
 
-            if ((resul == 10 && kon == 0) || (resul == 11 && kon == 1) || (resul == kon))
+            if ((resul === 10 && kon === 0) || (resul === 11 && kon === 1) || (resul === kon))
                 return true;
         }
         return false;

@@ -48,7 +48,7 @@ class DateCompareValidator implements Validation.IPropertyValidator{
         //if date to compare is not specified - defaults to compare against now
         if (!_.isDate(s)) return false;
 
-        if (this.CompareTo == undefined) Date.now();
+        if (this.CompareTo === undefined) Date.now();
 
         var now = moment(this.CompareTo);
         var then =  moment(s);
@@ -57,19 +57,19 @@ class DateCompareValidator implements Validation.IPropertyValidator{
         if (this.IgnoreTime) diffs = moment.duration(diffs).days();
 
         if (diffs < 0) {
-            isValid = this.CompareOperator == Validation.CompareOperator.LessThan
-                || this.CompareOperator == Validation.CompareOperator.LessThanEqual
-                || this.CompareOperator == Validation.CompareOperator.NotEqual;
+            isValid = this.CompareOperator === Validation.CompareOperator.LessThan
+                || this.CompareOperator === Validation.CompareOperator.LessThanEqual
+                || this.CompareOperator === Validation.CompareOperator.NotEqual;
         }
         else if (diffs > 0) {
-            isValid = this.CompareOperator == Validation.CompareOperator.GreaterThan
-                || this.CompareOperator == Validation.CompareOperator.GreaterThanEqual
-                || this.CompareOperator == Validation.CompareOperator.NotEqual;
+            isValid = this.CompareOperator === Validation.CompareOperator.GreaterThan
+                || this.CompareOperator === Validation.CompareOperator.GreaterThanEqual
+                || this.CompareOperator === Validation.CompareOperator.NotEqual;
         }
         else {
-            isValid = this.CompareOperator == Validation.CompareOperator.LessThanEqual
-                || this.CompareOperator == Validation.CompareOperator.Equal
-                || this.CompareOperator == Validation.CompareOperator.GreaterThanEqual;
+            isValid = this.CompareOperator === Validation.CompareOperator.LessThanEqual
+                || this.CompareOperator === Validation.CompareOperator.Equal
+                || this.CompareOperator === Validation.CompareOperator.GreaterThanEqual;
         }
         return isValid;
     }

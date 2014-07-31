@@ -5,7 +5,6 @@
 ///<reference path='../../typings/node/node.d.ts'/>
 ///<reference path='../../typings/expect.js/expect.js.d.ts'/>
 
-
 var expect = require('expect.js');
 import dateCompareValidator = require('../../src/customValidators/DateCompareValidator');
 import moment = require('moment')
@@ -49,7 +48,7 @@ describe('DateCompareValidator', function () {
         for (var op in params) {
             (function (item) {
                 it('should check date ' + item.input + ' is less then or equal -> ' + item.result, function () {
-                    if (item.ignoreTime != undefined) validator.IgnoreTime = item.ignoreTime;
+                    if (item.ignoreTime !== undefined) validator.IgnoreTime = item.ignoreTime;
                     expect(item.result).to.equal(validator.isAcceptable(item.input));
                 });
             })(params[op]);

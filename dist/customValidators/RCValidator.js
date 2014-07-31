@@ -39,9 +39,9 @@ var RCValidator = (function () {
         var day;
         var numrc;
         var dbg = false;
-        if (s == undefined)
+        if (s === undefined)
             return false;
-        if (s.toString().length == 0) {
+        if (s.toString().length === 0) {
             return false;
         }
 
@@ -49,11 +49,11 @@ var RCValidator = (function () {
             return false;
 
         if (s.indexOf('/') != -1)
-            old = s.length == 10;
+            old = s.length === 10;
         else
-            old = s.length == 9;
+            old = s.length === 9;
 
-        if (s.indexOf('/') != -1) {
+        if (s.indexOf('/') !== -1) {
             numrc = s.split("/");
             numrc = numrc.join("");
         } else {
@@ -69,10 +69,10 @@ var RCValidator = (function () {
         }
 
         if (!old && !dbg) {
-            if (numrc % 11 != 0 && s.substr(s.length - 1) == "0") {
-                if (parseInt(numrc.substr(0, 9), 10) % 11 != 10)
+            if (numrc % 11 !== 0 && s.substr(s.length - 1) === "0") {
+                if (parseInt(numrc.substr(0, 9), 10) % 11 !== 10)
                     return false;
-            } else if (numrc % 11 != 0)
+            } else if (numrc % 11 !== 0)
                 return false;
         }
 

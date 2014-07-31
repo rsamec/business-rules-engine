@@ -104,7 +104,7 @@ var ParamValidator = (function () {
 
         this.Options(this.ParamId).then(function (result) {
             var hasSome = _.some(result, function (item) {
-                return item.text == s;
+                return item.text === s;
             });
             if (hasSome)
                 deferred.resolve(true);

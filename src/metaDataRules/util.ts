@@ -53,7 +53,7 @@ module Validation {
 
 
                     data[key] = {};
-                    var path = parentPath == undefined ? key : parentPath + "." + key;
+                    var path = parentPath === undefined ? key : parentPath + "." + key;
                     //going on step down in the object tree!!
                     this.generateDataEx(o[key], data[key], path);
                 }

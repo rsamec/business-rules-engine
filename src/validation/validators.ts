@@ -82,7 +82,7 @@ module Validation {
     }
     export class NumberFce {
         static GetNegDigits(value:string):number {
-            if (value == undefined) return 0;
+            if (value === undefined) return 0;
             var digits = value.toString().split('.');
             if (digits.length > 1) {
                 var negDigitsLength = digits[1].length;
@@ -131,7 +131,7 @@ module Validation {
 
     export class RequiredValidator implements IStringValidator {
         isAcceptable(s:string) {
-            return s != undefined && s != "";
+            return s !== undefined && s !== "";
         }
 
         tagName = "required";
@@ -175,7 +175,7 @@ module Validation {
     var MinimalDefaultValue = 0;
     export class MinLengthValidator implements IStringValidator {
         constructor(public MinLength?:number) {
-            if (MinLength == undefined) this.MinLength = MinimalDefaultValue;
+            if (MinLength === undefined) this.MinLength = MinimalDefaultValue;
         }
 
         isAcceptable(s:string) {
@@ -187,7 +187,7 @@ module Validation {
     var MaximalDefaultValue = 0;
     export class MaxLengthValidator implements IStringValidator {
         constructor(public MaxLength?:number) {
-            if (MaxLength == undefined) this.MaxLength = MaximalDefaultValue;
+            if (MaxLength === undefined) this.MaxLength = MaximalDefaultValue;
         }
 
         isAcceptable(s:string) {
@@ -199,7 +199,7 @@ module Validation {
 
     export class RangeLengthValidator implements IStringValidator {
         constructor(public RangeLength?:Array<number>) {
-            if (RangeLength == undefined) this.RangeLength = [MinimalDefaultValue, MaximalDefaultValue];
+            if (RangeLength === undefined) this.RangeLength = [MinimalDefaultValue, MaximalDefaultValue];
         }
 
         isAcceptable(s:string) {
@@ -218,7 +218,7 @@ module Validation {
     }
     export class MinValidator implements IPropertyValidator {
         constructor(public Min?:number) {
-            if (Min == undefined) this.Min = MinimalDefaultValue;
+            if (Min === undefined) this.Min = MinimalDefaultValue;
         }
 
         isAcceptable(s:any) {
@@ -230,7 +230,7 @@ module Validation {
     }
     export class MaxValidator implements IPropertyValidator {
         constructor(public Max?:number) {
-            if (Max == undefined) this.Max = MaximalDefaultValue;
+            if (Max === undefined) this.Max = MaximalDefaultValue;
         }
 
         isAcceptable(s:any) {
@@ -243,7 +243,7 @@ module Validation {
 
     export class RangeValidator implements IPropertyValidator {
         constructor(public Range?:Array<number>) {
-            if (Range == undefined) this.Range = [MinimalDefaultValue, MaximalDefaultValue];
+            if (Range === undefined) this.Range = [MinimalDefaultValue, MaximalDefaultValue];
         }
 
         isAcceptable(s:any) {
@@ -264,14 +264,14 @@ module Validation {
     var StepDefaultValue = "1";
     export class StepValidator implements IPropertyValidator {
         constructor(public Step?:string) {
-            if (Step == undefined) this.Step = StepDefaultValue;
+            if (Step === undefined) this.Step = StepDefaultValue;
         }
 
         isAcceptable(s:any) {
 
             var maxNegDigits = Math.max(NumberFce.GetNegDigits(s), NumberFce.GetNegDigits(this.Step));
             var multiplier = Math.pow(10, maxNegDigits);
-            return (parseInt(s) * multiplier) % (parseInt(this.Step) * multiplier) == 0;
+            return (parseInt(s,10) * multiplier) % (parseInt(this.Step,10) * multiplier) === 0;
         }
 
         tagName = "step";
@@ -279,7 +279,7 @@ module Validation {
     var PatternDefaultValue = "*";
     export class PatternValidator implements IStringValidator {
         constructor(public Pattern?:string) {
-            if (Pattern == undefined) this.Pattern = PatternDefaultValue;
+            if (Pattern === undefined) this.Pattern = PatternDefaultValue;
         }
 
         isAcceptable(s:string) {
@@ -291,15 +291,15 @@ module Validation {
     export class ContainsValidator implements IAsyncPropertyValidator {
 
         constructor(public Options:Q.Promise<Array<any>>) {
-            if (Options == undefined) this.Options = Q.when([]);
+            if (Options === undefined) this.Options = Q.when([]);
         }
 
         isAcceptable(s:string):Q.Promise<boolean> {
-            var deferred = Q.defer<boolean>();
+            var deferred:Q.Deferred<boolean> = Q.defer<boolean>();
 
             this.Options.then(function (result) {
                 var hasSome = _.some(result, function (item) {
-                    return item == s;
+                    return item === s;
                 })
                 if (hasSome) deferred.resolve(true);
                 deferred.resolve(false);
@@ -312,6 +312,3 @@ module Validation {
         tagName = "contains";
     }
 }
-//declare module "node-form" {
-//    export = Validation ;
-//}

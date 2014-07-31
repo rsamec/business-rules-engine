@@ -218,14 +218,14 @@ module Validation {
         }
 
         public get HasErrorsDirty():boolean {
-            if (this.Optional != undefined && _.isFunction(this.Optional) && this.Optional()) return false;
+            if (this.Optional !== undefined && _.isFunction(this.Optional) && this.Optional()) return false;
             return _.some(this.Children, function (error) {
                 return error.HasErrorsDirty;
             });
         }
 
         get HasErrors(): boolean {
-            if (this.Optional != undefined && _.isFunction(this.Optional) && this.Optional()) return false;
+            if (this.Optional !== undefined && _.isFunction(this.Optional) && this.Optional()) return false;
             return _.some(this.Children, function (error) {
                 return error.HasErrors;
             });
@@ -255,7 +255,7 @@ module Validation {
         }
 
         public LogErrors(headerMessage?:string) {
-            if (headerMessage == undefined) headerMessage = "Output";
+            if (headerMessage === undefined) headerMessage = "Output";
             console.log("---------------\n");
             console.log("--- "  + headerMessage  + " ----\n");
             console.log("---------------\n");
@@ -282,7 +282,7 @@ module Validation {
             this.SetDirtyEx(this,false);
         }
         private SetDirtyEx(node: IValidationResult,  dirty:boolean){
-            if (node.Children.length == 0) {
+            if (node.Children.length === 0) {
                 node["IsDirty"] = dirty;
             }
             else {
@@ -293,7 +293,7 @@ module Validation {
             }
         }
         private flattenErrors(node: IValidationResult, errorCollection: Array<IValidationResult>) {
-            if (node.Children.length == 0) {
+            if (node.Children.length === 0) {
                 if (node.HasErrors) errorCollection.push(node);
             }
             else {

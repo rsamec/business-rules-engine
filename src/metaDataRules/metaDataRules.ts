@@ -28,7 +28,7 @@ module Validation {
         constructor(public Data:any, public MetaData:any) {
             for (var key in this.MetaData) {
                 var metaData = this.MetaData[key];
-                if (metaData[Util.RULE_PROPERTY_NAME] != null) {
+                if (metaData[Util.RULE_PROPERTY_NAME] !== undefined) {
                     this.Rules[key] = new MetaDataRule(metaData,new ValidationContext(key,this.Data))
                 }
             }
@@ -57,7 +57,7 @@ module Validation {
 
             //read label from metadata
             var label = metaData[Util.LABEL_PROPERTY_NAME];
-            var name = label != undefined ? label : this.Context.Key;
+            var name = label !== undefined ? label : this.Context.Key;
 
             var validators:Array<IPropertyValidator> = [];
             for (var method in metaData.rules) {

@@ -131,13 +131,12 @@ describe('validation rules for lists', function () {
         var promiseResult = this.MainValidator.ValidateAsync(this.Data);
 
         //verify
-        var selfValidator = this.MainValidator;
         promiseResult.then(function (response) {
 
-            selfValidator.ValidationResult.LogErrors();
+            response.LogErrors();
 
             //verify
-            expect(selfValidator.ValidationResult.HasErrors).to.equal(false);
+            expect(response.HasErrors).to.equal(false);
 
             done();
 
@@ -163,17 +162,16 @@ describe('validation rules for lists', function () {
         var promiseResult = this.MainValidator.ValidateAsync(this.Data);
 
         //verify
-        var selfValidator = this.MainValidator;
         promiseResult.then(function (response) {
 
-            selfValidator.ValidationResult.LogErrors();
+            response.LogErrors();
 
             //verify
-            expect(selfValidator.ValidationResult.HasErrors).to.equal(true);
-            expect(selfValidator.ValidationResult.Errors["Contacts"].HasErrors).to.equal(true);
-            expect(selfValidator.ValidationResult.Errors["Contacts"].Errors["Contacts0"].HasErrors).to.equal(false);
-            expect(selfValidator.ValidationResult.Errors["Contacts"].Errors["Contacts1"].HasErrors).to.equal(true);
-            expect(selfValidator.ValidationResult.Errors["Contacts"].Errors["Contacts2"].HasErrors).to.equal(true);
+            expect(response.HasErrors).to.equal(true);
+            expect(response.Errors["Contacts"].HasErrors).to.equal(true);
+            expect(response.Errors["Contacts"].Errors["Contacts0"].HasErrors).to.equal(false);
+            expect(response.Errors["Contacts"].Errors["Contacts1"].HasErrors).to.equal(true);
+            expect(response.Errors["Contacts"].Errors["Contacts2"].HasErrors).to.equal(true);
 
             done();
 
@@ -201,16 +199,15 @@ describe('validation rules for lists', function () {
         var promiseResult = this.MainValidator.ValidateAsync(this.Data);
 
         //verify
-        var selfValidator = this.MainValidator;
         promiseResult.then(function (response) {
 
-            selfValidator.ValidationResult.LogErrors();
+            response.LogErrors();
 
             //verify
-            expect(selfValidator.ValidationResult.HasErrors).to.equal(false);
-            expect(selfValidator.ValidationResult.Errors["Contacts"].HasErrors).to.equal(false);
-            expect(selfValidator.ValidationResult.Errors["Contacts"].Errors["Contacts0"].HasErrors).to.equal(false);
-            expect(selfValidator.ValidationResult.Errors["Contacts"].Errors["Contacts1"].HasErrors).to.equal(false);
+            expect(response.HasErrors).to.equal(false);
+            expect(response.Errors["Contacts"].HasErrors).to.equal(false);
+            expect(response.Errors["Contacts"].Errors["Contacts0"].HasErrors).to.equal(false);
+            expect(response.Errors["Contacts"].Errors["Contacts1"].HasErrors).to.equal(false);
 
             done();
 
@@ -238,16 +235,15 @@ describe('validation rules for lists', function () {
         var promiseResult = this.MainValidator.ValidateAsync(this.Data);
 
         //verify
-        var selfValidator = this.MainValidator;
         promiseResult.then(function (response) {
 
-            selfValidator.ValidationResult.LogErrors();
+            response.LogErrors();
 
             //verify
-            expect(selfValidator.ValidationResult.HasErrors).to.equal(true);
-            expect(selfValidator.ValidationResult.Errors["Contacts"].HasErrors).to.equal(true);
-            expect(selfValidator.ValidationResult.Errors["Contacts"].Errors["Contacts0"].HasErrors).to.equal(false);
-            expect(selfValidator.ValidationResult.Errors["Contacts"].Errors["Contacts1"].HasErrors).to.equal(true);
+            expect(response.HasErrors).to.equal(true);
+            expect(response.Errors["Contacts"].HasErrors).to.equal(true);
+            expect(response.Errors["Contacts"].Errors["Contacts0"].HasErrors).to.equal(false);
+            expect(response.Errors["Contacts"].Errors["Contacts1"].HasErrors).to.equal(true);
 
             done();
 

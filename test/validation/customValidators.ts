@@ -164,11 +164,10 @@ describe('custom validators', function () {
             var result = this.Validator.Validate(this.Data);
             var promiseResult = this.Validator.ValidateAsync(this.Data);
 
-            var errorInfo = this.Validator.ValidationResult;
             promiseResult.then(function (response) {
 
                 //verify
-                expect(errorInfo.HasErrors).to.equal(false);
+                expect(response.HasErrors).to.equal(false);
 
                 done();
 
@@ -185,14 +184,13 @@ describe('custom validators', function () {
             var result = this.Validator.Validate(this.Data);
             var promiseResult = this.Validator.ValidateAsync(this.Data);
 
-            var selfValidator = this.Validator;
             promiseResult.then(function (response) {
 
-                selfValidator.ValidationResult.LogErrors();
+                response.LogErrors();
 
                 //verify
-                expect(selfValidator.ValidationResult.HasErrors).to.equal(true);
-                expect(selfValidator.ValidationResult.ErrorCount).to.equal(2);
+                expect(response.HasErrors).to.equal(true);
+                expect(response.ErrorCount).to.equal(2);
 
                 done();
 
@@ -232,7 +230,7 @@ describe('custom validators', function () {
             var result = this.Validator.Validate(this.Data);
 
             //verify
-            expect(this.Validator.ValidationResult.HasErrors).to.equal(false);
+            expect(result.HasErrors).to.equal(false);
 
         });
 
@@ -246,9 +244,9 @@ describe('custom validators', function () {
             var result = this.Validator.Validate(this.Data);
 
             //verify
-            this.Validator.ValidationResult.LogErrors();
-            expect(this.Validator.ValidationResult.HasErrors).to.equal(true);
-            expect(this.Validator.ValidationResult.ErrorCount).to.equal(2);
+            result.LogErrors();
+            expect(result.HasErrors).to.equal(true);
+            expect(result.ErrorCount).to.equal(2);
 
         });
     });

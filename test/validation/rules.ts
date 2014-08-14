@@ -44,7 +44,7 @@ describe('basic validation rules', function () {
         it('fill correct data - no errors', function () {
 
             //when
-            this.Data.FirstName = "Jonh";
+            this.Data.FirstName = "John";
             this.Data.LastName = "Smith";
 
             //excercise
@@ -57,10 +57,10 @@ describe('basic validation rules', function () {
             expect(this.PersonValidator.ValidationResult.HasErrors).to.equal(false);
 
             //validator properties enables to check specific rule errors
-            expect(this.PersonValidator.Rules["FirstName"].ValidationFailures["required"].HasError).to.equal(false);
-            expect(this.PersonValidator.Rules["FirstName"].ValidationFailures["maxlength"].HasError).to.equal(false);
-            expect(this.PersonValidator.Rules["LastName"].ValidationFailures["required"].HasError).to.equal(false);
-            expect(this.PersonValidator.Rules["LastName"].ValidationFailures["maxlength"].HasError).to.equal(false);
+            expect(result.Errors["FirstName"].ValidationFailures["required"].HasError).to.equal(false);
+            expect(result.Errors["FirstName"].ValidationFailures["maxlength"].HasError).to.equal(false);
+            expect(result.Errors["LastName"].ValidationFailures["required"].HasError).to.equal(false);
+            expect(result.Errors["LastName"].ValidationFailures["maxlength"].HasError).to.equal(false);
 
         });
 
@@ -80,10 +80,10 @@ describe('basic validation rules', function () {
             expect(this.PersonValidator.ValidationResult.HasErrors).to.equal(true);
 
             //validator properties enables to check specific rule errors
-            expect(this.PersonValidator.Rules["FirstName"].ValidationFailures["required"].HasError).to.equal(true);
-            expect(this.PersonValidator.Rules["FirstName"].ValidationFailures["maxlength"].HasError).to.equal(false);
-            expect(this.PersonValidator.Rules["LastName"].ValidationFailures["required"].HasError).to.equal(false);
-            expect(this.PersonValidator.Rules["LastName"].ValidationFailures["maxlength"].HasError).to.equal(true);
+            expect(result.Errors["FirstName"].ValidationFailures["required"].HasError).to.equal(true);
+            expect(result.Errors["FirstName"].ValidationFailures["maxlength"].HasError).to.equal(false);
+            expect(result.Errors["LastName"].ValidationFailures["required"].HasError).to.equal(false);
+            expect(result.Errors["LastName"].ValidationFailures["maxlength"].HasError).to.equal(true);
 
         });
     });
@@ -130,11 +130,14 @@ describe('basic validation rules', function () {
             //excercise
             var promiseResult = this.PersonValidator.ValidateAsync(this.Data);
 
-            var errorInfo = this.PersonValidator.ValidationResult;
+            var selfValidator = this.PersonValidator;
             promiseResult.then(function (response) {
 
-                //verify
-                expect(errorInfo.HasErrors).to.equal(false);
+                //verify by return result
+                expect(response.HasErrors).to.equal(false);
+
+                //verify by concrete validator properties
+                expect(selfValidator.ValidationResult.HasErrors).to.equal(false);
 
                 done();
 
@@ -204,7 +207,7 @@ describe('basic validation rules', function () {
             var result = this.PersonValidator.Validate(this.Data);
 
             //verify
-            expect(this.PersonValidator.ValidationResult.HasErrors).to.equal(false);
+            expect(result.HasErrors).to.equal(false);
 
         });
 
@@ -219,7 +222,7 @@ describe('basic validation rules', function () {
             var result = this.PersonValidator.Validate(this.Data);
 
             //verify
-            expect(this.PersonValidator.ValidationResult.HasErrors).to.equal(true);
+            expect(result.HasErrors).to.equal(true);
         });
     });
 
@@ -358,7 +361,7 @@ describe('basic validation rules', function () {
             var result = this.PersonValidator.Validate(this.Data);
 
             //verify
-            expect(this.PersonValidator.ValidationResult.HasErrors).to.equal(false);
+            expect(result.HasErrors).to.equal(false);
 
         });
 
@@ -371,7 +374,7 @@ describe('basic validation rules', function () {
             var result = this.PersonValidator.Validate(this.Data);
 
             //verify
-            expect(this.PersonValidator.ValidationResult.HasErrors).to.equal(true);
+            expect(result.HasErrors).to.equal(true);
 
         });
     });

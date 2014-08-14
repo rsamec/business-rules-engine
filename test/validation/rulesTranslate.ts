@@ -61,8 +61,8 @@ describe('localization of error messages', function () {
             var result = this.PersonValidator.Validate(this.Data);
 
             //verify
-            expect(this.PersonValidator.Rules["FirstName"].ValidationFailures["required"].ErrorMessage).to.equal(this.Messages["required"]);
-            expect(this.PersonValidator.Rules["LastName"].ValidationFailures["maxlength"].ErrorMessage).to.equal(Validation.StringFce.format(this.Messages["maxlength"],{MaxLength:15}));
+            expect(result.Errors["FirstName"].ValidationFailures["required"].ErrorMessage).to.equal(this.Messages["required"]);
+            expect(result.Errors["LastName"].ValidationFailures["maxlength"].ErrorMessage).to.equal(Validation.StringFce.format(this.Messages["maxlength"],{MaxLength:15}));
         });
 
         it('cz errors', function () {
@@ -80,9 +80,9 @@ describe('localization of error messages', function () {
             var result = this.PersonValidator.Validate(this.Data);
 
             //verify
-            expect(Validation.StringFce.format(this.Messages["required"],this.PersonValidator.Rules["FirstName"].ValidationFailures["required"].TranslateArgs.MessageArgs))
+            expect(Validation.StringFce.format(this.Messages["required"],result.Errors["FirstName"].ValidationFailures["required"].TranslateArgs.MessageArgs))
                 .to.equal(this.Messages["required"]);
-            expect(Validation.StringFce.format(this.Messages["maxlength"],this.PersonValidator.Rules["LastName"].ValidationFailures["maxlength"].TranslateArgs.MessageArgs))
+            expect(Validation.StringFce.format(this.Messages["maxlength"],result.Errors["LastName"].ValidationFailures["maxlength"].TranslateArgs.MessageArgs))
                 .to.equal(Validation.StringFce.format(this.Messages["maxlength"],{MaxLength:15}));
 
         });
@@ -135,14 +135,13 @@ describe('localization of error messages', function () {
             //excercise
             var promiseResult = this.PersonValidator.ValidateAsync(this.Data);
 
-            var self = this;
-
+            var expectedMsg = this.Messages["contains"];
             promiseResult.then(function (response) {
 
-                self.PersonValidator.ValidationResult.LogErrors();
+                response.LogErrors();
 
                 //verify
-                expect(self.PersonValidator.Rules["Job"].ValidationFailures["contains"].ErrorMessage).to.equal(Validation.StringFce.format(self.Messages["contains"],{AttemptedValue:"unknow job"}));
+                expect(response.Errors["Job"].ValidationFailures["contains"].ErrorMessage).to.equal(Validation.StringFce.format(expectedMsg,{AttemptedValue:"unknow job"}));
 
                 done();
 
@@ -161,16 +160,16 @@ describe('localization of error messages', function () {
             //excercise
             var promiseResult = this.PersonValidator.ValidateAsync(this.Data);
 
-            var self = this;
+            var expectedMsg = this.Messages["contains"];
 
             promiseResult.then(function (response) {
 
-                self.PersonValidator.ValidationResult.LogErrors();
+                response.LogErrors();
 
                 //verify
 
-                expect(Validation.StringFce.format(self.Messages["contains"],self.PersonValidator.Rules["Job"].ValidationFailures["contains"].TranslateArgs.MessageArgs))
-                    .to.equal(Validation.StringFce.format(self.Messages["contains"],{AttemptedValue:"unknow job"}));
+                expect(Validation.StringFce.format(expectedMsg,response.Errors["Job"].ValidationFailures["contains"].TranslateArgs.MessageArgs))
+                    .to.equal(Validation.StringFce.format(expectedMsg,{AttemptedValue:"unknow job"}));
 
                 done();
 
@@ -316,7 +315,7 @@ describe('localization of error messages', function () {
             var result = this.PersonValidator.Validate(this.Data);
 
             //verify
-            expect(this.PersonValidator.Rules["BirthDate"].ValidationFailures["dateCompare"].ErrorMessage).to.equal(this.Messages["custom"]);
+            expect(result.Errors["BirthDate"].ValidationFailures["dateCompare"].ErrorMessage).to.equal(this.Messages["custom"]);
         });
 
         it('en errors - custom', function () {
@@ -348,7 +347,7 @@ describe('localization of error messages', function () {
                     CompareTo: moment(new Date()).format(this.Messages["dateCompare"]["Format"]),
                     AttemptedValue: moment(this.Data.BirthDate).format(this.Messages["dateCompare"]["Format"])
                 });
-            expect(customErrorMessage(this.Messages["dateCompare"],this.PersonValidator.Rules["BirthDate"].ValidationFailures["dateCompare"].TranslateArgs.MessageArgs))
+            expect(customErrorMessage(this.Messages["dateCompare"],result.Errors["BirthDate"].ValidationFailures["dateCompare"].TranslateArgs.MessageArgs))
                 .to.equal(expectedMsg);
         });
 
@@ -381,7 +380,7 @@ describe('localization of error messages', function () {
                     AttemptedValue: moment(this.Data.BirthDate).format(this.Messages["dateCompare"]["Format"])
                 });
 
-            expect(customErrorMessage(this.Messages["dateCompare"],this.PersonValidator.Rules["BirthDate"].ValidationFailures["dateCompare"].TranslateArgs.MessageArgs))
+            expect(customErrorMessage(this.Messages["dateCompare"],result.Errors["BirthDate"].ValidationFailures["dateCompare"].TranslateArgs.MessageArgs))
                 .to.equal(expectedMsg);
         });
     });

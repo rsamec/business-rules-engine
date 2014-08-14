@@ -154,7 +154,7 @@ describe('validation rules for groups', function () {
         }
     };
 
-    describe("call specific validation group",function() {
+    describe("call specific validator",function() {
         beforeEach(function () {
 
 
@@ -171,11 +171,15 @@ describe('validation rules for groups', function () {
             this.Data.Contacts.push(getItemDataTemplate('mail2@gmail.com'));
             this.Data.Contacts.push(getItemDataTemplate('mail3@gmail.com'));
 
-            //excercise
+            //find the validator by name
             var validator = this.MainValidator.Validators["UniqueContact"];
-            validator.Validate(this.Data);
+            //excercise
+            var result = validator.Validate(this.Data);
 
-            //verify
+            //verify by return value
+            expect(result.HasError).to.equal(false);
+
+            //verify by validator properties
             expect(validator.HasErrors).to.equal(false);
 
         });
@@ -186,11 +190,15 @@ describe('validation rules for groups', function () {
             this.Data.Contacts.push(getItemDataTemplate('mail2@gmail.com'));
             this.Data.Contacts.push(getItemDataTemplate('mail2@gmail.com'));
 
-            //excercise
+            //find the validator by name
             var validator = this.MainValidator.Validators["UniqueContact"];
-            validator.Validate(this.Data);
+            //excercise
+            var result = validator.Validate(this.Data);
 
-            //verify
+            //verify by return value
+            expect(result.HasError).to.equal(true);
+
+            //verify by validator properties
             expect(validator.HasErrors).to.equal(true);
 
         });

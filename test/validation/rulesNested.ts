@@ -144,13 +144,12 @@ describe('nested validation rules', function () {
         var promiseResult = this.MainValidator.ValidateAsync(this.Data);
 
         //verify
-        var selfValidator = this.MainValidator;
         promiseResult.then(function (response) {
 
-            selfValidator.ValidationResult.LogErrors();
+            response.LogErrors();
 
             //verify
-            expect(selfValidator.ValidationResult.HasErrors).to.equal(false);
+            expect(response.HasErrors).to.equal(false);
 
             done();
 
@@ -172,13 +171,12 @@ describe('nested validation rules', function () {
         var promiseResult = this.MainValidator.ValidateAsync(this.Data);
 
         //verify
-        var selfValidator = this.MainValidator;
         promiseResult.then(function (response) {
 
-            selfValidator.ValidationResult.LogErrors();
+            response.LogErrors();
 
             //verify
-            expect(selfValidator.ValidationResult.HasErrors).to.equal(true);
+            expect(response.HasErrors).to.equal(true);
 
             done();
 
@@ -218,13 +216,12 @@ describe('nested validation rules', function () {
             var promiseResult = this.MainValidator.ValidateAsync(this.Data);
 
             //verify
-            var selfValidator = this.MainValidator;
             promiseResult.then(function (response) {
 
-                selfValidator.ValidationResult.LogErrors();
+                response.LogErrors();
 
                 //verify
-                expect(selfValidator.ValidationResult.HasErrors).to.equal(false);
+                expect(response.HasErrors).to.equal(false);
 
                 done();
 
@@ -243,13 +240,12 @@ describe('nested validation rules', function () {
             var promiseResult = this.MainValidator.ValidateAsync(this.Data);
 
             //verify
-            var selfValidator = this.MainValidator;
             promiseResult.then(function (response) {
 
-                selfValidator.ValidationResult.LogErrors();
+                response.LogErrors();
 
                 //verify
-                expect(selfValidator.ValidationResult.HasErrors).to.equal(false);
+                expect(response.HasErrors).to.equal(false);
 
                 done();
 

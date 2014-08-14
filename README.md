@@ -127,3 +127,9 @@ To run tests
 mocha test
 ```
 
+## Roadmap
+
++ Simplify ValidationFor
++ Shared validation groups
++ Depedency injection
+

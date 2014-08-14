@@ -4,6 +4,8 @@
 
 
 var Validation = require('../../dist/node-form.js');
+var Validators = require('../../dist/customValidators/BasicValidators.js');
+var Util = require('../../dist/customValidators/util.js');
 var expect = require('expect.js');
 
 var _:UnderscoreStatic = require('underscore');
@@ -22,13 +24,20 @@ interface IPerson{
 }
 
 describe('localization of error messages', function () {
+
+    var defaultMessages = {
+        "required": "This field is required.",
+        "maxlength": "Please enter no more than {MaxLength} characters.",
+        "contains": "Please enter a value from list of values. Attempted value '{AttemptedValue}'.",
+        "custom":"Please, fix the field."
+    };
    describe('simple property validators', function () {
 
         beforeEach(function () {
             //setup
             this.Data = {};
             this.PersonValidator = personValidator.CreateRule("Person");
-            this.Messages = Validation.MessageLocalization.defaultMessages;
+            this.Messages = defaultMessages;
 
         });
 
@@ -36,8 +45,8 @@ describe('localization of error messages', function () {
         var personValidator = new Validation.AbstractValidator<IPerson>();
 
         //basic validators
-        var required = new Validation.RequiredValidator();
-        var maxLength = new Validation.MaxLengthValidator(15);
+        var required = new Validators.RequiredValidator();
+        var maxLength = new Validators.MaxLengthValidator(15);
         var lowerOrEqualThanToday = new dateCompareValidator();
         lowerOrEqualThanToday.CompareTo = new Date();
         lowerOrEqualThanToday.CompareOperator = Validation.CompareOperator.LessThanEqual;
@@ -62,7 +71,7 @@ describe('localization of error messages', function () {
 
             //verify
             expect(result.Errors["FirstName"].ValidationFailures["required"].ErrorMessage).to.equal(this.Messages["required"]);
-            expect(result.Errors["LastName"].ValidationFailures["maxlength"].ErrorMessage).to.equal(Validation.StringFce.format(this.Messages["maxlength"],{MaxLength:15}));
+            expect(result.Errors["LastName"].ValidationFailures["maxlength"].ErrorMessage).to.equal(Util.StringFce.format(this.Messages["maxlength"],{MaxLength:15}));
         });
 
         it('cz errors', function () {
@@ -80,10 +89,10 @@ describe('localization of error messages', function () {
             var result = this.PersonValidator.Validate(this.Data);
 
             //verify
-            expect(Validation.StringFce.format(this.Messages["required"],result.Errors["FirstName"].ValidationFailures["required"].TranslateArgs.MessageArgs))
+            expect(Util.StringFce.format(this.Messages["required"],result.Errors["FirstName"].ValidationFailures["required"].TranslateArgs.MessageArgs))
                 .to.equal(this.Messages["required"]);
-            expect(Validation.StringFce.format(this.Messages["maxlength"],result.Errors["LastName"].ValidationFailures["maxlength"].TranslateArgs.MessageArgs))
-                .to.equal(Validation.StringFce.format(this.Messages["maxlength"],{MaxLength:15}));
+            expect(Util.StringFce.format(this.Messages["maxlength"],result.Errors["LastName"].ValidationFailures["maxlength"].TranslateArgs.MessageArgs))
+                .to.equal(Util.StringFce.format(this.Messages["maxlength"],{MaxLength:15}));
 
         });
 
@@ -95,7 +104,7 @@ describe('localization of error messages', function () {
             //setup
             this.Data = {};
             this.PersonValidator = personValidator.CreateRule("Person");
-            this.Messages = Validation.MessageLocalization.defaultMessages;
+            this.Messages = defaultMessages;
 
         });
 
@@ -118,7 +127,7 @@ describe('localization of error messages', function () {
         };
 
         //async basic validators - return true if specified param contains any value
-        var param = new Validation.ContainsValidator();
+        var param = new Validators.ContainsValidator();
         param.Options = optionsFce();
 
         //assigned validator to property
@@ -141,7 +150,7 @@ describe('localization of error messages', function () {
                 response.LogErrors();
 
                 //verify
-                expect(response.Errors["Job"].ValidationFailures["contains"].ErrorMessage).to.equal(Validation.StringFce.format(expectedMsg,{AttemptedValue:"unknow job"}));
+                expect(response.Errors["Job"].ValidationFailures["contains"].ErrorMessage).to.equal(Util.StringFce.format(expectedMsg,{AttemptedValue:"unknow job"}));
 
                 done();
 
@@ -168,8 +177,8 @@ describe('localization of error messages', function () {
 
                 //verify
 
-                expect(Validation.StringFce.format(expectedMsg,response.Errors["Job"].ValidationFailures["contains"].TranslateArgs.MessageArgs))
-                    .to.equal(Validation.StringFce.format(expectedMsg,{AttemptedValue:"unknow job"}));
+                expect(Util.StringFce.format(expectedMsg,response.Errors["Job"].ValidationFailures["contains"].TranslateArgs.MessageArgs))
+                    .to.equal(Util.StringFce.format(expectedMsg,{AttemptedValue:"unknow job"}));
 
                 done();
 
@@ -184,7 +193,7 @@ describe('localization of error messages', function () {
             //setup
             this.Data = {};
             this.PersonValidator = personValidator.CreateRule("Person");
-            this.Messages = Validation.MessageLocalization.defaultMessages;
+            this.Messages = defaultMessages;
 
         });
 
@@ -198,7 +207,7 @@ describe('localization of error messages', function () {
             if (this.FirstName.indexOf(' ') != -1 || this.LastName.indexOf(' ') != -1) {
                 args.HasError = true;
                 args.TranslateArgs = {TranslateId:'FullNameOneSpace',MessageArgs:{AttemptedValue: this.FirstName + " " + this.LastName}};
-                args.ErrorMessage = Validation.StringFce.format("Full name can contain only one space. Attempted full name:'{AttemptedValue}'.",args.TranslateArgs.MessageArgs);
+                args.ErrorMessage = Util.StringFce.format("Full name can contain only one space. Attempted full name:'{AttemptedValue}'.",args.TranslateArgs.MessageArgs);
             }
         };
 
@@ -223,7 +232,7 @@ describe('localization of error messages', function () {
 
             //verify
             expect(this.PersonValidator.ValidationResult.ErrorMessage).
-                to.equal(Validation.StringFce.format("Full name can contain only one space. Attempted full name:'{AttemptedValue}'.", { AttemptedValue: "John Junior Smith" }));
+                to.equal(Util.StringFce.format("Full name can contain only one space. Attempted full name:'{AttemptedValue}'.", { AttemptedValue: "John Junior Smith" }));
 
         });
         it('cz error messsage', function () {
@@ -241,8 +250,8 @@ describe('localization of error messages', function () {
             var result = this.PersonValidator.Validate(this.Data);
 
             //verify
-            expect(Validation.StringFce.format(this.Messages["FullNameOneSpace"],this.PersonValidator.Validators["OneSpaceForbidden"].TranslateArgs[0].MessageArgs))
-                .to.equal(Validation.StringFce.format(this.Messages["FullNameOneSpace"], { AttemptedValue: "John Junior Smith" }));
+            expect(Util.StringFce.format(this.Messages["FullNameOneSpace"],this.PersonValidator.Validators["OneSpaceForbidden"].TranslateArgs[0].MessageArgs))
+                .to.equal(Util.StringFce.format(this.Messages["FullNameOneSpace"], { AttemptedValue: "John Junior Smith" }));
 
         });
     });
@@ -252,14 +261,14 @@ describe('localization of error messages', function () {
             //setup
             this.Data = {};
             this.PersonValidator = personValidator.CreateRule("Person");
-            this.Messages = Validation.MessageLocalization.defaultMessages;
+            this.Messages = defaultMessages;
         });
 
         //create new validator for object with structure<IPerson>
         var personValidator = new Validation.AbstractValidator();
 
         //basic validators
-        var required = new Validation.RequiredValidator();
+        var required = new Validators.RequiredValidator();
         var lowerOrEqualThanToday = new dateCompareValidator();
         lowerOrEqualThanToday.CompareTo = new Date();
         lowerOrEqualThanToday.CompareOperator = Validation.CompareOperator.LessThanEqual;
@@ -303,7 +312,7 @@ describe('localization of error messages', function () {
             }
             msg = msg.replace('CompareTo', 'FormatedCompareTo');
             msg = msg.replace('AttemptedValue', 'FormatedAttemptedValue');
-            return Validation.StringFce.format(msg, args);
+            return Util.StringFce.format(msg, args);
         };
 
         it('en errors - default', function () {
@@ -342,7 +351,7 @@ describe('localization of error messages', function () {
 
 
             //verify
-            var expectedMsg = Validation.StringFce.format(this.Messages["dateCompare"]["LessThanEqual"],
+            var expectedMsg = Util.StringFce.format(this.Messages["dateCompare"]["LessThanEqual"],
                 {
                     CompareTo: moment(new Date()).format(this.Messages["dateCompare"]["Format"]),
                     AttemptedValue: moment(this.Data.BirthDate).format(this.Messages["dateCompare"]["Format"])
@@ -374,7 +383,7 @@ describe('localization of error messages', function () {
             var result = this.PersonValidator.Validate(this.Data);
 
             //verify
-            var expectedMsg = Validation.StringFce.format(this.Messages["dateCompare"]["LessThanEqual"],
+            var expectedMsg = Util.StringFce.format(this.Messages["dateCompare"]["LessThanEqual"],
                 {
                     CompareTo: moment(new Date()).format(this.Messages["dateCompare"]["Format"]),
                     AttemptedValue: moment(this.Data.BirthDate).format(this.Messages["dateCompare"]["Format"])

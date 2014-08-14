@@ -1,6 +1,7 @@
 ///<reference path='../../typings/mocha/mocha.d.ts'/>
 ///<reference path='../../typings/node/node.d.ts'/>
 var Validation = require('../../dist/node-form.js');
+var Validators = require('../../dist/customValidators/BasicValidators.js');
 var expect = require('expect.js');
 
 describe('common validators', function () {

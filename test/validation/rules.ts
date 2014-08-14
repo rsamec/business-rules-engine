@@ -3,6 +3,7 @@
 ///<reference path='../../typings/underscore/underscore.d.ts'/>
 
 var Validation = require('../../dist/node-form.js');
+var Validators = require('../../dist/customValidators/BasicValidators.js');
 var expect = require('expect.js');
 var _:UnderscoreStatic = require('underscore');
 var Q = require('q');
@@ -13,7 +14,6 @@ interface IPerson{
     LastName:string;
     Job:string;
 }
-
 describe('basic validation rules', function () {
 
     describe('simple property validators', function() {
@@ -29,8 +29,8 @@ describe('basic validation rules', function () {
         var personValidator = new Validation.AbstractValidator<IPerson>();
 
         //basic validators
-        var required =new Validation.RequiredValidator();
-        var maxLength = new Validation.MaxLengthValidator(15);
+        var required =new Validators.RequiredValidator();
+        var maxLength = new Validators.MaxLengthValidator(15);
 
         //assigned validators to property
         personValidator.RuleFor("FirstName", required);
@@ -116,7 +116,7 @@ describe('basic validation rules', function () {
         };
 
         //async basic validators - return true if specified param contains any value
-        var param = new Validation.ContainsValidator();
+        var param = new Validators.ContainsValidator();
         param.Options = optionsFce();
 
         //assigned validator to property
@@ -340,8 +340,8 @@ describe('basic validation rules', function () {
         var personValidator = new Validation.AbstractValidator<IPerson>();
 
         //basic validators
-        var required =new Validation.RequiredValidator();
-        var maxLength = new Validation.MaxLengthValidator(15);
+        var required =new Validators.RequiredValidator();
+        var maxLength = new Validators.MaxLengthValidator(15);
 
         //assigned validators to property
         personValidator.RuleFor("FirstName", required);

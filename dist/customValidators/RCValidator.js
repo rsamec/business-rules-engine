@@ -1,6 +1,6 @@
 ///<reference path='../../typings/underscore.string/underscore.string.d.ts'/>
 ///<reference path='../../typings/moment/moment.d.ts'/>
-///<reference path='../validation/validators.ts'/>
+///<reference path='BasicValidators.ts'/>
 var moment = require("moment");
 var _s = require("underscore.string");
 

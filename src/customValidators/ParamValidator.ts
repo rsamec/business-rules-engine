@@ -1,4 +1,4 @@
-///<reference path='../validation/validators.ts'/>
+///<reference path='BasicValidators.ts'/>
 import Q = require("q");
 import _ = require("underscore");
 

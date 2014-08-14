@@ -1,6 +1,6 @@
 ///<reference path='../../typings/underscore/underscore.d.ts'/>
 
-///<reference path='validators.ts'/>
+///<reference path='abstract.ts'/>
 
 module Validation {
 

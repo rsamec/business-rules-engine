@@ -1,4 +1,4 @@
-///<reference path='../validation/validators.ts'/>
+///<reference path='BasicValidators.ts'/>
 var Q = require("q");
 var _ = require("underscore");
 

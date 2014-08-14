@@ -1,5 +1,5 @@
 ///<reference path='../validation/errors.ts'/>
-///<reference path='../validation/validators.ts'/>
+///<reference path='../customValidators/BasicValidators.ts'/>
 ///<reference path='../validation/rules.ts'/>
 
 ///<reference path='util.ts'/>

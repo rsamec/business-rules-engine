@@ -53,7 +53,7 @@ To create validator you have to
            }
            var createPersonValidator = function() {
 
-               var maxLength = new Validation.MaxLengthValidator(15);
+               var maxLength = new Validators.MaxLengthValidator(15);
 
                var validator = new Validation.AbstractValidator<IPerson>();
                validator.RuleFor("FirstName", required);
@@ -72,7 +72,7 @@ To create validator you have to
 
                var validator = new Validation.AbstractValidator<IContact>();
                validator.RuleFor("Email", required);
-               validator.RuleFor("Email", new Validation.MaxLengthValidator(100));
+               validator.RuleFor("Email", new Validators.MaxLengthValidator(100));
                validator.RuleFor("Email", new Validation.EmailValidator());
 
                var phoneValidator = createPhoneValidator();
@@ -86,10 +86,10 @@ To create validator you have to
 
                var validator = new Validation.AbstractValidator<IPhone>();
                validator.RuleFor("CountryCode", required);
-               validator.RuleFor("CountryCode", new Validation.MaxLengthValidator(3));
+               validator.RuleFor("CountryCode", new Validators.MaxLengthValidator(3));
 
                validator.RuleFor("Number", required);
-               validator.RuleFor("Number", new Validation.MaxLengthValidator(9));
+               validator.RuleFor("Number", new Validators.MaxLengthValidator(9));
 
                var optionsFce = function() {
                    var deferral = Q.defer();

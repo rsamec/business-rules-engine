@@ -1,6 +1,9 @@
 ///<reference path='util.ts'/>
 ///<reference path='../validation/errors.ts'/>
 ///<reference path='../validation/rules.ts'/>
+///<reference path='../customValidators/BasicValidators.ts'/>
+
+//import Validators = require("../customValidators/BasicValidators.js");
 
 module Validation {
 
@@ -12,12 +15,8 @@ module Validation {
         Parameters?: any;
     }
 
-
     /**
      * YUIDoc_comment
-     *
-     * @class rules
-     * @constructor
      **/
     export class MetaDataRules {
 
@@ -76,18 +75,22 @@ module Validation {
 
         private CreateValidator(rule:IMetaRule):IPropertyValidator{
 
-            switch (rule.Method) {
-                case "required":
-                    return new RequiredValidator();
-                case "minlength":
-                    var validator = new MinLengthValidator();
-                    validator.MinLength = rule.Parameters;
-                    return validator;
-                case "maxlength":
-                    var maxLengthValidator = new MaxLengthValidator();
-                    maxLengthValidator.MaxLength = rule.Parameters;
-                    return maxLengthValidator;
-            }
+//            switch (rule.Method) {
+//                case "required":
+//                    return new Validators.RequiredValidator();
+//
+//
+//
+//                case "minlength":
+//                    var validator = new Validators.MinLengthValidator();
+//                    validator.MinLength = rule.Parameters;
+//                    return validator;
+//                case "maxlength":
+//                    var maxLengthValidator = new Validators.MaxLengthValidator();
+//                    maxLengthValidator.MaxLength = rule.Parameters;
+//                    return maxLengthValidator;
+//            }
+            return undefined;
         }
 
         public Validate(): void {

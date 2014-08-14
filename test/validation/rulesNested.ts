@@ -3,6 +3,7 @@
 ///<reference path='../../typings/underscore/underscore.d.ts'/>
 
 var Validation = require('../../dist/node-form.js');
+var Validators = require('../../dist/customValidators/BasicValidators.js');
 var expect = require('expect.js');
 var _:UnderscoreStatic = require('underscore');
 var Q = require('q');
@@ -29,7 +30,7 @@ interface IPhone{
 
 describe('nested validation rules', function () {
 
-    var required = new Validation.RequiredValidator();
+    var required = new Validators.RequiredValidator();
 
     var createMainValidator = function(){
         var validator = new Validation.AbstractValidator<IData>();
@@ -43,7 +44,7 @@ describe('nested validation rules', function () {
 
     var createPersonValidator = function() {
 
-        var maxLength = new Validation.MaxLengthValidator(15);
+        var maxLength = new Validators.MaxLengthValidator(15);
 
         var validator = new Validation.AbstractValidator<IPerson>();
         validator.RuleFor("FirstName", required);
@@ -62,8 +63,8 @@ describe('nested validation rules', function () {
 
         var validator = new Validation.AbstractValidator<IContact>();
         validator.RuleFor("Email", required);
-        validator.RuleFor("Email", new Validation.MaxLengthValidator(100));
-        validator.RuleFor("Email", new Validation.EmailValidator());
+        validator.RuleFor("Email", new Validators.MaxLengthValidator(100));
+        validator.RuleFor("Email", new Validators.EmailValidator());
 
         var phoneValidator = createPhoneValidator();
         validator.ValidatorFor("Mobile", phoneValidator);
@@ -76,10 +77,10 @@ describe('nested validation rules', function () {
 
         var validator = new Validation.AbstractValidator<IPhone>();
         validator.RuleFor("CountryCode", required);
-        validator.RuleFor("CountryCode", new Validation.MaxLengthValidator(3));
+        validator.RuleFor("CountryCode", new Validators.MaxLengthValidator(3));
 
         validator.RuleFor("Number", required);
-        validator.RuleFor("Number", new Validation.MaxLengthValidator(9));
+        validator.RuleFor("Number", new Validators.MaxLengthValidator(9));
 
         var optionsFce = function() {
             var deferral = Q.defer();
@@ -89,7 +90,7 @@ describe('nested validation rules', function () {
             return deferral.promise;
         };
 
-        var param = new Validation.ContainsValidator();
+        var param = new Validators.ContainsValidator();
         param.Options = optionsFce();
 
         validator.RuleFor("CountryCode", param);

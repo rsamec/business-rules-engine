@@ -37,7 +37,7 @@ To create validator you have
 
           //basic validators
           var required =new Validation.RequiredValidator();
-          var maxLength = new Validation.MaxLengthValidator(15);
+          var maxLength = new Validators.MaxLengthValidator(15);
 
           //assigned validators to property
           personValidator.RuleFor("FirstName", required);

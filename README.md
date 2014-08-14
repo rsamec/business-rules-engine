@@ -41,7 +41,7 @@ To define business rules for some object, you have to create abstract validator.
 
           //basic validators
           var required =new Validation.RequiredValidator();
-          var maxLength = new Validation.MaxLengthValidator(15);
+          var maxLength = new Validators.MaxLengthValidator(15);
 
           //assigned validators to property
           personValidator.RuleFor("FirstName", required);

@@ -7,80 +7,16 @@
 ///<reference path='../../typings/q/q.d.ts'/>
 ///<reference path='../../typings/moment/moment.d.ts'/>
 
-module Validation {
+///<reference path='../validation/abstract.ts'/>
 
-    /**
-     * Custom message functions.
-     */
-    export interface IErrorCustomMessage { (config:any,args:any):string; }
+import moment = require("moment");
+import _ = require("underscore");
+import Q = require("q");
 
-    /**
-     * It represents a property validator for atomic object.
-     */
-    export interface IPropertyValidator {
-        isAcceptable(s:any): boolean;
-        customMessage?: IErrorCustomMessage;
-        tagName?:string;
-    }
+module Validators {
 
-    /**
-     * It represents a property validator for simple string value.
-     */
-    export interface IStringValidator extends IPropertyValidator {
-        isAcceptable(s:string): boolean;
-    }
 
-    /**
-     * It represents an async property validator for atomic object.
-     */
-    export interface IAsyncPropertyValidator {
-        isAcceptable(s:any): Q.Promise<boolean>;
-        customMessage?: IErrorCustomMessage;
-        isAsync:boolean;
-        tagName?:string;
-    }
-
-    /**
-     * It represents an async property validator for simple string value.
-     */
-    export interface IAsyncStringPropertyValidator extends IAsyncPropertyValidator {
-        isAcceptable(s:string): Q.Promise<boolean>;
-    }
-
-    /**
-     * It defines compare operators.
-     */
-    export enum CompareOperator {
-        //must be less than
-        LessThan,
-
-        //cannot be more than
-        LessThanEqual,
-
-        //must be the same as
-        Equal,
-
-        //must be different from
-        NotEqual,
-
-        //cannot be less than
-        GreaterThanEqual,
-
-        //must be more than
-        GreaterThan
-    }
-
-    export class StringFce {
-        static format(s:string, args:any):string {
-            var formatted = s;
-            for (var prop in args) {
-                var regexp = new RegExp('\\{' + prop + '\\}', 'gi');
-                formatted = formatted.replace(regexp, args[prop]);
-            }
-            return formatted;
-        }
-    }
-    export class NumberFce {
+    class NumberFce {
         static GetNegDigits(value:string):number {
             if (value === undefined) return 0;
             var digits = value.toString().split('.');
@@ -93,7 +29,7 @@ module Validation {
     }
 
     var lettersRegexp = /^[A-Za-z]+$/;
-    export class LettersOnlyValidator implements IStringValidator {
+    export class LettersOnlyValidator implements Validation.IStringValidator {
         isAcceptable(s:string) {
             return lettersRegexp.test(s);
         }
@@ -102,7 +38,7 @@ module Validation {
     }
 
     var numberRegexp = /^[0-9]+$/;
-    export class ZipCodeValidator implements IStringValidator {
+    export class ZipCodeValidator implements Validation.IStringValidator {
         isAcceptable(s:string) {
             return s.length === 5 && numberRegexp.test(s);
         }
@@ -112,7 +48,7 @@ module Validation {
 
     // contributed by Scott Gonzalez: http://projects.scottsplayground.com/email_address_validation/
     var emailRegexp = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i;
-    export class EmailValidator implements IStringValidator {
+    export class EmailValidator implements Validation.IStringValidator {
         isAcceptable(s:string) {
             return emailRegexp.test(s);
         }
@@ -121,7 +57,7 @@ module Validation {
     }
     // contributed by Scott Gonzalez: http://projects.scottsplayground.com/iri/
     var urlRegexp = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i;
-    export class UrlValidator implements IStringValidator {
+    export class UrlValidator implements Validation.IStringValidator {
         isAcceptable(s:string) {
             return urlRegexp.test(s);
         }
@@ -129,35 +65,35 @@ module Validation {
         tagName = "url";
     }
 
-    export class RequiredValidator implements IStringValidator {
+    export class RequiredValidator implements Validation.IStringValidator {
         isAcceptable(s:string) {
             return s !== undefined && s !== "";
         }
 
         tagName = "required";
     }
-    export class DateValidator implements IStringValidator {
+    export class DateValidator implements Validation.IStringValidator {
         isAcceptable(s:string) {
             return !/Invalid|NaN/.test(new Date(s).toString());
         }
 
         tagName = "date";
     }
-    export class DateISOValidator implements IStringValidator {
+    export class DateISOValidator implements Validation.IStringValidator {
         isAcceptable(s:string) {
             return  /^\d{4}[\/\-]\d{1,2}[\/\-]\d{1,2}$/.test(s);
         }
 
         tagName = "dateISO";
     }
-    export class NumberValidator implements IStringValidator {
+    export class NumberValidator implements Validation.IStringValidator {
         isAcceptable(s:string) {
             return /^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/.test(s);
         }
 
         tagName = "number";
     }
-    export class DigitValidator implements IStringValidator {
+    export class DigitValidator implements Validation.IStringValidator {
         isAcceptable(s:string) {
             return /^\d+$/.test(s);
         }
@@ -165,7 +101,7 @@ module Validation {
         tagName = "digit";
     }
 
-    export class SignedDigitValidator implements IStringValidator {
+    export class SignedDigitValidator implements Validation.IStringValidator {
         isAcceptable(s:string) {
             return /^-?\d+$/.test(s);
         }
@@ -173,7 +109,7 @@ module Validation {
         tagName = "signedDigit";
     }
     var MinimalDefaultValue = 0;
-    export class MinLengthValidator implements IStringValidator {
+    export class MinLengthValidator implements Validation.IStringValidator {
         constructor(public MinLength?:number) {
             if (MinLength === undefined) this.MinLength = MinimalDefaultValue;
         }
@@ -185,7 +121,7 @@ module Validation {
         tagName = "minlength";
     }
     var MaximalDefaultValue = 0;
-    export class MaxLengthValidator implements IStringValidator {
+    export class MaxLengthValidator implements Validation.IStringValidator {
         constructor(public MaxLength?:number) {
             if (MaxLength === undefined) this.MaxLength = MaximalDefaultValue;
         }
@@ -197,7 +133,7 @@ module Validation {
         tagName = "maxlength";
     }
 
-    export class RangeLengthValidator implements IStringValidator {
+    export class RangeLengthValidator implements Validation.IStringValidator {
         constructor(public RangeLength?:Array<number>) {
             if (RangeLength === undefined) this.RangeLength = [MinimalDefaultValue, MaximalDefaultValue];
         }
@@ -216,7 +152,7 @@ module Validation {
 
         tagName = "rangelength";
     }
-    export class MinValidator implements IPropertyValidator {
+    export class MinValidator implements Validation.IPropertyValidator {
         constructor(public Min?:number) {
             if (Min === undefined) this.Min = MinimalDefaultValue;
         }
@@ -228,7 +164,7 @@ module Validation {
 
         tagName = "min";
     }
-    export class MaxValidator implements IPropertyValidator {
+    export class MaxValidator implements Validation.IPropertyValidator {
         constructor(public Max?:number) {
             if (Max === undefined) this.Max = MaximalDefaultValue;
         }
@@ -241,7 +177,7 @@ module Validation {
         tagName = "max";
     }
 
-    export class RangeValidator implements IPropertyValidator {
+    export class RangeValidator implements Validation.IPropertyValidator {
         constructor(public Range?:Array<number>) {
             if (Range === undefined) this.Range = [MinimalDefaultValue, MaximalDefaultValue];
         }
@@ -262,7 +198,7 @@ module Validation {
         tagName = "range";
     }
     var StepDefaultValue = "1";
-    export class StepValidator implements IPropertyValidator {
+    export class StepValidator implements Validation.IPropertyValidator {
         constructor(public Step?:string) {
             if (Step === undefined) this.Step = StepDefaultValue;
         }
@@ -277,7 +213,7 @@ module Validation {
         tagName = "step";
     }
     var PatternDefaultValue = "*";
-    export class PatternValidator implements IStringValidator {
+    export class PatternValidator implements Validation.IStringValidator {
         constructor(public Pattern?:string) {
             if (Pattern === undefined) this.Pattern = PatternDefaultValue;
         }
@@ -288,7 +224,7 @@ module Validation {
 
         tagName = "pattern";
     }
-    export class ContainsValidator implements IAsyncPropertyValidator {
+    export class ContainsValidator implements Validation.IAsyncPropertyValidator {
 
         constructor(public Options:Q.Promise<Array<any>>) {
             if (Options === undefined) this.Options = Q.when([]);
@@ -312,3 +248,5 @@ module Validation {
         tagName = "contains";
     }
 }
+
+export = Validators;

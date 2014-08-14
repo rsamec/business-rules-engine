@@ -24,7 +24,7 @@ Add reference to dist/validation.js file.
 
           //basic validators
           var required =new f.Validation.RequiredValidator();
-          var maxLength = new f.Validation.MaxLengthValidator(15);
+          var maxLength = new f.Validators.MaxLengthValidator(15);
 
           //assigned validators to property
           personValidator.RuleFor("FirstName", required);

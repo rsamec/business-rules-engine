@@ -4,6 +4,8 @@
 ///<reference path='../../typings/q/q.d.ts'/>
 
 var Validation = require('../../dist/node-form.js');
+var Validators = require('../../dist/customValidators/BasicValidators.js');
+
 var expect = require('expect.js');
 var _:UnderscoreStatic = require('underscore');
 import Q = require('q');
@@ -135,7 +137,7 @@ describe('custom validators', function () {
 
     describe('create new custom validator', function () {
 
-        var required = new Validation.RequiredValidator();
+        var required = new Validators.RequiredValidator();
         var ico = new icoValidator();
         var branchOfBusiness = new BranchOfBusinessValidator();
 

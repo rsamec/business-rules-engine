@@ -1,12 +1,13 @@
 ///<reference path='../../typings/mocha/mocha.d.ts'/>
 ///<reference path='../../typings/node/node.d.ts'/>
 ///<reference path='../../typings/underscore/underscore.d.ts'/>
+///<reference path='../../typings/q/q.d.ts'/>
 
 var Validation = require('../../dist/node-form.js');
 var Validators = require('../../dist/customValidators/BasicValidators.js');
 var expect = require('expect.js');
 var _:UnderscoreStatic = require('underscore');
-var Q = require('q');
+import Q = require('q');
 
 interface IPerson{
     Checked:boolean;

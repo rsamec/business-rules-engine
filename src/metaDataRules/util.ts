@@ -31,6 +31,9 @@ module Validation {
             //TODO: better implementation - like _.defaults()
             var metaDataKeys = ["label", "rules", "help", "id", "defaultValue", "options","unit","hint", "Common", "disclaimer","saveOptions","optionsRef","apiId"];
             var tableKey = "RowData";
+
+            var containsLeafFce = function (key) { return _.contains(this, key) };
+            var containsTableFce =  function (key) {return key == this };
             for (var key in o) {
                 if (_.contains(metaDataKeys, key)) continue;
                 var item = o[key];
@@ -40,12 +43,12 @@ module Validation {
                     continue;
                 }
                 if (typeof (item) == "object") {
-                    var isLeafNode = _.every(_.keys(item), function (key) { return _.contains(this, key) }, metaDataKeys);
+                    var isLeafNode = _.every(_.keys(item), containsLeafFce, metaDataKeys);
                     if (isLeafNode) {
                         data[key] = undefined;
                         continue;
                     }
-                    var isTableNode = _.some(_.keys(item), function (key) {return key == this },tableKey);
+                    var isTableNode = _.some(_.keys(item),containsTableFce,tableKey);
                     if (isTableNode) {
                         data[key] = [];
                         continue;

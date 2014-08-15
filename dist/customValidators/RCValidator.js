@@ -1,33 +1,6 @@
-///<reference path='../../typings/underscore.string/underscore.string.d.ts'/>
-///<reference path='../../typings/moment/moment.d.ts'/>
-///<reference path='BasicValidators.ts'/>
 var moment = require("moment");
 var _s = require("underscore.string");
 
-/**
-* @ngdoc object
-* @name RCValidator
-*
-* @requires moment
-* @requires underscore.string
-*
-* @description
-* Return true for valid birth day number in Czech Republic, otherwise return false.
-*
-* @example
-*
-* <pre>
-*
-*  //create validator
-*  var validator = new RCValidator();
-*
-*  //valid RC -> return true
-*  var result = validator.isAcceptable('800101/9999');
-*  //unvalid RC  -> return false
-*  var result = validator.isAcceptable('111111/1752');
-*
-* </pre>
-*/
 var RCValidator = (function () {
     function RCValidator() {
         this.tagName = 'rc';
@@ -103,4 +76,3 @@ var RCValidator = (function () {
 })();
 
 module.exports = RCValidator;
-//# sourceMappingURL=RCValidator.js.map

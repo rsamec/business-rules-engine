@@ -1,33 +1,7 @@
-///<reference path='BasicValidators.ts'/>
-/**
-* @ngdoc object
-* @name ICOValidator
-*
-* @description
-* Return true for valid identification number of CZE company (called ico), otherwise return false.
-*
-* @example
-*
-* <pre>
-*  //create validator
-*  var validator = new IcoValidator();
-*
-*  //valid IC -> return true
-*  var result = validator.isAcceptable('12312312');
-*  //unvalid IC  -> return true
-*  var result = validator.isAcceptable('11111111');
-*
-* </pre>
-*/
 var ICOValidator = (function () {
     function ICOValidator() {
         this.tagName = "ico";
     }
-    /**
-    * It checks validity of identification number of CZE company (called ico)
-    * @param input {string} value to check
-    * @returns {boolean} return true for valid value, otherwise false
-    */
     ICOValidator.prototype.isAcceptable = function (input) {
         if (input === undefined)
             return false;
@@ -42,7 +16,6 @@ var ICOValidator = (function () {
         var Del = input.length;
         var kon = parseInt(input.substring(Del, Del - 1), 10);
 
-        //var Numer = parseInt(input.substring(0,Del - 1),10);
         Del = Del - 1;
         Souc = 0;
         for (var a = 0; a < Del; a++) {
@@ -52,7 +25,6 @@ var ICOValidator = (function () {
         }
 
         if (Souc > 0) {
-            //var resul = 11 - (Souc % 11);
             var resul = Souc % 11;
             var mezi = Souc - resul;
             resul = mezi + 11;
@@ -67,4 +39,3 @@ var ICOValidator = (function () {
 })();
 
 module.exports = ICOValidator;
-//# sourceMappingURL=ICOValidator.js.map

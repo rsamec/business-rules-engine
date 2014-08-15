@@ -1,6 +1,7 @@
 ///<reference path='../../typings/mocha/mocha.d.ts'/>
 ///<reference path='../../typings/node/node.d.ts'/>
 ///<reference path='../../typings/underscore/underscore.d.ts'/>
+///<reference path='../../typings/q/q.d.ts'/>
 
 
 var Validation = require('../../dist/node-form.js');
@@ -9,7 +10,7 @@ var Util = require('../../dist/customValidators/utils.js');
 var expect = require('expect.js');
 
 var _:UnderscoreStatic = require('underscore');
-var Q = require('q');
+import Q = require('q');
 
 import dateCompareValidator = require('../../src/customValidators/DateCompareValidator');
 import moment = require('moment')
@@ -147,8 +148,6 @@ describe('localization of error messages', function () {
             var expectedMsg = this.Messages["contains"];
             promiseResult.then(function (response) {
 
-                response.LogErrors();
-
                 //verify
                 expect(response.Errors["Job"].ValidationFailures["contains"].ErrorMessage).to.equal(Util.StringFce.format(expectedMsg,{AttemptedValue:"unknow job"}));
 
@@ -173,10 +172,7 @@ describe('localization of error messages', function () {
 
             promiseResult.then(function (response) {
 
-                response.LogErrors();
-
                 //verify
-
                 expect(Util.StringFce.format(expectedMsg,response.Errors["Job"].ValidationFailures["contains"].TranslateArgs.MessageArgs))
                     .to.equal(Util.StringFce.format(expectedMsg,{AttemptedValue:"unknow job"}));
 

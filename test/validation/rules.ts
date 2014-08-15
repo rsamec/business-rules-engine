@@ -1,12 +1,13 @@
 ///<reference path='../../typings/mocha/mocha.d.ts'/>
 ///<reference path='../../typings/node/node.d.ts'/>
 ///<reference path='../../typings/underscore/underscore.d.ts'/>
+///<reference path='../../typings/q/q.d.ts'/>
 
 var Validation = require('../../dist/node-form.js');
 var Validators = require('../../dist/customValidators/BasicValidators.js');
 var expect = require('expect.js');
 var _:UnderscoreStatic = require('underscore');
-var Q = require('q');
+import Q = require('q');
 
 interface IPerson{
     Checked:boolean;
@@ -14,6 +15,7 @@ interface IPerson{
     LastName:string;
     Job:string;
 }
+
 describe('basic validation rules', function () {
 
     describe('simple property validators', function() {
@@ -155,8 +157,6 @@ describe('basic validation rules', function () {
             var selfValidator = this.PersonValidator;
             promiseResult.then(function (response) {
 
-                selfValidator.ValidationResult.LogErrors("Output - job error");
-
                 //verify
                 expect(selfValidator.ValidationResult.HasErrors).to.equal(true);
 
@@ -240,7 +240,7 @@ describe('basic validation rules', function () {
 
         //shared validation function
         var oneSpaceFce = function (args:any) {
-            var deferred = Q.defer();
+            var deferred = Q.defer<any>();
 
             var self = this;
             setTimeout(function () {
@@ -248,16 +248,16 @@ describe('basic validation rules', function () {
                 args.ErrorMessage = "";
 
                 if (!self.Checked) {
-                    deferred.resolve();
+                    deferred.resolve(undefined);
                     return;
                 }
                 if (self.FirstName.indexOf(' ') != -1 || self.LastName.indexOf(' ') != -1) {
                     args.HasError = true;
                     args.ErrorMessage = "Full name can contain only one space.";
-                    deferred.resolve();
+                    deferred.resolve(undefined);
                     return;
                 }
-                deferred.resolve();
+                deferred.resolve(undefined);
 
             },100);
 

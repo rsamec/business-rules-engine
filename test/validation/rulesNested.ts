@@ -1,12 +1,13 @@
 ///<reference path='../../typings/mocha/mocha.d.ts'/>
 ///<reference path='../../typings/node/node.d.ts'/>
 ///<reference path='../../typings/underscore/underscore.d.ts'/>
+///<reference path='../../typings/q/q.d.ts'/>
 
 var Validation = require('../../dist/node-form.js');
 var Validators = require('../../dist/customValidators/BasicValidators.js');
 var expect = require('expect.js');
 var _:UnderscoreStatic = require('underscore');
-var Q = require('q');
+import Q = require('q');
 
 interface IData{
     Person1:IPerson
@@ -147,8 +148,6 @@ describe('nested validation rules', function () {
         //verify
         promiseResult.then(function (response) {
 
-            response.LogErrors();
-
             //verify
             expect(response.HasErrors).to.equal(false);
 
@@ -173,8 +172,6 @@ describe('nested validation rules', function () {
 
         //verify
         promiseResult.then(function (response) {
-
-            response.LogErrors();
 
             //verify
             expect(response.HasErrors).to.equal(true);
@@ -219,8 +216,6 @@ describe('nested validation rules', function () {
             //verify
             promiseResult.then(function (response) {
 
-                response.LogErrors();
-
                 //verify
                 expect(response.HasErrors).to.equal(false);
 
@@ -242,8 +237,6 @@ describe('nested validation rules', function () {
 
             //verify
             promiseResult.then(function (response) {
-
-                response.LogErrors();
 
                 //verify
                 expect(response.HasErrors).to.equal(false);

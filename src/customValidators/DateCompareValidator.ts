@@ -23,7 +23,7 @@ import _ = require("underscore");
  *
  *
  * @example
- * <pre>
+ * ```typescript
  *
  *  //create validator
  *  var validator = new dateCompareValidator();
@@ -36,7 +36,7 @@ import _ = require("underscore");
  *  //equal up to days -> return true
  *  var result = validator.isAcceptable(new Date(2000,2,2));
  *
- * </pre>
+ * ```
  *
  */
 

@@ -95,7 +95,7 @@ module Validation {
          *  Dependency = when the property is validated then the shared rule is validated also.
          * @param validatorFce name validation function
          */
-        Validation(validator:IValidatorFce);
+        Validation(validatorFce:IValidatorFce);
 
         /**
          * Register child validator for property - composition of validators
@@ -236,11 +236,11 @@ module Validation {
 
         /**
          *  Register property validator for property.
-         * @param prop name
+         * @param prop - property name
          * @param validator - property validator
          */
         public RuleFor(prop:string, validator:IPropertyValidator) {
-            if (this.Validators[prop] == undefined) {
+            if (this.Validators[prop] === undefined) {
                 this.Validators[prop] = [];
             }
 
@@ -250,10 +250,10 @@ module Validation {
          *  Register shared validation and assign property name as dependency on shared rule.
          *  Dependency = when the property is validated then the shared rule is validated also.
          * @param prop name
-         * @param validatorFce name validation function
+         * @param fce name validation function
          */
         public ValidationFor(prop:string,fce:IValidatorFce) {
-            if (this.ValidationFunctions[prop] == undefined) {
+            if (this.ValidationFunctions[prop] === undefined) {
                 this.ValidationFunctions[prop] = [];
             }
 
@@ -263,16 +263,18 @@ module Validation {
         /**
          *  Register shared validation. There are no relationship to dependent property.
          *  Dependency = when the property is validated then the shared rule is validated also.
-         * @param validatorFce name validation function
+         * @param fce name validation function
          */
         public Validation(fce:IValidatorFce) {
             if (fce.Name === undefined) throw 'argument must have property Name';
             this.ValidationFor(fce.Name,fce);
         }
+
         /**
          * Register child validator for property - composition of validators
          * @param prop name
          * @param validator child validator
+         * @param forList true if is array structure, otherwise false
          */
         public ValidatorFor<K>(prop:string,validator:IAbstractValidator<K>, forList?:boolean) {
 
@@ -334,7 +336,7 @@ module Validation {
                 _.each(this.validator.ValidationFunctions, function (val:Array<IValidatorFce>) {
                     _.each(val, function (validation) {
                         var validator = this.Validators[validation.Name];
-                        if (validator == undefined) {
+                        if (validator === undefined) {
                             validator = new Validator(validation.Name, validation.ValidationFce, validation.AsyncValidationFce);
                             this.Validators[validation.Name] = validator;
                             this.ValidationResult.Add(validator);
@@ -395,7 +397,7 @@ module Validation {
             _.each (this.validator.ValidationFunctions, function (valFunctions:Array<IValidatorFce>) {
                 _.each(valFunctions, function (valFce) {
                     var validator = this.Validators[valFce.Name];
-                    if (validator != undefined) validator.Validate(context);
+                    if (validator !== undefined) validator.Validate(context);
                 },this)
             },this);
 
@@ -421,7 +423,7 @@ module Validation {
             _.each (this.validator.ValidationFunctions, function (valFunctions:Array<IValidatorFce>) {
                 _.each(valFunctions, function (valFce) {
                     var validator = this.Validators[valFce.Name];
-                    if (validator != undefined) promises.push(validator.ValidateAsync(context));
+                    if (validator !== undefined) promises.push(validator.ValidateAsync(context));
                 },this)
             },this);
 
@@ -437,19 +439,19 @@ module Validation {
         }
         ValidateProperty(context:T, propName:string){
             var childRule = this.Children[propName];
-            if (childRule != undefined) childRule.Validate(context[propName]);
+            if (childRule !== undefined) childRule.Validate(context[propName]);
 
             var rule = this.Rules[propName];
-            if (rule != undefined) {
+            if (rule !== undefined) {
                 var valContext = new ValidationContext(propName, context);
                 rule.Validate(valContext);
                 rule.ValidateAsync(valContext);
             }
             var validationFces = this.validator.ValidationFunctions[propName];
-            if (validationFces != undefined) {
+            if (validationFces !== undefined) {
                 _.each(validationFces, function (valFce) {
                     var validator = this.Validators[valFce.Name];
-                    if (validator != undefined) validator.Validate(context);
+                    if (validator !== undefined) validator.Validate(context);
                 }, this);
             }
         }
@@ -485,7 +487,7 @@ module Validation {
             this.NotifyListChanged(context);
             for (var i = 0; i != context.length; i++) {
                 var validationRule = this.getValidationRule(i);
-                if (validationRule != undefined)  validationRule.Validate(context[i]);
+                if (validationRule !== undefined)  validationRule.Validate(context[i]);
             }
 
             return this.ValidationResult;
@@ -502,7 +504,7 @@ module Validation {
             this.NotifyListChanged(context);
             for (var i = 0; i != context.length; i++) {
                 var validationRule = this.getValidationRule(i);
-                if (validationRule != undefined) promises.push(validationRule.ValidateAsync(context[i]));
+                if (validationRule !== undefined) promises.push(validationRule.ValidateAsync(context[i]));
             }
             var self = this;
             Q.all(promises).then(function(result){deferred.resolve(self.ValidationResult);});
@@ -521,7 +523,7 @@ module Validation {
         public NotifyListChanged(list:Array<any>) {
             for (var i = 0; i != list.length; i++) {
                 var validationRule = this.getValidationRule(i);
-                if (validationRule == undefined) {
+                if (validationRule === undefined) {
                     var keyName = this.getIndexedKey(i);
                     validationRule = this.validator.CreateAbstractRule(keyName);
                     this.Children[keyName] = validationRule;
@@ -584,7 +586,7 @@ module Validation {
 
         static GetValidationMessage(validator:any) {
             var msgText = MessageLocalization.ValidationMessages[validator.tagName];
-            if (msgText == undefined || msgText == "" || !_.isString(msgText)) {
+            if (msgText === undefined || msgText === "" || !_.isString(msgText)) {
                 msgText = MessageLocalization.customMsg;
             }
 
@@ -639,7 +641,7 @@ module Validation {
         }
 
         public get HasErrors():boolean {
-            if (this.Optional != undefined && _.isFunction(this.Optional) && this.Optional()) return false;
+            if (this.Optional !== undefined && _.isFunction(this.Optional) && this.Optional()) return false;
             return _.some(_.values(this.Errors), function (error) {
                 return error.HasError;
             });
@@ -730,6 +732,14 @@ module Validation {
         ValidateAsyncEx(value:string):Q.Promise<Array<IValidationFailure>> {
             var deferred = Q.defer<Array<IValidationFailure>>();
             var promises = [];
+            var setResultFce = function (result) {
+                var hasError = !result;
+
+                validation.Error.HasError = hasError;
+                validation.Error.TranslateArgs = { TranslateId: validator.tagName, MessageArgs: _.extend(validator, {AttemptedValue: value})};
+                validation.Error.ErrorMessage = hasError ? MessageLocalization.GetValidationMessage(validation.Error.TranslateArgs.MessageArgs) : "";
+            };
+
             for (var index in this.ValidationFailures) {
                 var validation:IValidationFailure = this.ValidationFailures[index];
                 if (!validation.IsAsync) continue;
@@ -738,15 +748,7 @@ module Validation {
                 try {
 
                     var hasErrorPromise = ((value===undefined || value === null) && validator.tagName!="required")?Q.when(true):validator.isAcceptable(value);
-                    hasErrorPromise.then(function (result) {
-                        var hasError = !result;
-
-                        validation.Error.HasError = hasError;
-                        validation.Error.TranslateArgs = { TranslateId:validator.tagName, MessageArgs:_.extend(validator,{AttemptedValue: value})};
-                        validation.Error.ErrorMessage = hasError ? MessageLocalization.GetValidationMessage(validation.Error.TranslateArgs.MessageArgs) : "";
-
-
-                    });
+                    hasErrorPromise.then(setResultFce);
 
                     promises.push(hasErrorPromise);
 
@@ -789,14 +791,14 @@ module Validation {
         public Optional:IOptional;
 
         public Validate(context:any):IValidationFailure {
-            if (this.ValidateFce != undefined)  this.ValidateFce.bind(context)(this.Error);
+            if (this.ValidateFce !== undefined)  this.ValidateFce.bind(context)(this.Error);
             return this.ValidationFailures[this.Name];
         }
 
         public ValidateAsync(context:any):Q.Promise<IValidationFailure>{
             var deferred = Q.defer<IValidationFailure>();
 
-            if (this.AsyncValidationFce == undefined) {
+            if (this.AsyncValidationFce === undefined) {
                 deferred.resolve(this.ValidationFailures[this.Name]);
             }
             else {
@@ -818,7 +820,7 @@ module Validation {
             return this.ValidationFailures;
         }
         public get HasErrors(): boolean {
-            if (this.Optional != undefined && _.isFunction(this.Optional) && this.Optional()) return false;
+            if (this.Optional !== undefined && _.isFunction(this.Optional) && this.Optional()) return false;
             return this.Error.HasError;
         }
 

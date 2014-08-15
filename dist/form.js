@@ -304,7 +304,7 @@ var Validation;
             this.ForList = false;
         }
         AbstractValidator.prototype.RuleFor = function (prop, validator) {
-            if (this.Validators[prop] == undefined) {
+            if (this.Validators[prop] === undefined) {
                 this.Validators[prop] = [];
             }
 
@@ -312,7 +312,7 @@ var Validation;
         };
 
         AbstractValidator.prototype.ValidationFor = function (prop, fce) {
-            if (this.ValidationFunctions[prop] == undefined) {
+            if (this.ValidationFunctions[prop] === undefined) {
                 this.ValidationFunctions[prop] = [];
             }
 
@@ -365,7 +365,7 @@ var Validation;
                 _.each(this.validator.ValidationFunctions, function (val) {
                     _.each(val, function (validation) {
                         var validator = this.Validators[validation.Name];
-                        if (validator == undefined) {
+                        if (validator === undefined) {
                             validator = new Validator(validation.Name, validation.ValidationFce, validation.AsyncValidationFce);
                             this.Validators[validation.Name] = validator;
                             this.ValidationResult.Add(validator);
@@ -414,7 +414,7 @@ var Validation;
             _.each(this.validator.ValidationFunctions, function (valFunctions) {
                 _.each(valFunctions, function (valFce) {
                     var validator = this.Validators[valFce.Name];
-                    if (validator != undefined)
+                    if (validator !== undefined)
                         validator.Validate(context);
                 }, this);
             }, this);
@@ -438,7 +438,7 @@ var Validation;
             _.each(this.validator.ValidationFunctions, function (valFunctions) {
                 _.each(valFunctions, function (valFce) {
                     var validator = this.Validators[valFce.Name];
-                    if (validator != undefined)
+                    if (validator !== undefined)
                         promises.push(validator.ValidateAsync(context));
                 }, this);
             }, this);
@@ -457,20 +457,20 @@ var Validation;
         };
         AbstractValidationRule.prototype.ValidateProperty = function (context, propName) {
             var childRule = this.Children[propName];
-            if (childRule != undefined)
+            if (childRule !== undefined)
                 childRule.Validate(context[propName]);
 
             var rule = this.Rules[propName];
-            if (rule != undefined) {
+            if (rule !== undefined) {
                 var valContext = new ValidationContext(propName, context);
                 rule.Validate(valContext);
                 rule.ValidateAsync(valContext);
             }
             var validationFces = this.validator.ValidationFunctions[propName];
-            if (validationFces != undefined) {
+            if (validationFces !== undefined) {
                 _.each(validationFces, function (valFce) {
                     var validator = this.Validators[valFce.Name];
-                    if (validator != undefined)
+                    if (validator !== undefined)
                         validator.Validate(context);
                 }, this);
             }
@@ -489,7 +489,7 @@ var Validation;
             this.NotifyListChanged(context);
             for (var i = 0; i != context.length; i++) {
                 var validationRule = this.getValidationRule(i);
-                if (validationRule != undefined)
+                if (validationRule !== undefined)
                     validationRule.Validate(context[i]);
             }
 
@@ -504,7 +504,7 @@ var Validation;
             this.NotifyListChanged(context);
             for (var i = 0; i != context.length; i++) {
                 var validationRule = this.getValidationRule(i);
-                if (validationRule != undefined)
+                if (validationRule !== undefined)
                     promises.push(validationRule.ValidateAsync(context[i]));
             }
             var self = this;
@@ -526,7 +526,7 @@ var Validation;
         AbstractListValidationRule.prototype.NotifyListChanged = function (list) {
             for (var i = 0; i != list.length; i++) {
                 var validationRule = this.getValidationRule(i);
-                if (validationRule == undefined) {
+                if (validationRule === undefined) {
                     var keyName = this.getIndexedKey(i);
                     validationRule = this.validator.CreateAbstractRule(keyName);
                     this.Children[keyName] = validationRule;
@@ -557,7 +557,7 @@ var Validation;
         }
         MessageLocalization.GetValidationMessage = function (validator) {
             var msgText = MessageLocalization.ValidationMessages[validator.tagName];
-            if (msgText == undefined || msgText == "" || !_.isString(msgText)) {
+            if (msgText === undefined || msgText === "" || !_.isString(msgText)) {
                 msgText = MessageLocalization.customMsg;
             }
 
@@ -633,7 +633,7 @@ var Validation;
 
         Object.defineProperty(PropertyValidationRule.prototype, "HasErrors", {
             get: function () {
-                if (this.Optional != undefined && _.isFunction(this.Optional) && this.Optional())
+                if (this.Optional !== undefined && _.isFunction(this.Optional) && this.Optional())
                     return false;
                 return _.some(_.values(this.Errors), function (error) {
                     return error.HasError;
@@ -729,6 +729,14 @@ var Validation;
         PropertyValidationRule.prototype.ValidateAsyncEx = function (value) {
             var deferred = Q.defer();
             var promises = [];
+            var setResultFce = function (result) {
+                var hasError = !result;
+
+                validation.Error.HasError = hasError;
+                validation.Error.TranslateArgs = { TranslateId: validator.tagName, MessageArgs: _.extend(validator, { AttemptedValue: value }) };
+                validation.Error.ErrorMessage = hasError ? MessageLocalization.GetValidationMessage(validation.Error.TranslateArgs.MessageArgs) : "";
+            };
+
             for (var index in this.ValidationFailures) {
                 var validation = this.ValidationFailures[index];
                 if (!validation.IsAsync)
@@ -737,13 +745,7 @@ var Validation;
 
                 try  {
                     var hasErrorPromise = ((value === undefined || value === null) && validator.tagName != "required") ? Q.when(true) : validator.isAcceptable(value);
-                    hasErrorPromise.then(function (result) {
-                        var hasError = !result;
-
-                        validation.Error.HasError = hasError;
-                        validation.Error.TranslateArgs = { TranslateId: validator.tagName, MessageArgs: _.extend(validator, { AttemptedValue: value }) };
-                        validation.Error.ErrorMessage = hasError ? MessageLocalization.GetValidationMessage(validation.Error.TranslateArgs.MessageArgs) : "";
-                    });
+                    hasErrorPromise.then(setResultFce);
 
                     promises.push(hasErrorPromise);
                 } catch (e) {
@@ -776,7 +778,7 @@ var Validation;
             this.ValidationFailures[this.Name] = new _Validation.ValidationFailure(this.Error, false);
         }
         Validator.prototype.Validate = function (context) {
-            if (this.ValidateFce != undefined)
+            if (this.ValidateFce !== undefined)
                 this.ValidateFce.bind(context)(this.Error);
             return this.ValidationFailures[this.Name];
         };
@@ -784,7 +786,7 @@ var Validation;
         Validator.prototype.ValidateAsync = function (context) {
             var deferred = Q.defer();
 
-            if (this.AsyncValidationFce == undefined) {
+            if (this.AsyncValidationFce === undefined) {
                 deferred.resolve(this.ValidationFailures[this.Name]);
             } else {
                 var self = this;
@@ -813,7 +815,7 @@ var Validation;
         });
         Object.defineProperty(Validator.prototype, "HasErrors", {
             get: function () {
-                if (this.Optional != undefined && _.isFunction(this.Optional) && this.Optional())
+                if (this.Optional !== undefined && _.isFunction(this.Optional) && this.Optional())
                     return false;
                 return this.Error.HasError;
             },

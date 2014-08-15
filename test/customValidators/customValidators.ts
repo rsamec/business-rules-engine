@@ -188,8 +188,6 @@ describe('custom validators', function () {
 
             promiseResult.then(function (response) {
 
-                response.LogErrors();
-
                 //verify
                 expect(response.HasErrors).to.equal(true);
                 expect(response.ErrorCount).to.equal(2);
@@ -246,7 +244,6 @@ describe('custom validators', function () {
             var result = this.Validator.Validate(this.Data);
 
             //verify
-            result.LogErrors();
             expect(result.HasErrors).to.equal(true);
             expect(result.ErrorCount).to.equal(2);
 

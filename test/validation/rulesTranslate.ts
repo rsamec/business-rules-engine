@@ -5,7 +5,7 @@
 
 var Validation = require('../../dist/node-form.js');
 var Validators = require('../../dist/customValidators/BasicValidators.js');
-var Util = require('../../dist/customValidators/util.js');
+var Util = require('../../dist/customValidators/utils.js');
 var expect = require('expect.js');
 
 var _:UnderscoreStatic = require('underscore');

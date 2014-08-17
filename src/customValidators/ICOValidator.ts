@@ -1,4 +1,3 @@
-///<reference path='BasicValidators.ts'/>
 
 /**
  * @ngdoc object

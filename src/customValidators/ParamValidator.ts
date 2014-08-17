@@ -1,4 +1,8 @@
-///<reference path='BasicValidators.ts'/>
+///<reference path='../../typings/underscore/underscore.d.ts'/>
+///<reference path='../../typings/q/q.d.ts'/>
+///<reference path='../../typings/node-form/node-form.d.ts'/>
+
+
 import Q = require("q");
 import _ = require("underscore");
 
@@ -89,7 +93,7 @@ import _ = require("underscore");
  *  </pre>
  *
  */
-class ParamValidator {
+class ParamValidator implements Validation.IAsyncPropertyValidator{
 
     /**
      * It checks validity of identification number of CZE company (called ico)

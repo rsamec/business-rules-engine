@@ -1,5 +1,5 @@
 ///<reference path='../../typings/moment/moment.d.ts'/>
-///<reference path='BasicValidators.ts'/>
+///<reference path='../../typings/node-form/node-form.d.ts'/>
 
 import moment = require("moment");
 import _ = require("underscore");

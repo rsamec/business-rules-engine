@@ -1,21 +1,13 @@
-// Type definitions for node-form v1.0.6
-// Project: https://github.com/rsamec/form
-// Definitions by: Roman Samec <https://github.com/rsamec>
-// Definitions: https://github.com/borisyankov/DefinitelyTyped
-
 ///<reference path='../../typings/underscore/underscore.d.ts'/>
 ///<reference path='../../typings/q/q.d.ts'/>
 ///<reference path='../../typings/moment/moment.d.ts'/>
-
-///<reference path='../validation/abstract.ts'/>
+///<reference path='../../typings/node-form/node-form.d.ts'/>
 
 import moment = require("moment");
 import _ = require("underscore");
 import Q = require("q");
 
 module Validators {
-
-
     class NumberFce {
         static GetNegDigits(value:string):number {
             if (value === undefined) return 0;
@@ -248,5 +240,4 @@ module Validators {
         tagName = "contains";
     }
 }
-
 export = Validators;

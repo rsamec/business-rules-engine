@@ -94,6 +94,17 @@ module.exports = function (grunt) {
                   comments:false
               }
           },
+          customValidators: {
+              src: ['src/customValidators/*.ts'],
+              dest: 'typings/node-form',
+              options: {
+                  basePath: 'src/customValidators',
+                  module: 'commonjs',
+                  target: 'es5',
+                  declaration: true,
+                  comments:false
+              }
+          },
           test:{
               src: ['test/**/*.ts'],
               dest: '',
@@ -119,19 +130,12 @@ module.exports = function (grunt) {
               }
           }
       },
-      // this task
-      command : {
-//          run_shell: {
-//              type : 'shell',
-//              cmd  : './test.sh'
-//          },
-//          run_bat: {
-//              type : 'bat',
-//              cmd  : 'test.bat'
-//          },
-          run_cmd: {
-              cmd: ['tsc src/validation/rules.ts -t ES5 -out typings/node-form/node-form.js -d']
-              //cmd: ['mkdir jjj']
+      run: {
+          options: {
+              wait: true
+          },
+          commands: {
+              exec: ['tsc src/validation/rules.ts -t ES5 -out typings/node-form/node-form.js -d']
           }
       },
       copy: {
@@ -157,12 +161,29 @@ module.exports = function (grunt) {
               files: {
                   //'dist/basic.js': ['src/main.js'],
                   'dist/node-form.js': ['<%= typescript.base.dest %>', 'src/validation/commonjs.js']
-
               }
           },
           typings:{
+              options:{
+                  banner: '// Type definitions for node-<%= pkg.name %> - v<%= pkg.version %>\n' +
+                          '// Project: https://github.com/rsamec/form\n' +
+                      '// Definitions by: Roman Samec <https://github.com/rsamec>\n' +
+                      '// Definitions: https://github.com/borisyankov/DefinitelyTyped\n\n',
+                  footer: 'declare module "node-form" {export = Validation;}\n'
+              },
               files: {
-                  'typings/node-form/node-form.d.ts': ['typings/node-form/header.d.js', 'typings/node-form/node-form.d.ts', 'typings/node-form/footer.d.js']
+                  'typings/node-form/node-form.d.ts': ['typings/node-form/node-form.d.ts']
+              }
+          },
+          customValidatorsTypings:{
+              options:{
+                  process: function(src, filepath) {
+                      return '// Source: ' + filepath + '\n' +
+                          src.replace(/[ \t]*export = (\w*);?/g, 'declare module "node-$1" {export = $1;}');
+                  }
+              },
+              files: {
+                  'typings/node-form/validators.d.ts': ['typings/node-form/BasicValidators.d.ts', 'typings/node-form/Utils.d.ts']
               }
           }
       }
@@ -179,12 +200,12 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-commands');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-run');
+
 
   grunt.registerTask('test', ['typescript:test', 'mochacli', 'watch']);
   grunt.registerTask('ci', ['complexity', 'jshint', 'mochacli']);
-  grunt.registerTask('default', ['test']);
   grunt.registerTask('dist', ['typescript:base','concat:dist','uglify','copy']);
-  grunt.registerTask('typings',['command']);
-  grunt.registerTask('typings-concat',['concat:typings']);
+  grunt.registerTask('typings',['run','typescript:customValidators','concat:typings','concat:customValidatorsTypings']);
   grunt.registerTask('document', ['typedoc']);
 };

@@ -1,56 +1,14 @@
-///<reference path='../../typings/moment/moment.d.ts'/>
-///<reference path='BasicValidators.ts'/>
 var moment = require("moment");
 var _ = require("underscore");
 
-/**
-* @ngdoc object
-* @name DateCompareValidator
-*
-* @requires moment
-* @requires underscore
-*
-* @description
-* DateCompareValidator enables to compare date to another date (CompareTo).
-*
-* @property {Date} CompareTo
-* The datetime against the compare is done.
-* If  property is not set, then comparison is done against actual datetime.
-*
-* @property {boolean} IgnoreDate
-* It forces to ignore time part of date by date compare.
-*
-*
-* @example
-* ```typescript
-*
-*  //create validator
-*  var validator = new dateCompareValidator();
-*  validator.CompareTo = new Date(2000,2,2);
-*  validator.CompareOperator = Validation.CompareOperator.LessThanEqual;
-*
-*
-*  //less more than month -> return true
-*  var result = validator.isAcceptable(new Date(2000,1,1));
-*  //equal up to days -> return true
-*  var result = validator.isAcceptable(new Date(2000,2,2));
-*
-* ```
-*
-*/
 var DateCompareValidator = (function () {
     function DateCompareValidator() {
-        /**
-        * It forces to ignore time part of date by date compare.
-        * @type {boolean}
-        */
         this.IgnoreTime = false;
         this.tagName = 'dateCompare';
     }
     DateCompareValidator.prototype.isAcceptable = function (s) {
         var isValid = false;
 
-        //if date to compare is not specified - defaults to compare against now
         if (!_.isDate(s))
             return false;
 
@@ -77,4 +35,3 @@ var DateCompareValidator = (function () {
 })();
 
 module.exports = DateCompareValidator;
-//# sourceMappingURL=DateCompareValidator.js.map

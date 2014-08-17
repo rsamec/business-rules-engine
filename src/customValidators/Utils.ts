@@ -1,11 +1,4 @@
-/**
- * Created by rsamec on 15.8.2014.
- */
-/**
- * Created by rsamec on 14.8.2014.
- */
 module Utils {
-
     export class StringFce {
         static format(s:string, args:any):string {
             var formatted = s;
@@ -30,3 +23,4 @@ module Utils {
     }
 }
 export = Utils;
+

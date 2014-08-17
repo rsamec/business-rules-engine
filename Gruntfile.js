@@ -17,13 +17,11 @@ module.exports = function (grunt) {
       jshint: {
           all: [
               'Gruntfile.js',
-              'src/**/*.js',
-              //'test/**/*.js'
+              'src/**/*.js'
           ],
           options: {
               jshintrc: '.jshintrc',
               force:false
-
           }
       },
       mochacli: {
@@ -144,15 +142,6 @@ module.exports = function (grunt) {
                   // includes files within path
                   {expand: true, src: ['src/localization/*.js'], dest: 'dist/i18n', filter: 'isFile',flatten:true},
                   {expand: true, src: ['src/customValidators/*.js'], dest: 'dist/customValidators', filter: 'isFile',flatten:true}
-
-                  // includes files within path and its sub-directories
-                  //{expand: true, src: ['src/models/vacationApproval/locales/**'], dest: 'dest/'},
-
-                  // makes all src relative to cwd
-                  //{expand: true, cwd: 'path/', src: ['**'], dest: 'dest/'},
-
-                  // flattens results to a single level
-                  //{expand: true, flatten: true, src: ['path/**'], dest: 'dest/', filter: 'isFile'}
               ]
           }
       },
@@ -175,7 +164,7 @@ module.exports = function (grunt) {
                   'typings/node-form/node-form.d.ts': ['typings/node-form/node-form.d.ts']
               }
           },
-          customValidatorsTypings:{
+          typingsCustom:{
               options:{
                   process: function(src, filepath) {
                       return '// Source: ' + filepath + '\n' +
@@ -183,7 +172,8 @@ module.exports = function (grunt) {
                   }
               },
               files: {
-                  'typings/node-form/validators.d.ts': ['typings/node-form/BasicValidators.d.ts', 'typings/node-form/Utils.d.ts']
+                  'typings/node-form/BasicValidators.d.ts': ['typings/node-form/BasicValidators.d.ts'],
+                  'typings/node-form/Utils.d.ts': ['typings/node-form/Utils.d.ts']
               }
           }
       }
@@ -206,6 +196,6 @@ module.exports = function (grunt) {
   grunt.registerTask('test', ['typescript:test', 'mochacli', 'watch']);
   grunt.registerTask('ci', ['complexity', 'jshint', 'mochacli']);
   grunt.registerTask('dist', ['typescript:base','concat:dist','uglify','copy']);
-  grunt.registerTask('typings',['run','typescript:customValidators','concat:typings','concat:customValidatorsTypings']);
+  grunt.registerTask('typings',['run','typescript:customValidators','concat:typings','concat:typingsCustom']);
   grunt.registerTask('document', ['typedoc']);
 };

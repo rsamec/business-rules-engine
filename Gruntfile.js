@@ -160,9 +160,16 @@ module.exports = function (grunt) {
           main: {
               files: [
                   // includes files within path
-                  {expand: true, src: ['src/localization/*.js'], dest: 'dist/i18n', filter: 'isFile',flatten:true}
+                  {expand: true, src: ['src/localization/*.js'], dest: 'dist/i18n', filter: 'isFile',flatten:true},
+                  {expand: true, src: ['dist/commonjs/*.js'], dest: 'dist/module', filter: 'isFile',flatten:true}
                   //{expand: true, src: ['src/customValidators/*.js'], dest: 'dist/customValidators', filter: 'isFile',flatten:true}
-              ]
+              ],
+              options: {
+                  process: function (content, srcpath) {
+                      var content = content.replace(/.*require.*/g,"");
+                      return content.replace(/module.exports.*/g,"");
+                  }
+              }
           }
       },
       concat: {

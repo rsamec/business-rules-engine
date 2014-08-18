@@ -8,7 +8,7 @@ var Localization = (function () {
         */
         get: function () {
             return {
-                required: "Tento údaj je povinný.",
+
                 remote: "Prosím, opravte tento údaj.",
                 email: "Prosím, zadejte platný e-mail.",
                 url: "Prosím, zadejte platné URL.",
@@ -43,5 +43,5 @@ var Localization = (function () {
     return Localization;
 })();
 
-module.exports = Localization;
+
 //# sourceMappingURL=messages_cs.js.map

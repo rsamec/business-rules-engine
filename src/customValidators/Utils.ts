@@ -1,3 +1,5 @@
+///<reference path='../../typings/node/node.d.ts'/>
+
 module Utils {
     export class StringFce {
         static format(s:string, args:any):string {
@@ -23,4 +25,3 @@ module Utils {
     }
 }
 export = Utils;
-

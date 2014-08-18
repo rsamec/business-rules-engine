@@ -92,7 +92,27 @@ module.exports = function (grunt) {
                   comments:false
               }
           },
-          customValidators: {
+          commonjs: {
+              src: ['src/customValidators/*.ts'],
+              dest: 'dist/commonjs',
+              options: {
+                  basePath: 'src/customValidators',
+                  module: 'commonjs',
+                  target: 'es5',
+                  comments:false
+              }
+          },
+          amd: {
+              src: ['src/customValidators/*.ts'],
+              dest: 'dist/amd',
+              options: {
+                  basePath: 'src/customValidators',
+                  module: 'amd',
+                  target: 'es5',
+                  comments:false
+              }
+          },
+          typings: {
               src: ['src/customValidators/*.ts'],
               dest: 'typings/node-form',
               options: {
@@ -140,8 +160,8 @@ module.exports = function (grunt) {
           main: {
               files: [
                   // includes files within path
-                  {expand: true, src: ['src/localization/*.js'], dest: 'dist/i18n', filter: 'isFile',flatten:true},
-                  {expand: true, src: ['src/customValidators/*.js'], dest: 'dist/customValidators', filter: 'isFile',flatten:true}
+                  {expand: true, src: ['src/localization/*.js'], dest: 'dist/i18n', filter: 'isFile',flatten:true}
+                  //{expand: true, src: ['src/customValidators/*.js'], dest: 'dist/customValidators', filter: 'isFile',flatten:true}
               ]
           }
       },
@@ -195,7 +215,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('test', ['typescript:test', 'mochacli', 'watch']);
   grunt.registerTask('ci', ['complexity', 'jshint', 'mochacli']);
-  grunt.registerTask('dist', ['typescript:base','concat:dist','uglify','copy']);
-  grunt.registerTask('typings',['run','typescript:customValidators','concat:typings','concat:typingsCustom']);
+  grunt.registerTask('dist', ['typescript:base','typescript:commonjs','typescript:amd','concat:dist','uglify','copy']);
+  grunt.registerTask('typings',['run','typescript:typings','concat:typings','concat:typingsCustom']);
   grunt.registerTask('document', ['typedoc']);
 };

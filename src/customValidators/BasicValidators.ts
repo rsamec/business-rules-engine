@@ -1,11 +1,13 @@
 ///<reference path='../../typings/underscore/underscore.d.ts'/>
 ///<reference path='../../typings/q/q.d.ts'/>
 ///<reference path='../../typings/moment/moment.d.ts'/>
+///<reference path='../../typings/node/node.d.ts'/>
 ///<reference path='../../typings/node-form/node-form.d.ts'/>
 
+import Q = require("q");
 import moment = require("moment");
 import _ = require("underscore");
-import Q = require("q");
+
 
 module Validators {
     class NumberFce {
@@ -241,3 +243,4 @@ module Validators {
     }
 }
 export = Validators;
+

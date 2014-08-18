@@ -592,6 +592,7 @@ var Validation;
         MessageLocalization.ValidationMessages = MessageLocalization.defaultMessages;
         return MessageLocalization;
     })();
+    _Validation.MessageLocalization = MessageLocalization;
     var StringFce = (function () {
         function StringFce() {
         }

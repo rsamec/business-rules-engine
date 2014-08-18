@@ -553,7 +553,7 @@ module Validation {
     }
 
 
-   class MessageLocalization {
+   export class MessageLocalization {
 
         static customMsg = "Please, fix the field.";
 

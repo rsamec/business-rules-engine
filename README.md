@@ -36,7 +36,7 @@ This module is installed:
 +   Bower
    +   bower install form
    +   Require.js - require(["form/amd/Validation"], ...
-   +   Script tag -> add reference to dist/module/Validation.js file.
+   +   Script tag -> add reference to form/module/Validation.js file.
 
 ## Example Usage
 
@@ -116,7 +116,7 @@ npm install -g typescript
 To compile to javascript.
 
 ``` bash
-tsc src/validation/Validation.ts --target ES5 --module:commonjs
+tsc src/validation/Validation.ts --target ES5 --module commonjs
 ```
 
 ## Tests

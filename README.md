@@ -6,10 +6,8 @@ Validation module is a lightweight JavaScript library for easy business rules de
 
 + [Tutorial] (https://github.com/rsamec/form/wiki)
 + [API] (http://rsamec.github.io/form/docs/globals.html)
-
 + [Business rules - sources] (https://github.com/rsamec/business-rules)
 + [Business rules - API] (http://rsamec.github.io/business-rules/docs/globals.html)
-
 + [NodeJS Example] (https://github.com/rsamec/node-form-app)
 + [AngularJS Example] (https://github.com/rsamec/angular-form-app)
 + [AngularJS Demo] (http://nodejs-formvalidation.rhcloud.com/)

@@ -30,7 +30,8 @@ This module is installed:
    +    use require('node-form');
 +   Bower
    +   bower install form
-   +   add reference to dist/form.min.js file.
+   +   Require.js - require(["form/amd/Validation"], ...
+   +   Script tag -> add reference to dist/module/Validation.js file.
 
 ## Example Usage
 
@@ -110,9 +111,8 @@ npm install -g typescript
 To compile to javascript.
 
 ``` bash
-tsc src/validation/rules.ts --target ES5 --out dist/validation.js
+tsc src/validation/Validation.ts --target ES5 --module:commonjs
 ```
-
 
 ## Tests
 
@@ -126,10 +126,37 @@ To run tests
 ``` bash
 mocha test
 ```
+## Grunt automatization
+
+To build all sources to dist folder (generates AMD, CommonJS and module pattern)
+``` bash
+$ grunt dist
+```
+
+To run code analyze - complexity + jshint.
+``` bash
+$ grunt ci
+```
+
+To generate api documentation.
+``` bash
+$ grunt document
+```
+
+To generate typings -> typescript definition files.
+``` bash
+$ grunt typings
+```
+
+To run tests
+``` bash
+$ grunt test
+```
 
 ## Roadmap
 
-+ Simplify ValidationFor
-+ Shared validation groups
-+ Depedency injection
++ Add validation groups to shared validation rules
++ Separate ValidationResult from execution of validation rules
++ Add depedency injection for managing dependencies among components
+
 

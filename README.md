@@ -4,7 +4,12 @@
 
 Validation module is a lightweight JavaScript library for easy business rules definition of the product, the contract, the form etc.
 
-[Tutorial] (https://github.com/rsamec/form/wiki)
++ [Tutorial] (https://github.com/rsamec/form/wiki)
++ [API] (http://rsamec.github.io/form/docs/globals.html)
++ [NodeJS Example] (https://github.com/rsamec/node-form-app)
++ [AngularJS Example] (https://github.com/rsamec/angular-form-app)
++ [AngularJS Demo] (http://nodejs-formvalidation.rhcloud.com/)
++ [Example business rules documation] (http://rsamec.github.io/node-form-app/docs/globals.html)
 
 ## Key features
 The main benefit is that validation engine is not tight to HTML DOM or any other UI framework.

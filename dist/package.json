@@ -1,8 +1,8 @@
 {
   "name": "node-form",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "form validation engine",
-  "main": "./node-form",
+  "main": "./commonjs/Validation",
   "repository": {
     "type": "git",
     "url": "https://github.com/rsamec/form"

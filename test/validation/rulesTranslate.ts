@@ -4,9 +4,9 @@
 ///<reference path='../../typings/q/q.d.ts'/>
 
 
-var Validation = require('../../dist/node-form.js');
-var Validators = require('../../src/customValidators/BasicValidators.js');
-var Util = require('../../src/customValidators/utils.js');
+var Validation = require('../../src/validation/Validation.js');
+var Validators = require('../../src/validation/BasicValidators.js');
+var Util = require('../../src/validation/Utils.js');
 var expect = require('expect.js');
 
 var _:UnderscoreStatic = require('underscore');

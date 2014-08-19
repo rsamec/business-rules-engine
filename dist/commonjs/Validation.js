@@ -1,5 +1,14 @@
+var __extends = this.__extends || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
+var _ = require('underscore');
+var Q = require('q');
+
 var Validation;
-(function (Validation) {
+(function (_Validation) {
     
 
     
@@ -22,11 +31,25 @@ var Validation;
         CompareOperator[CompareOperator["GreaterThanEqual"] = 4] = "GreaterThanEqual";
 
         CompareOperator[CompareOperator["GreaterThan"] = 5] = "GreaterThan";
-    })(Validation.CompareOperator || (Validation.CompareOperator = {}));
-    var CompareOperator = Validation.CompareOperator;
-})(Validation || (Validation = {}));
-var Validation;
-(function (Validation) {
+    })(_Validation.CompareOperator || (_Validation.CompareOperator = {}));
+    var CompareOperator = _Validation.CompareOperator;
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
 
     
@@ -44,7 +67,7 @@ var Validation;
         }
         return Error;
     })();
-    Validation.Error = Error;
+    _Validation.Error = Error;
 
     var ValidationFailure = (function () {
         function ValidationFailure(Error, IsAsync) {
@@ -74,7 +97,7 @@ var Validation;
         });
         return ValidationFailure;
     })();
-    Validation.ValidationFailure = ValidationFailure;
+    _Validation.ValidationFailure = ValidationFailure;
 
     var ValidationResult = (function () {
         function ValidationResult(Name) {
@@ -127,7 +150,7 @@ var Validation;
         });
         return ValidationResult;
     })();
-    Validation.ValidationResult = ValidationResult;
+    _Validation.ValidationResult = ValidationResult;
 
     var CompositeValidationResult = (function () {
         function CompositeValidationResult(Name) {
@@ -270,31 +293,7 @@ var Validation;
         };
         return CompositeValidationResult;
     })();
-    Validation.CompositeValidationResult = CompositeValidationResult;
-})(Validation || (Validation = {}));
-var __extends = this.__extends || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
-};
-var Validation;
-(function (_Validation) {
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
+    _Validation.CompositeValidationResult = CompositeValidationResult;
 
     var AbstractValidator = (function () {
         function AbstractValidator() {
@@ -352,7 +351,7 @@ var Validation;
             this.Validators = {};
             this.Children = {};
             this.ForList = false;
-            this.ValidationResult = new _Validation.CompositeValidationResult(this.Name);
+            this.ValidationResult = new CompositeValidationResult(this.Name);
 
             if (!forList) {
                 _.each(this.validator.Validators, function (val, key) {
@@ -621,7 +620,7 @@ var Validation;
         }
         PropertyValidationRule.prototype.AddValidator = function (validator) {
             this.Validators[validator.tagName] = validator;
-            this.ValidationFailures[validator.tagName] = new _Validation.ValidationFailure(new _Validation.Error(), !!validator.isAsync);
+            this.ValidationFailures[validator.tagName] = new ValidationFailure(new Error(), !!validator.isAsync);
         };
 
         Object.defineProperty(PropertyValidationRule.prototype, "Errors", {
@@ -765,7 +764,7 @@ var Validation;
             return deferred.promise;
         };
         return PropertyValidationRule;
-    })(_Validation.ValidationResult);
+    })(ValidationResult);
 
     var Validator = (function (_super) {
         __extends(Validator, _super);
@@ -774,9 +773,9 @@ var Validation;
             this.Name = Name;
             this.ValidateFce = ValidateFce;
             this.AsyncValidationFce = AsyncValidationFce;
-            this.Error = new _Validation.Error();
+            this.Error = new Error();
             this.ValidationFailures = {};
-            this.ValidationFailures[this.Name] = new _Validation.ValidationFailure(this.Error, false);
+            this.ValidationFailures[this.Name] = new ValidationFailure(this.Error, false);
         }
         Validator.prototype.Validate = function (context) {
             if (this.ValidateFce !== undefined)
@@ -853,5 +852,6 @@ var Validation;
             configurable: true
         });
         return Validator;
-    })(_Validation.ValidationResult);
+    })(ValidationResult);
 })(Validation || (Validation = {}));
+module.exports = Validation;

@@ -155,7 +155,18 @@ module.exports = function (grunt) {
                   comments:false
               }
           },
-
+          src:{
+              src: ['src/**/*.ts'],
+              dest: '',
+              options: {
+                  module: 'commonjs',
+                  target: 'es5',
+                  declaration: false,
+                  comments:false
+//                  noImplicitAny:false,
+//                  ignoreError:true
+              }
+          },
           test:{
               src: ['test/**/*.ts'],
               dest: '',
@@ -191,7 +202,7 @@ module.exports = function (grunt) {
               ],
               options: {
                   process: function (content, srcpath) {
-                      var content = content.replace(/.*require.*/g,"");
+                      content = content.replace(/.*require.*/g,"");
                       return content.replace(/module.exports.*/g,"");
                   }
               }
@@ -245,7 +256,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-run');
 
 
-  grunt.registerTask('test', ['typescript:test', 'mochacli', 'watch']);
+  grunt.registerTask('test', ['typescript:src','typescript:test', 'mochacli', 'watch']);
   grunt.registerTask('ci', ['complexity', 'jshint', 'mochacli']);
   grunt.registerTask('dist', ['typescript:commonjs','typescript:amd','typescript:customValidatorsCommonjs','typescript:customValidatorsAmd','copy']);
   grunt.registerTask('typings',['typescript:typings','concat:typings','typescript:otherTypings','typescript:otherTypings']);

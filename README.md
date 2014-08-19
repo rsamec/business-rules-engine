@@ -131,7 +131,16 @@ To run tests
 ``` bash
 mocha test
 ```
+
+
 ## Grunt automatization
+
+### Basic steps
+
++ git clone https://github.com/rsamec/form
++ npm install - get npm packages
++ tsd update - get external typings definition
++ grunt typings - create node-form typings definition - used by custom validators
 
 To build all sources to dist folder (generates AMD, CommonJS and module pattern)
 ``` bash

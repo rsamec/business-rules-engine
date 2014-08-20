@@ -1,8 +1,8 @@
-# Form validation module
+# Business rules engine
 
 ![logo](https://github.com/rsamec/form/blob/master/form_logo.jpg)
 
-Validation module is a lightweight JavaScript library for easy business rules definition of the product, the contract, the form etc.
+Business rules engine is a lightweight JavaScript library for easy business rules definition of the product, the contract, the form etc.
 
 + [Validation Engine - Tutorial] (https://github.com/rsamec/form/wiki)
 + [Validation Engine - API] (http://rsamec.github.io/form/docs/globals.html)

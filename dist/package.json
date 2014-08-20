@@ -1,6 +1,6 @@
 {
   "name": "business-rules-engine",
-  "version": "1.0.20",
+  "version": "1.0.21",
   "description": "business rules engine",
   "main": "./commonjs/Validation",
   "repository": {

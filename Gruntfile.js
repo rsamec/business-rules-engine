@@ -218,7 +218,7 @@ module.exports = function (grunt) {
                       '// Definitions: https://github.com/borisyankov/DefinitelyTyped\n\n',
                   process: function(src, filepath) {
                       return '// Source: ' + filepath + '\n' +
-                          src.replace(/[ \t]*export = (\w*);?/g, 'declare module "<%= pkg.name %>" {export = $1;}');
+                          src.replace(/[ \t]*export = (\w*);?/g, 'declare module "business-rule-engine" {export = $1;}');
                   }
               },
               files: {
@@ -259,6 +259,6 @@ module.exports = function (grunt) {
   grunt.registerTask('test', ['typescript:src','typescript:test', 'mochacli', 'watch']);
   grunt.registerTask('ci', ['complexity', 'jshint', 'mochacli']);
   grunt.registerTask('dist', ['typescript:commonjs','typescript:amd','typescript:customValidatorsCommonjs','typescript:customValidatorsAmd','copy']);
-  grunt.registerTask('typings',['typescript:typings','concat:typings','typescript:otherTypings','typescript:otherTypings']);
+  grunt.registerTask('typings',['typescript:typings','concat:typings','typescript:otherTypings','concat:otherTypings']);
   grunt.registerTask('document', ['typedoc']);
 };

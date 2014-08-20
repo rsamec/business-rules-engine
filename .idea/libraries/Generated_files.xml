@@ -6,6 +6,7 @@
         <item url="file://$PROJECT_DIR$/src/customValidators/ParamValidator.js" />
         <item url="file://$PROJECT_DIR$/src/customValidators/DateCompareValidator.js" />
         <item url="file://$PROJECT_DIR$/src/validation/BasicValidators.js" />
+        <item url="file://$PROJECT_DIR$/src/validation/Validation.js" />
       </sourceFilesUrls>
     </properties>
     <CLASSES>
@@ -29,33 +30,14 @@
       <root url="file://$PROJECT_DIR$/src/customValidators/Util.js" />
       <root url="file://$PROJECT_DIR$/test/customValidators/validators.js" />
       <root url="file://$PROJECT_DIR$/src/validation/abstract.js" />
-      <root url="file://$PROJECT_DIR$/src/localization/messages_cs.js" />
-      <root url="file://$PROJECT_DIR$/test/customValidators/customValidators.js" />
-      <root url="file://$PROJECT_DIR$/test/validation/rulesNested.js" />
-      <root url="file://$PROJECT_DIR$/src/customValidators/ICOValidator.js" />
-      <root url="file://$PROJECT_DIR$/test/validation/rulesLists.js" />
-      <root url="file://$PROJECT_DIR$/test/validation/rules.js" />
       <root url="file://$PROJECT_DIR$/src/validation/errors.js" />
-      <root url="file://$PROJECT_DIR$/src/localization/messages_de.js" />
       <root url="file://$PROJECT_DIR$/typings/node-form/node-form-tests.js" />
-      <root url="file://$PROJECT_DIR$/src/validation/Validation.js" />
-      <root url="file://$PROJECT_DIR$/src/localization/messages_en.js" />
-      <root url="file://$PROJECT_DIR$/src/validation/Utils.js" />
-      <root url="file://$PROJECT_DIR$/test/validation/rulesShared.js" />
-      <root url="file://$PROJECT_DIR$/test/customValidators/DataCompareValidator.js" />
-      <root url="file://$PROJECT_DIR$/src/validation/Validation.js" />
-      <root url="file://$PROJECT_DIR$/test/validation/rulesTranslate.js" />
-      <root url="file://$PROJECT_DIR$/test/customValidators/ParamValidator.js" />
-      <root url="file://$PROJECT_DIR$/test/customValidators/ICOValidator.js" />
-      <root url="file://$PROJECT_DIR$/test/customValidators/RCValidator.js" />
-      <root url="file://$PROJECT_DIR$/src/metaDataRules/form.js" />
-      <root url="file://$PROJECT_DIR$/src/metaDataRules/metaDataRules.js" />
-      <root url="file://$PROJECT_DIR$/src/metaDataRules/util.js" />
       <root url="file://$PROJECT_DIR$/src/customValidators/RCValidator.js" />
       <root url="file://$PROJECT_DIR$/src/customValidators/ParamValidator.js" />
       <root url="file://$PROJECT_DIR$/src/customValidators/DateCompareValidator.js" />
       <root url="file://$PROJECT_DIR$/dist/i18n/messages_de.js" />
       <root url="file://$PROJECT_DIR$/dist/i18n/messages_cs.js" />
+      <root url="file://$PROJECT_DIR$/src/validation/Validation.js" />
       <root url="file://$PROJECT_DIR$/src/validation/BasicValidators.js" />
     </CLASSES>
     <SOURCES />

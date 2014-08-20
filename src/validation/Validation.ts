@@ -1,4 +1,4 @@
-///<reference path='../../typings/q/q.d.ts'/>
+///<reference path='../../typings/q/Q.d.ts'/>
 ///<reference path='../../typings/underscore/underscore.d.ts'/>
 
 import _ = require('underscore');

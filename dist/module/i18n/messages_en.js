@@ -4,7 +4,7 @@ var Localization = (function () {
     Object.defineProperty(Localization, "ValidationMessages", {
         get: function () {
             return {
-
+                required: "This field is required.",
                 remote: "Please fix the field.",
                 email: "Please enter a valid email address.",
                 url: "Please enter a valid URL.",

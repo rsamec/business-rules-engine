@@ -565,7 +565,7 @@ var Validation;
         MessageLocalization.customMsg = "Please, fix the field.";
 
         MessageLocalization.defaultMessages = {
-
+            "required": "This field is required.",
             "remote": "Please fix the field.",
             "email": "Please enter a valid email address.",
             "url": "Please enter a valid URL.",
@@ -702,7 +702,7 @@ var Validation;
                     if (shortCircuited && priority > lastPriority) {
                         validation.Error.HasError = false;
                     } else {
-
+                        var hasError = ((value === undefined || value === null) && validator.tagName != "required") ? false : !validator.isAcceptable(value);
 
                         validation.Error.HasError = hasError;
                         validation.Error.TranslateArgs = { TranslateId: validator.tagName, MessageArgs: _.extend(validator, { AttemptedValue: value }), CustomMessage: validator.customMessage };
@@ -744,7 +744,7 @@ var Validation;
                 var validator = this.Validators[index];
 
                 try  {
-
+                    var hasErrorPromise = ((value === undefined || value === null) && validator.tagName != "required") ? Q.when(true) : validator.isAcceptable(value);
                     hasErrorPromise.then(setResultFce);
 
                     promises.push(hasErrorPromise);

@@ -4,7 +4,7 @@ var Localization = (function () {
     Object.defineProperty(Localization, "ValidationMessages", {
         get: function () {
             return {
-
+                required: "Tento údaj je povinný.",
                 remote: "Prosím, opravte tento údaj.",
                 email: "Prosím, zadejte platný e-mail.",
                 url: "Prosím, zadejte platné URL.",

@@ -69,7 +69,7 @@ var Validators;
 
     var RequiredValidator = (function () {
         function RequiredValidator() {
-
+            this.tagName = "required";
         }
         RequiredValidator.prototype.isAcceptable = function (s) {
             return s !== undefined && s !== "";

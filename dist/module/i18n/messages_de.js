@@ -4,7 +4,7 @@ var Localization = (function () {
     Object.defineProperty(Localization, "ValidationMessages", {
         get: function () {
             return {
-
+                required: "Dieses Feld ist ein Pflichtfeld.",
                 maxlength: "Geben Sie bitte maximal {MaxLength} Zeichen ein.",
                 minlength: "Geben Sie bitte mindestens {MinLength} Zeichen ein.",
                 rangelength: "Geben Sie bitte mindestens {MinLength} und maximal {MaxLength} Zeichen ein.",

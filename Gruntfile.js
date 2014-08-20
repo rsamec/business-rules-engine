@@ -222,7 +222,7 @@ module.exports = function (grunt) {
               ],
               options: {
                   process: function (content) {
-                      content = content.replace(/.*require.*/g,"");
+                      content = content.replace(/.*require\(.*/g,"");
                       return content.replace(/module.exports.*/g,"");
                   }
               }

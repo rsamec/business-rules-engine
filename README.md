@@ -4,8 +4,8 @@
 
 Business rules engine is a lightweight JavaScript library for easy business rules definition of the product, the contract, the form etc.
 
-+ [Validation Engine - Tutorial] (https://github.com/rsamec/form/wiki)
-+ [Validation Engine - API] (http://rsamec.github.io/form/docs/globals.html)
++ [Validation Engine - Tutorial] (https://github.com/rsamec/business-rules-engine/wiki)
++ [Validation Engine - API] (http://rsamec.github.io/business-rules-engine/docs/globals.html)
 + [Business rules - sources] (https://github.com/rsamec/business-rules)
 + [Business rules - API] (http://rsamec.github.io/business-rules/docs/globals.html)
 + [NodeJS Example] (https://github.com/rsamec/node-form-app)
@@ -13,7 +13,7 @@ Business rules engine is a lightweight JavaScript library for easy business rule
 + [AngularJS Demo] (http://nodejs-formvalidation.rhcloud.com/)
 
 ## Key features
-The main benefit is that validation engine is not tight to HTML DOM or any other UI framework.
+The main benefit is that business rules engine is not tight to HTML DOM or any other UI framework.
 This validation engine is **UI agnostic** and that is why it can be used as **an independent representation of business rules** of a product, contract, etc.
 It can be easily reused by different types of applications, libraries.
 
@@ -32,12 +32,12 @@ It can be easily reused by different types of applications, libraries.
 This module is installed:
 
 +   Node.js
-   +    npm install node-form
-   +    use require('node-form');
+   +    npm install business-rules-engine
+   +    use require('business-rules-engine');
 +   Bower
-   +   bower install form
-   +   Require.js - require(["form/amd/Validation"], ...
-   +   Script tag -> add reference to form/module/Validation.js file.
+   +   bower install business-rules-engine
+   +   Require.js - require(["business-rules-engine/amd/Validation"], ...
+   +   Script tag -> add reference to business-rules-engine/module/Validation.js file.
 
 ## Example Usage
 
@@ -138,7 +138,7 @@ mocha test
 
 ### Basic steps
 
-+ git clone https://github.com/rsamec/form
++ git clone https://github.com/rsamec/business-rules-engine
 + npm install - get npm packages
 + tsd update - get external typings definition
 + grunt typings - create node-form typings definition - used by custom validators

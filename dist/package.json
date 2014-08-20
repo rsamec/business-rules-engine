@@ -1,20 +1,21 @@
 {
-  "name": "node-form",
-  "version": "1.0.18",
-  "description": "form validation engine",
+  "name": "business-rules-engine",
+  "version": "1.0.20",
+  "description": "business rules engine",
   "main": "./commonjs/Validation",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rsamec/form"
+    "url": "https://github.com/rsamec/business-rules-engine"
   },
   "keywords": [
+    "business rules",
     "validation",
     "form"
   ],
   "author": "rsamec <roman.samec2@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/rsamec/form/issues"
+    "url": "https://github.com/rsamec/business-rules-engine/issues"
   },
   "dependencies": {
     "underscore": "latest",

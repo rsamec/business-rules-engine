@@ -1,23 +1,24 @@
 {
-  "name": "form",
-  "version": "1.0.0",
-  "description": "form validation module",
-  "main": "src/lib/validation",
+  "name": "business-rules-engine",
+  "version": "1.0.20",
+  "description": "business rules engine",
+  "main": "src/validation",
   "scripts": {
     "test": "node_modules/.bin/grunt ci"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/rsamec/form"
+    "url": "https://github.com/rsamec/business-rules-engine"
   },
   "keywords": [
+    "business rules",
     "validation",
     "form"
   ],
   "author": "rsamec <roman.samec2@gmail.com>",
   "license": "BSD-3-Clause",
   "bugs": {
-    "url": "https://github.com/rsamec/form/issues"
+    "url": "https://github.com/rsamec/business-rules-engine/issues"
   },
   "dependencies": {
     "Q": "latest",

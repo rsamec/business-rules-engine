@@ -1,6 +1,6 @@
 ///<reference path='../../typings/underscore/underscore.d.ts'/>
 ///<reference path='../../typings/q/q.d.ts'/>
-///<reference path='../../typings/node-form/node-form.d.ts'/>
+///<reference path='../../typings/business-rules-engine/business-rules-engine.d.ts'/>
 
 
 import Q = require("q");
@@ -16,7 +16,7 @@ import _ = require("underscore");
  * Returns true if the value is present in the list. Otherwise return false.
  * The list is returned via Options property that can be parametrize by the name of the list with ParamId parameter.
  *
- *  @property {Date} Options
+ *  @property Options
  *  Promise that returns list of param items (key-value pairs)
  *
  *  <pre>
@@ -51,7 +51,7 @@ import _ = require("underscore");
  *       };
  *  </pre>
  *
- *  @property {boolean} ParamId - The name of the list to be returned.
+ *  @property  ParamId - The name of the list to be returned.
  *
  *  @example
  *
@@ -97,8 +97,8 @@ class ParamValidator implements Validation.IAsyncPropertyValidator{
 
     /**
      * It checks validity of identification number of CZE company (called ico)
-     * @param s {string} value to check
-     * @returns {boolean} return true for valid value, otherwise false
+     * @param s value to check
+     * @returns return true for valid value, otherwise false
      */
     isAcceptable(s:string):Q.Promise<boolean> {
         var deferred = Q.defer<boolean>();

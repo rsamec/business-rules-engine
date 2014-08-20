@@ -12,8 +12,7 @@ var Validators;
                 return 0;
             var digits = value.toString().split('.');
             if (digits.length > 1) {
-                var negDigitsLength = digits[1].length;
-                return negDigitsLength;
+                return digits[1].length;
             }
             return 0;
         };

@@ -2,7 +2,7 @@
 ///<reference path='../../typings/q/q.d.ts'/>
 ///<reference path='../../typings/moment/moment.d.ts'/>
 ///<reference path='../../typings/node/node.d.ts'/>
-///<reference path='../../typings/node-form/node-form.d.ts'/>
+///<reference path='../../typings/business-rules-engine/business-rules-engine.d.ts'/>
 
 import Q = require("q");
 import moment = require("moment");
@@ -15,8 +15,7 @@ module Validators {
             if (value === undefined) return 0;
             var digits = value.toString().split('.');
             if (digits.length > 1) {
-                var negDigitsLength = digits[1].length;
-                return negDigitsLength;
+                return digits[1].length;
             }
             return 0;
         }
@@ -230,10 +229,10 @@ module Validators {
             this.Options.then(function (result) {
                 var hasSome = _.some(result, function (item) {
                     return item === s;
-                })
+                });
                 if (hasSome) deferred.resolve(true);
                 deferred.resolve(false);
-            })
+            });
 
             return deferred.promise;
         }

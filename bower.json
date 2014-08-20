@@ -1,12 +1,12 @@
 {
-  "name": "form",
-  "main": "dist/form.js",
-  "version": "1.0.13",
-  "homepage": "https://github.com/rsamec/form",
+  "name": "business-rules-engine",
+  "main": "dist/module/Validation.js",
+  "version": "1.0.20",
+  "homepage": "https://github.com/rsamec/business-rules-engine",
   "authors": [
     "rsamec <roman.samec2@gmail.com>"
   ],
-  "description": "Validation engine",
+  "description": "Business rules engine",
   "moduleType": [
     "amd",
     "globals",

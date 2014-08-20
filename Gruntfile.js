@@ -124,7 +124,7 @@ module.exports = function (grunt) {
           },
           typings:{
               src: ['src/validation/Validation.ts','src/validation/Utils.ts'],
-              dest: 'typings/node-form',
+              dest: 'typings/<%= pkg.name %>',
               options: {
                   basePath: 'src/validation',
                   module: 'commonjs',
@@ -135,7 +135,7 @@ module.exports = function (grunt) {
           },
           otherTypings: {
               src: ['src/validation/BasicValidators.ts'],
-              dest: 'typings/node-form',
+              dest: 'typings/<%= pkg.name %>',
               options: {
                   basePath: 'src/validation',
                   module: 'commonjs',
@@ -146,7 +146,7 @@ module.exports = function (grunt) {
           },
           customValidatorsTypings: {
               src: ['src/customValidators/*.ts'],
-              dest: 'typings/node-form',
+              dest: 'typings/<%= pkg.name %>',
               options: {
                   basePath: 'src/customValidators',
                   module: 'commonjs',
@@ -201,7 +201,7 @@ module.exports = function (grunt) {
                   //{expand: true, src: ['src/customValidators/*.js'], dest: 'dist/customValidators', filter: 'isFile',flatten:true}
               ],
               options: {
-                  process: function (content, srcpath) {
+                  process: function (content) {
                       content = content.replace(/.*require.*/g,"");
                       return content.replace(/module.exports.*/g,"");
                   }
@@ -212,17 +212,17 @@ module.exports = function (grunt) {
         typings:{
 
               options:{
-                  banner: '// Type definitions for node-<%= pkg.name %> - v<%= pkg.version %>\n' +
+                  banner: '// Type definitions for <%= pkg.name %> - v<%= pkg.version %>\n' +
                       '// Project: https://github.com/rsamec/form\n' +
                       '// Definitions by: Roman Samec <https://github.com/rsamec>\n' +
                       '// Definitions: https://github.com/borisyankov/DefinitelyTyped\n\n',
                   process: function(src, filepath) {
                       return '// Source: ' + filepath + '\n' +
-                          src.replace(/[ \t]*export = (\w*);?/g, 'declare module "node-form" {export = $1;}');
+                          src.replace(/[ \t]*export = (\w*);?/g, 'declare module "<%= pkg.name %>" {export = $1;}');
                   }
               },
               files: {
-                  'typings/node-form/node-form.d.ts': ['typings/node-form/Validation.d.ts']
+                  'typings/<%= pkg.name %>/<%= pkg.name %>.d.ts': ['typings/<%= pkg.name %>/Validation.d.ts']
               }
           },
           otherTypings:{
@@ -234,8 +234,8 @@ module.exports = function (grunt) {
                   }
               },
               files: {
-                  'typings/node-form/BasicValidators.d.ts': ['typings/node-form/BasicValidators.d.ts'],
-                  'typings/node-form/Utils.d.ts': ['typings/node-form/Utils.d.ts']
+                  'typings/<%= pkg.name %>/BasicValidators.d.ts': ['typings/<%= pkg.name %>/BasicValidators.d.ts'],
+                  'typings/<%= pkg.name %>/Utils.d.ts': ['typings/<%= pkg.name %>/Utils.d.ts']
 
               }
           }

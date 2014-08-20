@@ -2,10 +2,6 @@ var Localization = (function () {
     function Localization() {
     }
     Object.defineProperty(Localization, "ValidationMessages", {
-        /*
-        * Translated default messages for the validation engine.
-        * Locale: DE (German, Deutsch)
-        */
         get: function () {
             return {
 
@@ -39,4 +35,3 @@ var Localization = (function () {
 })();
 
 
-//# sourceMappingURL=messages_de.js.map

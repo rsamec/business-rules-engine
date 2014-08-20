@@ -1,5 +1,5 @@
 ///<reference path='../../typings/moment/moment.d.ts'/>
-///<reference path='../../typings/node-form/node-form.d.ts'/>
+///<reference path='../../typings/business-rules-engine/business-rules-engine.d.ts'/>
 
 import moment = require("moment");
 import _ = require("underscore");
@@ -14,11 +14,11 @@ import _ = require("underscore");
  * @description
  * DateCompareValidator enables to compare date to another date (CompareTo).
  *
- * @property {Date} CompareTo
+ * @property CompareTo
  * The datetime against the compare is done.
  * If  property is not set, then comparison is done against actual datetime.
  *
- * @property {boolean} IgnoreDate
+ * @property IgnoreDate
  * It forces to ignore time part of date by date compare.
  *
  *
@@ -87,7 +87,6 @@ class DateCompareValidator implements Validation.IPropertyValidator{
 
     /**
      * It forces to ignore time part of date by date compare.
-     * @type {boolean}
      */
     public IgnoreTime:boolean = false;
 

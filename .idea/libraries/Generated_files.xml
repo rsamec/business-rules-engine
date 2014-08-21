@@ -7,6 +7,7 @@
         <item url="file://$PROJECT_DIR$/src/customValidators/DateCompareValidator.js" />
         <item url="file://$PROJECT_DIR$/src/validation/BasicValidators.js" />
         <item url="file://$PROJECT_DIR$/src/validation/Validation.js" />
+        <item url="file://$PROJECT_DIR$/src/localization/messages_cz.js" />
       </sourceFilesUrls>
     </properties>
     <CLASSES>
@@ -32,11 +33,12 @@
       <root url="file://$PROJECT_DIR$/src/validation/abstract.js" />
       <root url="file://$PROJECT_DIR$/src/validation/errors.js" />
       <root url="file://$PROJECT_DIR$/typings/node-form/node-form-tests.js" />
+      <root url="file://$PROJECT_DIR$/dist/i18n/messages_de.js" />
+      <root url="file://$PROJECT_DIR$/dist/i18n/messages_cs.js" />
       <root url="file://$PROJECT_DIR$/src/customValidators/RCValidator.js" />
       <root url="file://$PROJECT_DIR$/src/customValidators/ParamValidator.js" />
       <root url="file://$PROJECT_DIR$/src/customValidators/DateCompareValidator.js" />
-      <root url="file://$PROJECT_DIR$/dist/i18n/messages_de.js" />
-      <root url="file://$PROJECT_DIR$/dist/i18n/messages_cs.js" />
+      <root url="file://$PROJECT_DIR$/src/localization/messages_cz.js" />
       <root url="file://$PROJECT_DIR$/src/validation/Validation.js" />
       <root url="file://$PROJECT_DIR$/src/validation/BasicValidators.js" />
     </CLASSES>

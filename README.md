@@ -173,5 +173,6 @@ $ grunt test
 + Add validation groups to shared validation rules
 + Separate ValidationResult from execution of validation rules
 + Add depedency injection for managing dependencies among components
++ Support for meta data definitions
 
 

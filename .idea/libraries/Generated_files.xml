@@ -5,6 +5,7 @@
         <item url="file://$PROJECT_DIR$/src/customValidators/RCValidator.js" />
         <item url="file://$PROJECT_DIR$/src/customValidators/ParamValidator.js" />
         <item url="file://$PROJECT_DIR$/src/customValidators/DateCompareValidator.js" />
+        <item url="file://$PROJECT_DIR$/test/validation/rulesLists.js" />
         <item url="file://$PROJECT_DIR$/src/validation/BasicValidators.js" />
         <item url="file://$PROJECT_DIR$/src/validation/Validation.js" />
         <item url="file://$PROJECT_DIR$/src/localization/messages_cz.js" />
@@ -38,6 +39,7 @@
       <root url="file://$PROJECT_DIR$/src/customValidators/RCValidator.js" />
       <root url="file://$PROJECT_DIR$/src/customValidators/ParamValidator.js" />
       <root url="file://$PROJECT_DIR$/src/customValidators/DateCompareValidator.js" />
+      <root url="file://$PROJECT_DIR$/test/validation/rulesLists.js" />
       <root url="file://$PROJECT_DIR$/src/localization/messages_cz.js" />
       <root url="file://$PROJECT_DIR$/src/validation/Validation.js" />
       <root url="file://$PROJECT_DIR$/src/validation/BasicValidators.js" />

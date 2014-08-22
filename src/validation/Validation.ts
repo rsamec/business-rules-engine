@@ -706,15 +706,10 @@ module Validation {
         public Validators: { [name: string]: IValidator ; } = {};
         public Children:{ [name: string]: IAbstractValidationRule<any> ; } = {};
 
-        /**
-         * Return true if this validation rule is intended for list of items, otherwise true.
-         */
-        public ForList:boolean = false;
 
-        constructor(public Name:string,public validator:AbstractValidator<T>, forList?:boolean){
+        constructor(public Name:string,public validator:AbstractValidator<T>,public ForList?:boolean){
             this.ValidationResult = new CompositeValidationResult(this.Name);
-
-            if (!forList) {
+            if (!this.ForList) {
                 _.each(this.validator.Validators, function (val, key) {
                     this.createRuleFor(key);
                     _.each(val, function (validator) {

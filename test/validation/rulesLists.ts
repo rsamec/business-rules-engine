@@ -121,7 +121,25 @@ describe('validation rules for lists', function () {
         this.MainValidator =  mainValidator.CreateRule("Main");
 
     });
+    it('fill undefined - some errors', function (done) {
 
+        //when
+        this.Data.Contacts = undefined;
+
+        //excercise
+        var result = this.MainValidator.Validate(this.Data);
+        var promiseResult = this.MainValidator.ValidateAsync(this.Data);
+
+        //verify
+        promiseResult.then(function (response) {
+
+            //verify
+            expect(response.HasErrors).to.equal(false);
+
+            done();
+
+        }).done(null,done);
+    });
     it('fill correct data - no errors', function (done) {
 
         //when

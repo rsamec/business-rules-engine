@@ -342,16 +342,15 @@ define(["require", "exports", 'underscore', 'q'], function(require, exports, _, 
         _Validation.AbstractValidator = AbstractValidator;
 
         var AbstractValidationRule = (function () {
-            function AbstractValidationRule(Name, validator, forList) {
+            function AbstractValidationRule(Name, validator, ForList) {
                 this.Name = Name;
                 this.validator = validator;
+                this.ForList = ForList;
                 this.Rules = {};
                 this.Validators = {};
                 this.Children = {};
-                this.ForList = false;
                 this.ValidationResult = new CompositeValidationResult(this.Name);
-
-                if (!forList) {
+                if (!this.ForList) {
                     _.each(this.validator.Validators, function (val, key) {
                         this.createRuleFor(key);
                         _.each(val, function (validator) {

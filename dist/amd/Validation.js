@@ -399,7 +399,7 @@ define(["require", "exports", 'underscore', 'q'], function(require, exports, _, 
             AbstractValidationRule.prototype.Validate = function (context) {
                 _.each(this.Children, function (val, key) {
                     if (context[key] === undefined)
-                        context[key] = {};
+                        context[key] = val.ForList ? [] : {};
                     val.Validate(context[key]);
                 }, this);
 

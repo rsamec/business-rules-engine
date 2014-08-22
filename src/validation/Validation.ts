@@ -329,6 +329,11 @@ module Validation {
          */
         Children:{ [name: string]: IAbstractValidationRule<any> ; }
 
+        /**
+         * Return true if this validation rule is intended for list of items, otherwise true.
+         */
+        ForList:boolean;
+
     }
 
     /**
@@ -768,7 +773,7 @@ module Validation {
         public Validate(context:T):IValidationResult{
 
             _.each(this.Children,function(val,key){
-                if (context[key] === undefined) context[key] = {};
+                if (context[key] === undefined) context[key] = val.ForList?[]:{};
                 val.Validate(context[key]);
             },this);
 

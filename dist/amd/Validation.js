@@ -543,7 +543,7 @@ define(["require", "exports", 'underscore', 'q'], function(require, exports, _, 
                 var results = _.map(this.RowsMap.values(), function (item) {
                     return item.ValidationResult;
                 });
-                for (var i = 0; i != this.ValidationResult.Children.length; i++) {
+                for (var i = this.ValidationResult.Children.length; i > 0; --i) {
                     var item = this.ValidationResult.Children[i];
                     if (item === undefined)
                         continue;

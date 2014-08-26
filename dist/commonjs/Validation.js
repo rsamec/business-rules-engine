@@ -525,9 +525,13 @@ var Validation;
             return deferred.promise;
         };
 
-        AbstractListValidationRule.prototype.Rows = function () {
-            return this.RowsMap.values();
-        };
+        Object.defineProperty(AbstractListValidationRule.prototype, "Rows", {
+            get: function () {
+                return this.RowsMap.values();
+            },
+            enumerable: true,
+            configurable: true
+        });
         AbstractListValidationRule.prototype.RefreshRows = function (list) {
             this.refreshList(list);
         };

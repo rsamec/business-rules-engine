@@ -352,7 +352,7 @@ module Validation {
          *  Return rows of validation rules for collection-based structures (arrays).
          *
          */
-        Rows():Array<IAbstractValidationRule<T>>
+        Rows:Array<IAbstractValidationRule<T>>
 
         /**
          * Refresh (add or removes row from collection of validation rules based on passed data context).
@@ -931,7 +931,7 @@ module Validation {
         }
 
 
-        public Rows():Array<IAbstractValidationRule<any>> {
+        public get Rows():Array<IAbstractValidationRule<any>> {
             return this.RowsMap.values();
         }
         public RefreshRows(list:Array<any>) {

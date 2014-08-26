@@ -544,7 +544,7 @@ var Validation;
             var results = _.map(this.RowsMap.values(), function (item) {
                 return item.ValidationResult;
             });
-            for (var i = this.ValidationResult.Children.length; i > 0; --i) {
+            for (var i = this.ValidationResult.Children.length - 1; i >= 0; i--) {
                 var item = this.ValidationResult.Children[i];
                 if (item === undefined)
                     continue;

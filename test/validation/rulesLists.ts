@@ -186,9 +186,9 @@ describe('validation rules for lists', function () {
             //verify
             expect(response.HasErrors).to.equal(true);
             expect(response.Errors["Contacts"].HasErrors).to.equal(true);
-            expect(response.Errors["Contacts"].Errors["Contacts0"].HasErrors).to.equal(false);
-            expect(response.Errors["Contacts"].Errors["Contacts1"].HasErrors).to.equal(true);
-            expect(response.Errors["Contacts"].Errors["Contacts2"].HasErrors).to.equal(true);
+            expect(response.Errors["Contacts"].Children[0].HasErrors).to.equal(false);
+            expect(response.Errors["Contacts"].Children[1].HasErrors).to.equal(true);
+            expect(response.Errors["Contacts"].Children[2].HasErrors).to.equal(true);
 
             done();
 
@@ -221,8 +221,8 @@ describe('validation rules for lists', function () {
             //verify
             expect(response.HasErrors).to.equal(false);
             expect(response.Errors["Contacts"].HasErrors).to.equal(false);
-            expect(response.Errors["Contacts"].Errors["Contacts0"].HasErrors).to.equal(false);
-            expect(response.Errors["Contacts"].Errors["Contacts1"].HasErrors).to.equal(false);
+            expect(response.Errors["Contacts"].Children[0].HasErrors).to.equal(false);
+            expect(response.Errors["Contacts"].Children[1].HasErrors).to.equal(false);
 
             done();
 
@@ -255,8 +255,8 @@ describe('validation rules for lists', function () {
             //verify
             expect(response.HasErrors).to.equal(true);
             expect(response.Errors["Contacts"].HasErrors).to.equal(true);
-            expect(response.Errors["Contacts"].Errors["Contacts0"].HasErrors).to.equal(false);
-            expect(response.Errors["Contacts"].Errors["Contacts1"].HasErrors).to.equal(true);
+            expect(response.Errors["Contacts"].Children[0].HasErrors).to.equal(false);
+            expect(response.Errors["Contacts"].Children[1].HasErrors).to.equal(true);
 
             done();
 

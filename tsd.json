@@ -28,6 +28,9 @@
     },
     "underscore.string/underscore.string.d.ts": {
       "commit": "5c000a23b5d00efe35ab0fcc3b568f71f3aa23c8"
+    },
+    "hashmap/hashmap.d.ts": {
+      "commit": "3505d15d991ddaa4f5efa13edcd8543bae1e46de"
     }
   }
 }

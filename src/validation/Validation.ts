@@ -1,11 +1,14 @@
 ///<reference path='../../typings/q/Q.d.ts'/>
 ///<reference path='../../typings/underscore/underscore.d.ts'/>
+///<reference path='../../typings/hashmap/hashmap.d.ts'/>
+///<reference path='../../typings/node/node.d.ts'/>
 
 import _ = require('underscore');
 import Q = require('q');
-
+var HashMap = require('hashmap').HashMap;
 
 module Validation {
+
     /**
      * @ngdoc module
      * @name Validation
@@ -335,7 +338,29 @@ module Validation {
         ForList:boolean;
 
     }
+    /**
+     * It represents concrete validation rule for list of type of <T>.
+     */
+    export interface IAbstractListValidationRule<T> {
 
+        /**
+         * Return map of rows of validation rules for collection-based structures (arrays).
+         */
+        RowsMap:HashMap<T,IAbstractValidationRule<T>>;
+
+        /**
+         *  Return rows of validation rules for collection-based structures (arrays).
+         *
+         */
+        Rows():Array<IAbstractValidationRule<T>>
+
+        /**
+         * Refresh (add or removes row from collection of validation rules based on passed data context).
+         * @param list collection-based structure data
+         */
+        RefreshRows(context:Array<T>)
+
+    }
     /**
      * It represents property validation rule for type of <T>.
      */
@@ -499,6 +524,9 @@ module Validation {
         }
         public Remove(index: number) {
             this.Children.splice(index, 1);
+        }
+        public Clear(){
+            this.Children.splice(0,this.Children.length);
         }
 
         public get HasErrorsDirty():boolean {
@@ -839,6 +867,10 @@ module Validation {
                 }, this);
             }
         }
+        static id:number =0;
+        public getHashCode(){
+            return AbstractValidationRule.id++;
+        }
 
     }
 
@@ -853,8 +885,9 @@ module Validation {
      * @description
      * It represents an validator for custom object. It enables to assign rules to custom object properties.
      */
-    class AbstractListValidationRule<T> extends AbstractValidationRule<T> {
+    class AbstractListValidationRule<T> extends AbstractValidationRule<T>  implements  IAbstractListValidationRule<T>{
 
+        public RowsMap = new HashMap<any,IAbstractValidationRule>();
         constructor(public Name:string, public validator:AbstractValidator<T>) {
             super(Name, validator, true);
         }
@@ -864,16 +897,15 @@ module Validation {
          * Performs validation using a validation context and returns a collection of Validation Failures.
          */
         public Validate(context:any):IValidationResult {
-
             //super.Validate(context);
 
-
-            this.NotifyListChanged(context);
+            this.RefreshRows(context);
             for (var i = 0; i != context.length; i++) {
-                var validationRule = this.getValidationRule(i);
+                var validationRule =this.RowsMap.get(context[i]);
                 if (validationRule !== undefined)  validationRule.Validate(context[i]);
             }
 
+            //this.ClearValidationResult(context);
             return this.ValidationResult;
         }
 
@@ -885,35 +917,64 @@ module Validation {
 
             var promises = [];
 
-            this.NotifyListChanged(context);
+            this.RefreshRows(context);
             for (var i = 0; i != context.length; i++) {
-                var validationRule = this.getValidationRule(i);
+                var validationRule = this.RowsMap.get(context[i]);
                 if (validationRule !== undefined) promises.push(validationRule.ValidateAsync(context[i]));
             }
             var self = this;
-            Q.all(promises).then(function(result){deferred.resolve(self.ValidationResult);});
+            Q.all(promises).then(function(result){
+                //self.ClearValidationResult(context);
+                deferred.resolve(self.ValidationResult);});
 
             return deferred.promise;
         }
 
-        private getValidationRule(i:number) {
-            var keyName = this.getIndexedKey(i);
-            return this.Children[keyName];
-        }
-        private getIndexedKey(i:number){
-            return this.Name + i.toString();
-        }
 
-        public NotifyListChanged(list:Array<any>) {
-            for (var i = 0; i != list.length; i++) {
-                var validationRule = this.getValidationRule(i);
-                if (validationRule === undefined) {
-                    var keyName = this.getIndexedKey(i);
-                    validationRule = this.validator.CreateAbstractRule(keyName);
-                    this.Children[keyName] = validationRule;
-                    this.ValidationResult.Add(validationRule.ValidationResult);
+        public Rows():Array<IAbstractValidationRule<any>> {
+            return this.RowsMap.values();
+        }
+        public RefreshRows(list:Array<any>) {
+            this.refreshList(list);
+        }
+        private ClearRows(list:Array<any>){
+            var keysToRemove = _.difference(list,this.RowsMap.keys());
+            _.each(keysToRemove,function(key){
+                if (this.has(key)) this.remove(key);
+            },this.RowsMap);
+
+        }
+        private ClearValidationResult(list:Array<any>) {
+            this.ClearRows(list);
+
+            var results =
+                _.map( this.RowsMap.values(), function(item:IAbstractValidationRule<any>) {return item.ValidationResult;});
+            for (var i=0; i!= this.ValidationResult.Children.length;i++){
+                var item = this.ValidationResult.Children[i];
+                if (item === undefined) continue;
+                if (results.indexOf(item) === -1){
+                    this.ValidationResult.Remove(i);
                 }
             }
+        }
+        private getValidationRule(key:any, name?:string):IAbstractValidationRule<any>
+        {
+            if (name === undefined) name = "Row";
+            var validationRule:IAbstractValidationRule<any>;
+            if (!this.RowsMap.has(key)) {
+                validationRule = this.validator.CreateAbstractRule(name);
+                this.ValidationResult.Add(validationRule.ValidationResult);
+                this.RowsMap.set(key,validationRule);
+            }
+            else{
+                validationRule = this.RowsMap.get(key)
+            }
+
+            return validationRule;
+        }
+        private refreshList(list:Array<any>){
+            this.ClearValidationResult(list);
+            _.each(list,function(item){ var rule = this.getValidationRule(item);},this)
         }
     }
 

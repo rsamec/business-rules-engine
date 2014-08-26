@@ -5,6 +5,8 @@ var __extends = this.__extends || function (d, b) {
     d.prototype = new __();
 };
 define(["require", "exports", 'underscore', 'q'], function(require, exports, _, Q) {
+    var HashMap = require('hashmap').HashMap;
+
     var Validation;
     (function (_Validation) {
         
@@ -31,6 +33,8 @@ define(["require", "exports", 'underscore', 'q'], function(require, exports, _, 
             CompareOperator[CompareOperator["GreaterThan"] = 5] = "GreaterThan";
         })(_Validation.CompareOperator || (_Validation.CompareOperator = {}));
         var CompareOperator = _Validation.CompareOperator;
+
+        
 
         
 
@@ -163,6 +167,9 @@ define(["require", "exports", 'underscore', 'q'], function(require, exports, _, 
             };
             CompositeValidationResult.prototype.Remove = function (index) {
                 this.Children.splice(index, 1);
+            };
+            CompositeValidationResult.prototype.Clear = function () {
+                this.Children.splice(0, this.Children.length);
             };
 
             Object.defineProperty(CompositeValidationResult.prototype, "HasErrorsDirty", {
@@ -471,6 +478,11 @@ define(["require", "exports", 'underscore', 'q'], function(require, exports, _, 
                     }, this);
                 }
             };
+
+            AbstractValidationRule.prototype.getHashCode = function () {
+                return AbstractValidationRule.id++;
+            };
+            AbstractValidationRule.id = 0;
             return AbstractValidationRule;
         })();
 
@@ -480,11 +492,12 @@ define(["require", "exports", 'underscore', 'q'], function(require, exports, _, 
                 _super.call(this, Name, validator, true);
                 this.Name = Name;
                 this.validator = validator;
+                this.RowsMap = new HashMap();
             }
             AbstractListValidationRule.prototype.Validate = function (context) {
-                this.NotifyListChanged(context);
+                this.RefreshRows(context);
                 for (var i = 0; i != context.length; i++) {
-                    var validationRule = this.getValidationRule(i);
+                    var validationRule = this.RowsMap.get(context[i]);
                     if (validationRule !== undefined)
                         validationRule.Validate(context[i]);
                 }
@@ -497,9 +510,9 @@ define(["require", "exports", 'underscore', 'q'], function(require, exports, _, 
 
                 var promises = [];
 
-                this.NotifyListChanged(context);
+                this.RefreshRows(context);
                 for (var i = 0; i != context.length; i++) {
-                    var validationRule = this.getValidationRule(i);
+                    var validationRule = this.RowsMap.get(context[i]);
                     if (validationRule !== undefined)
                         promises.push(validationRule.ValidateAsync(context[i]));
                 }
@@ -511,24 +524,53 @@ define(["require", "exports", 'underscore', 'q'], function(require, exports, _, 
                 return deferred.promise;
             };
 
-            AbstractListValidationRule.prototype.getValidationRule = function (i) {
-                var keyName = this.getIndexedKey(i);
-                return this.Children[keyName];
+            AbstractListValidationRule.prototype.Rows = function () {
+                return this.RowsMap.values();
             };
-            AbstractListValidationRule.prototype.getIndexedKey = function (i) {
-                return this.Name + i.toString();
+            AbstractListValidationRule.prototype.RefreshRows = function (list) {
+                this.refreshList(list);
             };
+            AbstractListValidationRule.prototype.ClearRows = function (list) {
+                var keysToRemove = _.difference(list, this.RowsMap.keys());
+                _.each(keysToRemove, function (key) {
+                    if (this.has(key))
+                        this.remove(key);
+                }, this.RowsMap);
+            };
+            AbstractListValidationRule.prototype.ClearValidationResult = function (list) {
+                this.ClearRows(list);
 
-            AbstractListValidationRule.prototype.NotifyListChanged = function (list) {
-                for (var i = 0; i != list.length; i++) {
-                    var validationRule = this.getValidationRule(i);
-                    if (validationRule === undefined) {
-                        var keyName = this.getIndexedKey(i);
-                        validationRule = this.validator.CreateAbstractRule(keyName);
-                        this.Children[keyName] = validationRule;
-                        this.ValidationResult.Add(validationRule.ValidationResult);
+                var results = _.map(this.RowsMap.values(), function (item) {
+                    return item.ValidationResult;
+                });
+                for (var i = 0; i != this.ValidationResult.Children.length; i++) {
+                    var item = this.ValidationResult.Children[i];
+                    if (item === undefined)
+                        continue;
+                    if (results.indexOf(item) === -1) {
+                        this.ValidationResult.Remove(i);
                     }
                 }
+            };
+            AbstractListValidationRule.prototype.getValidationRule = function (key, name) {
+                if (name === undefined)
+                    name = "Row";
+                var validationRule;
+                if (!this.RowsMap.has(key)) {
+                    validationRule = this.validator.CreateAbstractRule(name);
+                    this.ValidationResult.Add(validationRule.ValidationResult);
+                    this.RowsMap.set(key, validationRule);
+                } else {
+                    validationRule = this.RowsMap.get(key);
+                }
+
+                return validationRule;
+            };
+            AbstractListValidationRule.prototype.refreshList = function (list) {
+                this.ClearValidationResult(list);
+                _.each(list, function (item) {
+                    var rule = this.getValidationRule(item);
+                }, this);
             };
             return AbstractListValidationRule;
         })(AbstractValidationRule);

@@ -531,7 +531,7 @@ define(["require", "exports", 'underscore', 'q'], function(require, exports, _, 
                 this.refreshList(list);
             };
             AbstractListValidationRule.prototype.ClearRows = function (list) {
-                var keysToRemove = _.difference(list, this.RowsMap.keys());
+                var keysToRemove = _.difference(this.RowsMap.keys(), list);
                 _.each(keysToRemove, function (key) {
                     if (this.has(key))
                         this.remove(key);

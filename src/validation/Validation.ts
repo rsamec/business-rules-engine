@@ -938,7 +938,7 @@ module Validation {
             this.refreshList(list);
         }
         private ClearRows(list:Array<any>){
-            var keysToRemove = _.difference(list,this.RowsMap.keys());
+            var keysToRemove = _.difference(this.RowsMap.keys(),list);
             _.each(keysToRemove,function(key){
                 if (this.has(key)) this.remove(key);
             },this.RowsMap);

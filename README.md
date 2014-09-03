@@ -5,6 +5,7 @@
 Business rules engine is a lightweight JavaScript library for easy business rules definition of the product, the contract, the form etc.
 
 + [Business rules engine - Tutorial] (https://github.com/rsamec/business-rules-engine/wiki)
++ [Business rules engine - sources] (https://github.com/rsamec/business-rules-engine)
 + [Business rules engine - API] (http://rsamec.github.io/business-rules-engine/docs/globals.html)
 + [Business rules repository - sources] (https://github.com/rsamec/business-rules)
 + [Business rules repository - API] (http://rsamec.github.io/business-rules/docs/globals.html)
@@ -13,6 +14,7 @@ Business rules engine is a lightweight JavaScript library for easy business rule
 + [AngularJS Demo - Forms app] (http://nodejs-formvalidation.rhcloud.com/)
    + [Vacation Request form] (http://nodejs-formvalidation.rhcloud.com/#/vacationApproval/new)
    + [Hobbies form] (http://nodejs-formvalidation.rhcloud.com/#/hobbies/new)
++ [Blog] (http://rsamec.github.io/)
 
 ## Key features
 The main benefit is that business rules engine is not tight to HTML DOM or any other UI framework.

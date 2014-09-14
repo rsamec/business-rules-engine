@@ -267,8 +267,9 @@ module Validation {
          * Register child validator for property - composition of validators
          * @param prop name
          * @param validator child validator
+         * @param forList true if is array structure, otherwise false
          */
-        ValidatorFor<K>(prop:string,validator:IAbstractValidator<K>);
+        ValidatorFor<K>(prop:string,validator:IAbstractValidator<K>,forList?:boolean);
 
         //Validators:{ [name: string]: Array<IPropertyValidator> ; };
 

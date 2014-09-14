@@ -1,6 +1,13 @@
 ///<reference path='../../typings/node/node.d.ts'/>
+///<reference path='../../typings/underscore/underscore.d.ts'/>
+
+import _ = require('underscore');
 
 module Utils {
+
+    /*
+    It represents utility for string manipulation.
+     */
     export class StringFce {
         static format(s:string, args:any):string {
             var formatted = s;
@@ -12,6 +19,9 @@ module Utils {
         }
     }
 
+    /*
+    It represents utility for number manipulation.
+     */
     export class NumberFce {
         static GetNegDigits(value:string):number {
             if (value === undefined) return 0;

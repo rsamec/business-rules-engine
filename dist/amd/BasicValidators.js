@@ -198,6 +198,21 @@ define(["require", "exports", "q", "underscore"], function(require, exports, Q, 
             return MinValidator;
         })();
         Validators.MinValidator = MinValidator;
+        var MinItemsValidator = (function () {
+            function MinItemsValidator(Min) {
+                this.Min = Min;
+                this.tagName = "minItems";
+                if (Min === undefined)
+                    this.Min = MinimalDefaultValue;
+            }
+            MinItemsValidator.prototype.isAcceptable = function (s) {
+                if (_.isArray(s))
+                    return s.length >= this.Min;
+                return false;
+            };
+            return MinItemsValidator;
+        })();
+        Validators.MinItemsValidator = MinItemsValidator;
         var MaxValidator = (function () {
             function MaxValidator(Max) {
                 this.Max = Max;
@@ -213,6 +228,21 @@ define(["require", "exports", "q", "underscore"], function(require, exports, Q, 
             return MaxValidator;
         })();
         Validators.MaxValidator = MaxValidator;
+        var MaxItemsValidator = (function () {
+            function MaxItemsValidator(Max) {
+                this.Max = Max;
+                this.tagName = "maxItems";
+                if (Max === undefined)
+                    this.Max = MaximalDefaultValue;
+            }
+            MaxItemsValidator.prototype.isAcceptable = function (s) {
+                if (_.isArray(s))
+                    return s.length <= this.Max;
+                return false;
+            };
+            return MaxItemsValidator;
+        })();
+        Validators.MaxItemsValidator = MaxItemsValidator;
 
         var RangeValidator = (function () {
             function RangeValidator(Range) {
@@ -245,6 +275,45 @@ define(["require", "exports", "q", "underscore"], function(require, exports, Q, 
             return RangeValidator;
         })();
         Validators.RangeValidator = RangeValidator;
+        var EnumValidator = (function () {
+            function EnumValidator(Enum) {
+                this.Enum = Enum;
+                this.tagName = "enum";
+                if (Enum === undefined)
+                    this.Enum = [];
+            }
+            EnumValidator.prototype.isAcceptable = function (s) {
+                return _.contains(this.Enum, s);
+            };
+            return EnumValidator;
+        })();
+        Validators.EnumValidator = EnumValidator;
+
+        var TypeValidator = (function () {
+            function TypeValidator(Type) {
+                this.Type = Type;
+                this.tagName = "enum";
+                if (this.Type === undefined)
+                    this.Type = "string";
+            }
+            TypeValidator.prototype.isAcceptable = function (s) {
+                if (this.Type === "string")
+                    return _.isString(s);
+                if (this.Type === "boolean")
+                    return _.isBoolean(s);
+                if (this.Type === "number")
+                    return _.isNumber(s);
+                if (this.Type === "integer")
+                    return /^\d+$/.test(s);
+                if (this.Type === "object")
+                    return _.isObject(s);
+                if (this.Type === "array")
+                    return _.isArray(s);
+                return false;
+            };
+            return TypeValidator;
+        })();
+        Validators.TypeValidator = TypeValidator;
         var StepDefaultValue = "1";
         var StepValidator = (function () {
             function StepValidator(Step) {

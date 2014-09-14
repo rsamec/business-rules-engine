@@ -157,6 +157,18 @@ module Validators {
 
         tagName = "min";
     }
+    export class MinItemsValidator implements Validation.IPropertyValidator {
+        constructor(public Min?:number) {
+            if (Min === undefined) this.Min = MinimalDefaultValue;
+        }
+
+        isAcceptable(s:any) {
+            if (_.isArray(s)) return s.length >=this.Min;
+            return false;
+        }
+
+        tagName = "minItems";
+    }
     export class MaxValidator implements Validation.IPropertyValidator {
         constructor(public Max?:number) {
             if (Max === undefined) this.Max = MaximalDefaultValue;
@@ -168,6 +180,18 @@ module Validators {
         }
 
         tagName = "max";
+    }
+    export class MaxItemsValidator implements Validation.IPropertyValidator {
+        constructor(public Max?:number) {
+            if (Max === undefined) this.Max = MaximalDefaultValue;
+        }
+
+        isAcceptable(s:any) {
+            if (_.isArray(s)) return s.length <=this.Max;
+            return false;
+        }
+
+        tagName = "maxItems";
     }
 
     export class RangeValidator implements Validation.IPropertyValidator {
@@ -189,6 +213,33 @@ module Validators {
         }
 
         tagName = "range";
+    }
+    export class EnumValidator implements Validation.IPropertyValidator {
+        constructor(public Enum?:Array<number>) {
+            if (Enum === undefined) this.Enum = [];
+        }
+
+        isAcceptable(s:any) {
+           return _.contains(this.Enum,s);
+        }
+        tagName = "enum";
+    }
+
+    export class TypeValidator implements Validation.IPropertyValidator {
+        constructor(public Type:string) {
+            if (this.Type === undefined) this.Type = "string";
+        }
+
+        isAcceptable(s:any) {
+            if (this.Type === "string") return _.isString(s);
+            if (this.Type === "boolean") return _.isBoolean(s);
+            if (this.Type === "number") return _.isNumber(s);
+            if (this.Type === "integer") return /^\d+$/.test(s);
+            if (this.Type === "object") return _.isObject(s);
+            if (this.Type === "array") return _.isArray(s);
+            return false;
+        }
+        tagName = "enum";
     }
     var StepDefaultValue = "1";
     export class StepValidator implements Validation.IPropertyValidator {

@@ -5,16 +5,17 @@
 
 import _ = require('underscore');
 import Q = require('q');
-var Validation = require('../validation/Validation.js');
-var Validators = require('../validation/BasicValidators.js');
 
 //var Validation = require("business-rules-engine");
 //var Validators = require('business-rules-engine/commonjs/BasicValidators');
 
+var Validation = require('../validation/Validation.js');
+var Validators = require('../validation/BasicValidators.js');
+
 module FormSchema {
 
-    /*
-     It represents utility for JSON schema form manipulation.
+    /**
+     * It represents utility for JSON schema form manipulation.
      */
     export class Util {
 
@@ -22,8 +23,9 @@ module FormSchema {
         static PROPERTIES_KEY = "properties";
         static DEFAULT_KEY = "default";
         static ARRAY_KEY = "items";
-        /*
-         Returns the initial JSON data structured according to JSON schema.
+
+        /**
+         * Returns the initial JSON data structured according to JSON schema.
          */
         static GetFormValues(formSchema:any, data:any) {
             var data = data || {};
@@ -77,8 +79,8 @@ module FormSchema {
         }
 
 
-        /*
-        Returns the abstract validation rules structured according to JSON schema.
+        /**
+         * Returns the abstract validation rules structured according to JSON schema.
          */
         static GetAbstractRule(formSchema:any,rule?:Validation.IAbstractValidator<any>){
 

@@ -63,6 +63,8 @@ var Validation;
 
     
 
+    
+
     var Error = (function () {
         function Error() {
             this.HasError = true;
@@ -301,6 +303,72 @@ var Validation;
     })();
     _Validation.CompositeValidationResult = CompositeValidationResult;
 
+    var MixedValidationResult = (function (_super) {
+        __extends(MixedValidationResult, _super);
+        function MixedValidationResult(Composite, PropRule) {
+            _super.call(this, Composite.Name);
+            this.Composite = Composite;
+            this.PropRule = PropRule;
+        }
+        Object.defineProperty(MixedValidationResult.prototype, "Children", {
+            get: function () {
+                return this.Composite.Children;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MixedValidationResult.prototype, "ValidationFailures", {
+            get: function () {
+                return this.PropRule.ValidationFailures;
+            },
+            enumerable: true,
+            configurable: true
+        });
+
+        Object.defineProperty(MixedValidationResult.prototype, "HasErrorsDirty", {
+            get: function () {
+                if (this.Composite.HasErrorsDirty)
+                    return true;
+                if (this.PropRule !== undefined && this.PropRule.HasErrorsDirty)
+                    return true;
+                return false;
+            },
+            enumerable: true,
+            configurable: true
+        });
+
+        Object.defineProperty(MixedValidationResult.prototype, "HasErrors", {
+            get: function () {
+                if (this.Composite.HasErrors)
+                    return true;
+                if (this.PropRule !== undefined && this.PropRule.HasErrors)
+                    return true;
+                return false;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MixedValidationResult.prototype, "ErrorCount", {
+            get: function () {
+                if (!this.Composite.HasErrors && this.PropRule !== undefined && !this.PropRule.HasErrors)
+                    return 0;
+                return this.Composite.ErrorCount + (this.PropRule !== undefined ? this.PropRule.ErrorCount : 0);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MixedValidationResult.prototype, "ErrorMessage", {
+            get: function () {
+                if (!this.Composite.HasErrors && this.PropRule !== undefined && !this.PropRule.HasErrors)
+                    return "";
+                this.Composite.ErrorMessage + this.PropRule !== undefined ? this.PropRule.ErrorMessage : "";
+            },
+            enumerable: true,
+            configurable: true
+        });
+        return MixedValidationResult;
+    })(CompositeValidationResult);
+
     var AbstractValidator = (function () {
         function AbstractValidator() {
             this.Validators = {};
@@ -357,7 +425,7 @@ var Validation;
             this.Rules = {};
             this.Validators = {};
             this.Children = {};
-            this.ValidationResult = new CompositeValidationResult(this.Name);
+            this.ValidationResultVisitor = new ValidationResultVisitor(new CompositeValidationResult(this.Name));
             if (!this.ForList) {
                 _.each(this.validator.Validators, function (val, key) {
                     this.createRuleFor(key);
@@ -372,7 +440,7 @@ var Validation;
                         if (validator === undefined) {
                             validator = new Validator(validation.Name, validation.ValidationFce, validation.AsyncValidationFce);
                             this.Validators[validation.Name] = validator;
-                            this.ValidationResult.Add(validator);
+                            validator.AcceptVisitor(this.ValidationResultVisitor);
                         }
                     }, this);
                 }, this);
@@ -380,6 +448,18 @@ var Validation;
                 this.addChildren();
             }
         }
+        Object.defineProperty(AbstractValidationRule.prototype, "ValidationResult", {
+            get: function () {
+                return this.ValidationResultVisitor.ValidationResult;
+            },
+            enumerable: true,
+            configurable: true
+        });
+
+        AbstractValidationRule.prototype.AcceptVisitor = function (visitor) {
+            visitor.AddValidator(this);
+        };
+
         AbstractValidationRule.prototype.addChildren = function () {
             _.each(this.validator.AbstractValidators, function (val, key) {
                 var validationRule;
@@ -389,7 +469,7 @@ var Validation;
                     validationRule = val.CreateAbstractRule(key);
                 }
                 this.Children[key] = validationRule;
-                this.ValidationResult.Add(validationRule.ValidationResult);
+                validationRule.AcceptVisitor(this.ValidationResultVisitor);
             }, this);
         };
 
@@ -400,7 +480,7 @@ var Validation;
         AbstractValidationRule.prototype.createRuleFor = function (prop) {
             var propValidationRule = new PropertyValidationRule(prop);
             this.Rules[prop] = propValidationRule;
-            this.ValidationResult.Add(propValidationRule);
+            propValidationRule.AcceptVisitor(this.ValidationResultVisitor);
         };
 
         AbstractValidationRule.prototype.Validate = function (context) {
@@ -485,6 +565,30 @@ var Validation;
         };
         AbstractValidationRule.id = 0;
         return AbstractValidationRule;
+    })();
+
+    var ValidationResultVisitor = (function () {
+        function ValidationResultVisitor(ValidationResult) {
+            this.ValidationResult = ValidationResult;
+        }
+        ValidationResultVisitor.prototype.AddRule = function (rule) {
+            this.ValidationResult.Add(rule);
+        };
+
+        ValidationResultVisitor.prototype.AddValidator = function (rule) {
+            var error = _.find(this.ValidationResult.Children, function (item) {
+                return item.Name === rule.ValidationResult.Name;
+            });
+            if (error !== undefined) {
+                this.ValidationResult.Add(new MixedValidationResult(rule.ValidationResult, error));
+            } else {
+                this.ValidationResult.Add(rule.ValidationResult);
+            }
+        };
+        ValidationResultVisitor.prototype.AddValidation = function (validator) {
+            this.ValidationResult.Add(validator);
+        };
+        return ValidationResultVisitor;
     })();
 
     var AbstractListValidationRule = (function (_super) {
@@ -662,6 +766,10 @@ var Validation;
                 this.AddValidator(validatorsToAdd[index]);
             }
         }
+        PropertyValidationRule.prototype.AcceptVisitor = function (visitor) {
+            visitor.AddRule(this);
+        };
+
         PropertyValidationRule.prototype.AddValidator = function (validator) {
             this.Validators[validator.tagName] = validator;
             this.ValidationFailures[validator.tagName] = new ValidationFailure(new Error(), !!validator.isAsync);
@@ -895,6 +1003,10 @@ var Validation;
             enumerable: true,
             configurable: true
         });
+
+        Validator.prototype.AcceptVisitor = function (visitor) {
+            visitor.AddValidation(this);
+        };
         return Validator;
     })(ValidationResult);
 })(Validation || (Validation = {}));

@@ -143,7 +143,7 @@ module.exports = function (grunt) {
               }
           },
           typings:{
-              src: ['src/validation/Validation.ts','src/validation/Utils.ts'],
+              src: ['src/validation/Validation.ts','src/validation/Utils.ts','src/validation/FormSchema.ts'],
               dest: 'typings/<%= pkg.name %>',
               options: {
                   basePath: 'src/validation',
@@ -255,7 +255,8 @@ module.exports = function (grunt) {
               },
               files: {
                   'typings/<%= pkg.name %>/BasicValidators.d.ts': ['typings/<%= pkg.name %>/BasicValidators.d.ts'],
-                  'typings/<%= pkg.name %>/Utils.d.ts': ['typings/<%= pkg.name %>/Utils.d.ts']
+                  'typings/<%= pkg.name %>/Utils.d.ts': ['typings/<%= pkg.name %>/Utils.d.ts'],
+                  'typings/<%= pkg.name %>/FormSchema.d.ts': ['typings/<%= pkg.name %>/FormSchema.d.ts']
 
               }
           }

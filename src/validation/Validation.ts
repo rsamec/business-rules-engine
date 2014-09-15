@@ -406,6 +406,28 @@ module Validation {
     }
 
     /**
+     * It enables to create your own visitors for definition of various validation results.
+     */
+    export interface IValidationResultVisitor{
+        /**
+         *  It creates (visits) validation result for validation rule for property.
+         * @param IPropertyValidationRule - property validation rule.
+         */
+        AddRule(IPropertyValidationRule);
+        /**
+         *  It creates (visits) validation result for child validation rule.
+         * @param IAbstractValidationRule - child validation rule
+         */
+        AddValidator(IAbstractValidationRule);
+        /**
+         *  It creates (visits) validation result for shared validation rule.
+         * @param IValidator - shared validation rule
+         */
+        AddValidation(IValidator);
+
+        ValidationResult:IValidationResult;
+    }
+    /**
      *
      * @ngdoc object
      * @name  Error
@@ -516,6 +538,7 @@ module Validation {
         }
 
         public Optional: IOptional;
+
 
         public AddFirst(error: IValidationResult) {
             this.Children.unshift(error);
@@ -631,6 +654,40 @@ module Validation {
     }
 
     /**
+     * It represents mixed validation rule for composite error object and property validation rule error.
+     */
+    class MixedValidationResult extends CompositeValidationResult implements IValidationResult {
+
+        constructor(private Composite:IValidationResult,private PropRule:PropertyValidationRule<any>) {
+            super(Composite.Name);
+
+
+        }
+
+        public get Children() {return this.Composite.Children;}
+        public get ValidationFailures(){return this.PropRule.ValidationFailures;}
+
+        public get HasErrorsDirty():boolean {
+            if (this.Composite.HasErrorsDirty) return true;
+            if (this.PropRule !== undefined && this.PropRule.HasErrorsDirty) return true;
+            return false;
+        }
+
+        get HasErrors(): boolean {
+            if (this.Composite.HasErrors) return true;
+            if (this.PropRule !== undefined && this.PropRule.HasErrors) return true;
+            return false;
+        }
+        public get ErrorCount(): number {
+            if (!this.Composite.HasErrors && this.PropRule !== undefined && !this.PropRule.HasErrors) return 0;
+            return this.Composite.ErrorCount + (this.PropRule !== undefined ? this.PropRule.ErrorCount:0);
+        }
+        public get ErrorMessage(): string {
+            if (!this.Composite.HasErrors && this.PropRule !== undefined && !this.PropRule.HasErrors) return "";
+            this.Composite.ErrorMessage + this.PropRule !== undefined ?this.PropRule.ErrorMessage:"";
+        }
+    }
+    /**
      *
      * @ngdoc object
      * @name  AbstractValidator
@@ -730,14 +787,18 @@ module Validation {
      * It represents concreate validator for custom object. It enables to assign validation rules to custom object properties.
      */
     class AbstractValidationRule<T> implements IAbstractValidationRule<T>{
-        public ValidationResult:IValidationResult;
+        public get ValidationResult():IValidationResult {return this.ValidationResultVisitor.ValidationResult;}
         public Rules:{ [name: string]: IPropertyValidationRule<T> ; } = {};
         public Validators: { [name: string]: IValidator ; } = {};
         public Children:{ [name: string]: IAbstractValidationRule<any> ; } = {};
 
+        public ValidationResultVisitor:IValidationResultVisitor;
+        public AcceptVisitor(visitor:IValidationResultVisitor){
+            visitor.AddValidator(this);
+        }
 
         constructor(public Name:string,public validator:AbstractValidator<T>,public ForList?:boolean){
-            this.ValidationResult = new CompositeValidationResult(this.Name);
+            this.ValidationResultVisitor = new ValidationResultVisitor(new CompositeValidationResult(this.Name));
             if (!this.ForList) {
                 _.each(this.validator.Validators, function (val, key) {
                     this.createRuleFor(key);
@@ -752,7 +813,8 @@ module Validation {
                         if (validator === undefined) {
                             validator = new Validator(validation.Name, validation.ValidationFce, validation.AsyncValidationFce);
                             this.Validators[validation.Name] = validator;
-                            this.ValidationResult.Add(validator);
+                            validator.AcceptVisitor(this.ValidationResultVisitor);
+                            //this.ValidationResult.Add(validator);
                         }
                     }, this)
                 }, this);
@@ -764,14 +826,15 @@ module Validation {
         public addChildren(){
             _.each(this.validator.AbstractValidators, function(val, key){
                 var validationRule;
-                if (val.ForList){
+                if (val.ForList) {
                     validationRule = val.CreateAbstractListRule(key);
                 }
                 else {
                     validationRule = val.CreateAbstractRule(key);
                 }
                 this.Children[key] = validationRule;
-                this.ValidationResult.Add(validationRule.ValidationResult);
+                validationRule.AcceptVisitor(this.ValidationResultVisitor);
+                //this.ValidationResult.Add(validationRule.ValidationResult);
             },this);
 
         }
@@ -787,7 +850,8 @@ module Validation {
         private createRuleFor(prop:string){
             var propValidationRule = new PropertyValidationRule(prop);
             this.Rules[prop] = propValidationRule;
-            this.ValidationResult.Add(propValidationRule);
+            propValidationRule.AcceptVisitor(this.ValidationResultVisitor);
+            //this.ValidationResult.Add(propValidationRule);
 
         }
 
@@ -875,6 +939,36 @@ module Validation {
 
     }
 
+    /**
+     *  It represents visitor class that enables to separate validation result creation from validation execution.
+     *  You can create your own Visitors for composing ValidationResults on your own.
+     */
+    class ValidationResultVisitor implements IValidationResultVisitor{
+
+        constructor(public ValidationResult:IValidationResult){
+
+        }
+
+        public AddRule(rule:PropertyValidationRule<any>){
+            this.ValidationResult.Add(rule);
+        }
+
+        public AddValidator(rule:IAbstractValidationRule<any>){
+            // mixed composite validation result with property validation error
+            //TODO: find better and more generic way how to solve mixed validation results with the same name
+            var error:any =  _.find(this.ValidationResult.Children, function(item:IValidationResult) {return item.Name === rule.ValidationResult.Name});
+            if (error !== undefined){
+                //compose composite validation result with property validation result
+                this.ValidationResult.Add(new MixedValidationResult(rule.ValidationResult,error));
+            }
+            else {
+                this.ValidationResult.Add(rule.ValidationResult);
+            }
+        }
+        public AddValidation(validator:Validator){
+            this.ValidationResult.Add(validator);
+        }
+    }
 
     /**
      *
@@ -1065,6 +1159,10 @@ module Validation {
         public Validators:{[name:string]: any} = {};
         public ValidationFailures:{[name:string]: IValidationFailure} = {};
         //public AsyncValidationFailures:{[name:string]: IAsyncValidationFailure} = {};
+
+        public AcceptVisitor(visitor:IValidationResultVisitor){
+            visitor.AddRule(this);
+        }
 
         constructor(public Name:string, validatorsToAdd?:Array<IPropertyValidator>) {
             super(Name);
@@ -1283,6 +1381,10 @@ module Validation {
             var newArray = [];
             newArray.push(this.Error.TranslateArgs);
             return newArray;
+        }
+
+        public AcceptVisitor(visitor:IValidationResultVisitor){
+            visitor.AddValidation(this);
         }
     }
 }

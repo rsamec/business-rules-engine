@@ -1,4 +1,3 @@
-
 ///<reference path='../../typings/mocha/mocha.d.ts'/>
 ///<reference path='../../typings/node/node.d.ts'/>
 ///<reference path='../../typings/underscore/underscore.d.ts'/>
@@ -6,7 +5,7 @@
 
 var Validation = require('../../src/validation/Validation.js');
 var Validators = require('../../src/validation/BasicValidators.js');
-var FormSchema = require('../../src/formSchema/FormSchema.js');
+var FormSchema = require('../../src/validation/FormSchema.js');
 var expect = require('expect.js');
 var _:UnderscoreStatic = require('underscore');
 import Q = require('q');

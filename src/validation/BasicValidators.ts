@@ -58,12 +58,63 @@ module Validators {
         tagName = "url";
     }
 
+    // http://jqueryvalidation.org/creditcard-method/
+    // based on http://en.wikipedia.org/wiki/Luhn/
+    export class CreditCardValidator implements Validation.IStringValidator {
+        isAcceptable(value:string) {
+
+
+            // accept only spaces, digits and dashes
+            if (/[^0-9 \-]+/.test(value)) {
+                return false;
+            }
+            var nCheck = 0,
+                nDigit = 0,
+                bEven = false,
+                n, cDigit;
+
+            value = value.replace(/\D/g, "");
+
+            // Basing min and max length on
+            // http://developer.ean.com/general_info/Valid_Credit_Card_Types
+            if (value.length < 13 || value.length > 19) {
+                return false;
+            }
+
+            for (n = value.length - 1; n >= 0; n--) {
+                cDigit = value.charAt(n);
+                nDigit = parseInt(cDigit, 10);
+                if (bEven) {
+                    if (( nDigit *= 2 ) > 9) {
+                        nDigit -= 9;
+                    }
+                }
+                nCheck += nDigit;
+                bEven = !bEven;
+            }
+
+            return ( nCheck % 10 ) === 0;
+        }
+
+        tagName = "creditcard";
+    }
+
     export class RequiredValidator implements Validation.IStringValidator {
         isAcceptable(s:string) {
             return s !== undefined && s !== "";
         }
 
         tagName = "required";
+    }
+    export class EqualToValidator implements Validation.IPropertyValidator {
+        constructor(public Value?:any) {
+
+        }
+        isAcceptable(s:any) {
+            return s === this.Value;
+        }
+
+        tagName = "equalTo";
     }
     export class DateValidator implements Validation.IStringValidator {
         isAcceptable(s:string) {
@@ -146,13 +197,13 @@ module Validators {
         tagName = "rangelength";
     }
     export class MinValidator implements Validation.IPropertyValidator {
-        constructor(public Min?:number) {
+        constructor(public Min?:number,public Exclusive?:boolean) {
             if (Min === undefined) this.Min = MinimalDefaultValue;
         }
 
         isAcceptable(s:any) {
             if (!_.isNumber(s)) s = parseFloat(s);
-            return s >= this.Min;
+            return this.Exclusive?( s> this.Min):( s >= this.Min);
         }
 
         tagName = "min";
@@ -170,13 +221,14 @@ module Validators {
         tagName = "minItems";
     }
     export class MaxValidator implements Validation.IPropertyValidator {
-        constructor(public Max?:number) {
+        constructor(public Max?:number, public Exclusive?:boolean) {
             if (Max === undefined) this.Max = MaximalDefaultValue;
         }
 
         isAcceptable(s:any) {
             if (!_.isNumber(s)) s = parseFloat(s);
-            return s <= this.Max;
+
+            return this.Exclusive? (s<this.Max): (s<=this.Max);
         }
 
         tagName = "max";
@@ -192,6 +244,15 @@ module Validators {
         }
 
         tagName = "maxItems";
+    }
+    export class UniqItemsValidator implements Validation.IPropertyValidator {
+
+        isAcceptable(s:any) {
+            if (_.isArray(s)) return _.uniq(s).length === s.length;
+            return false;
+        }
+
+        tagName = "uniqItems";
     }
 
     export class RangeValidator implements Validation.IPropertyValidator {
@@ -239,7 +300,7 @@ module Validators {
             if (this.Type === "array") return _.isArray(s);
             return false;
         }
-        tagName = "enum";
+        tagName = "type";
     }
     var StepDefaultValue = "1";
     export class StepValidator implements Validation.IPropertyValidator {
@@ -255,6 +316,20 @@ module Validators {
         }
 
         tagName = "step";
+    }
+
+    var MultipleOfDefaultValue = 1;
+    export class MultipleOfValidator implements Validation.IPropertyValidator {
+        constructor(public Divider?:number) {
+            if (Divider === undefined) this.Divider = MultipleOfDefaultValue;
+        }
+
+        isAcceptable(s:any) {
+            if (!_.isNumber(s)) return false;
+            return (s % this.Divider) % 1 === 0;
+        }
+
+        tagName = "multipleOf";
     }
     var PatternDefaultValue = "*";
     export class PatternValidator implements Validation.IStringValidator {

@@ -63,7 +63,7 @@ describe('JSON Form Schema', function () {
 
     //
     var getItemDataTemplate = function () {
-        var item = FormSchema.Util.GetFormValues(formSchema.Contacts.items.properties);
+        var item = FormSchema.Util.ParseValues(formSchema.Contacts.items.properties);
 
         item.Email = 'mail@gmail.com';
         item.Mobile.CountryCode = 'CZE';
@@ -77,34 +77,34 @@ describe('JSON Form Schema', function () {
     beforeEach(function () {
 
         this.FormSchema = formSchema;
-        this.Data = FormSchema.Util.GetFormValues(this.FormSchema);
+        this.Data = FormSchema.Util.ParseValues(this.FormSchema);
 
         this.Data.FirstName = "John";
         this.Data.LastName = "Smith";
 
-        this.MainValidator = FormSchema.Util.GetAbstractRule(this.FormSchema).CreateRule("Main");
+        this.MainValidator = new FormSchema.JsonSchemaAbstractValidationRuleFactory(this.FormSchema).CreateRule("Main");
 
 
     });
 
-    it('form values - parsing', function () {
-
-        var personData = FormSchema.Util.GetFormValues(this.FormSchema);
-        console.log(JSON.stringify(personData));
-
-        var contactRow = FormSchema.Util.GetFormValues(this.FormSchema.Contacts.items.properties);
-        console.log(JSON.stringify(contactRow));
-    });
-
-    it('form rules', function () {
-
-        var personData = FormSchema.Util.GetAbstractRule(this.FormSchema);
-        console.log(JSON.stringify(personData));
-
-
-//        var contactRow = FormSchema.Util.GetFormValues(this.FormSchema.Person.properties.Contacts.items.properties);
+//    it('form values - parsing', function () {
+//
+//        var personData = FormSchema.Util.GetFormValues(this.FormSchema);
+//        console.log(JSON.stringify(personData));
+//
+//        var contactRow = FormSchema.Util.GetFormValues(this.FormSchema.Contacts.items.properties);
 //        console.log(JSON.stringify(contactRow));
-    });
+//    });
+//
+//    it('form rules', function () {
+//
+//        var personData = FormSchema.Util.GetAbstractRule(this.FormSchema);
+//        console.log(JSON.stringify(personData));
+//
+//
+////        var contactRow = FormSchema.Util.GetFormValues(this.FormSchema.Person.properties.Contacts.items.properties);
+////        console.log(JSON.stringify(contactRow));
+//    });
 
     it('fill undefined - some errors', function () {
 

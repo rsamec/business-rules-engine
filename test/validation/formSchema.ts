@@ -63,7 +63,7 @@ describe('JSON Form Schema', function () {
 
     //
     var getItemDataTemplate = function () {
-        var item = FormSchema.Util.ParseValues(formSchema.Contacts.items.properties);
+        var item = FormSchema.Util.InitValues(formSchema.Contacts.items.properties);
 
         item.Email = 'mail@gmail.com';
         item.Mobile.CountryCode = 'CZE';
@@ -77,7 +77,7 @@ describe('JSON Form Schema', function () {
     beforeEach(function () {
 
         this.FormSchema = formSchema;
-        this.Data = FormSchema.Util.ParseValues(this.FormSchema);
+        this.Data = FormSchema.Util.InitValues(this.FormSchema);
 
         this.Data.FirstName = "John";
         this.Data.LastName = "Smith";

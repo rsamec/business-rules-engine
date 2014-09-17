@@ -64,6 +64,40 @@ define(["require", "exports", "q", "underscore"], function(require, exports, Q, 
         })();
         Validators.UrlValidator = UrlValidator;
 
+        var CreditCardValidator = (function () {
+            function CreditCardValidator() {
+                this.tagName = "creditcard";
+            }
+            CreditCardValidator.prototype.isAcceptable = function (value) {
+                if (/[^0-9 \-]+/.test(value)) {
+                    return false;
+                }
+                var nCheck = 0, nDigit = 0, bEven = false, n, cDigit;
+
+                value = value.replace(/\D/g, "");
+
+                if (value.length < 13 || value.length > 19) {
+                    return false;
+                }
+
+                for (n = value.length - 1; n >= 0; n--) {
+                    cDigit = value.charAt(n);
+                    nDigit = parseInt(cDigit, 10);
+                    if (bEven) {
+                        if ((nDigit *= 2) > 9) {
+                            nDigit -= 9;
+                        }
+                    }
+                    nCheck += nDigit;
+                    bEven = !bEven;
+                }
+
+                return (nCheck % 10) === 0;
+            };
+            return CreditCardValidator;
+        })();
+        Validators.CreditCardValidator = CreditCardValidator;
+
         var RequiredValidator = (function () {
             function RequiredValidator() {
                 this.tagName = "required";
@@ -74,6 +108,17 @@ define(["require", "exports", "q", "underscore"], function(require, exports, Q, 
             return RequiredValidator;
         })();
         Validators.RequiredValidator = RequiredValidator;
+        var EqualToValidator = (function () {
+            function EqualToValidator(Value) {
+                this.Value = Value;
+                this.tagName = "equalTo";
+            }
+            EqualToValidator.prototype.isAcceptable = function (s) {
+                return s === this.Value;
+            };
+            return EqualToValidator;
+        })();
+        Validators.EqualToValidator = EqualToValidator;
         var DateValidator = (function () {
             function DateValidator() {
                 this.tagName = "date";
@@ -184,8 +229,9 @@ define(["require", "exports", "q", "underscore"], function(require, exports, Q, 
         })();
         Validators.RangeLengthValidator = RangeLengthValidator;
         var MinValidator = (function () {
-            function MinValidator(Min) {
+            function MinValidator(Min, Exclusive) {
                 this.Min = Min;
+                this.Exclusive = Exclusive;
                 this.tagName = "min";
                 if (Min === undefined)
                     this.Min = MinimalDefaultValue;
@@ -193,7 +239,7 @@ define(["require", "exports", "q", "underscore"], function(require, exports, Q, 
             MinValidator.prototype.isAcceptable = function (s) {
                 if (!_.isNumber(s))
                     s = parseFloat(s);
-                return s >= this.Min;
+                return this.Exclusive ? (s > this.Min) : (s >= this.Min);
             };
             return MinValidator;
         })();
@@ -214,8 +260,9 @@ define(["require", "exports", "q", "underscore"], function(require, exports, Q, 
         })();
         Validators.MinItemsValidator = MinItemsValidator;
         var MaxValidator = (function () {
-            function MaxValidator(Max) {
+            function MaxValidator(Max, Exclusive) {
                 this.Max = Max;
+                this.Exclusive = Exclusive;
                 this.tagName = "max";
                 if (Max === undefined)
                     this.Max = MaximalDefaultValue;
@@ -223,7 +270,8 @@ define(["require", "exports", "q", "underscore"], function(require, exports, Q, 
             MaxValidator.prototype.isAcceptable = function (s) {
                 if (!_.isNumber(s))
                     s = parseFloat(s);
-                return s <= this.Max;
+
+                return this.Exclusive ? (s < this.Max) : (s <= this.Max);
             };
             return MaxValidator;
         })();
@@ -243,6 +291,18 @@ define(["require", "exports", "q", "underscore"], function(require, exports, Q, 
             return MaxItemsValidator;
         })();
         Validators.MaxItemsValidator = MaxItemsValidator;
+        var UniqItemsValidator = (function () {
+            function UniqItemsValidator() {
+                this.tagName = "uniqItems";
+            }
+            UniqItemsValidator.prototype.isAcceptable = function (s) {
+                if (_.isArray(s))
+                    return _.uniq(s).length === s.length;
+                return false;
+            };
+            return UniqItemsValidator;
+        })();
+        Validators.UniqItemsValidator = UniqItemsValidator;
 
         var RangeValidator = (function () {
             function RangeValidator(Range) {
@@ -292,7 +352,7 @@ define(["require", "exports", "q", "underscore"], function(require, exports, Q, 
         var TypeValidator = (function () {
             function TypeValidator(Type) {
                 this.Type = Type;
-                this.tagName = "enum";
+                this.tagName = "type";
                 if (this.Type === undefined)
                     this.Type = "string";
             }
@@ -330,6 +390,23 @@ define(["require", "exports", "q", "underscore"], function(require, exports, Q, 
             return StepValidator;
         })();
         Validators.StepValidator = StepValidator;
+
+        var MultipleOfDefaultValue = 1;
+        var MultipleOfValidator = (function () {
+            function MultipleOfValidator(Divider) {
+                this.Divider = Divider;
+                this.tagName = "multipleOf";
+                if (Divider === undefined)
+                    this.Divider = MultipleOfDefaultValue;
+            }
+            MultipleOfValidator.prototype.isAcceptable = function (s) {
+                if (!_.isNumber(s))
+                    return false;
+                return (s % this.Divider) % 1 === 0;
+            };
+            return MultipleOfValidator;
+        })();
+        Validators.MultipleOfValidator = MultipleOfValidator;
         var PatternDefaultValue = "*";
         var PatternValidator = (function () {
             function PatternValidator(Pattern) {
@@ -369,6 +446,23 @@ define(["require", "exports", "q", "underscore"], function(require, exports, Q, 
             return ContainsValidator;
         })();
         Validators.ContainsValidator = ContainsValidator;
+
+        var RemoteValidator = (function () {
+            function RemoteValidator(Options) {
+                this.Options = Options;
+                this.isAsync = true;
+                this.tagName = "remote";
+                if (Options === undefined)
+                    this.Options = Q.when([]);
+            }
+            RemoteValidator.prototype.isAcceptable = function (s) {
+                var deferred = Q.defer();
+
+                return deferred.promise;
+            };
+            return RemoteValidator;
+        })();
+        Validators.RemoteValidator = RemoteValidator;
     })(Validators || (Validators = {}));
     
     return Validators;

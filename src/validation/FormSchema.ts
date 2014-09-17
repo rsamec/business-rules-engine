@@ -302,7 +302,7 @@ module FormSchema {
          * Returns the initial JSON data structured according to JSON schema.
          * The data are initilizied with default values.
          */
-        static ParseValues(formSchema:any, data?:any) {
+        static InitValues(formSchema:any, data?:any) {
             var data = data || {};
 
             for (var key in formSchema) {
@@ -310,7 +310,7 @@ module FormSchema {
                 var type = item[Util.TYPE_KEY];
                 if (type === "object") {
                     data[key] = {};
-                    Util.ParseValues(item[Util.PROPERTIES_KEY], data[key]);
+                    Util.InitValues(item[Util.PROPERTIES_KEY], data[key]);
                 }
                 else if (type === "array") {
                     data[key] = [];

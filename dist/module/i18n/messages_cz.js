@@ -30,7 +30,13 @@ var Localization = (function () {
                     NotEqual: "Prosím, zadejte datum různé od {CompareTo}.",
                     GreaterThanEqual: "Prosím, zadejte datum větší nebo rovné {CompareTo}.",
                     GreaterThan: "Prosím, zadejte datum větší než {CompareTo}."
-                }
+                },
+                minItems: "Prosím zadejte alespoň {Min} položek.",
+                maxItems: "Prosím zadejte maximálně {Max} položek.",
+                uniqItems: "Prosím zadejte pouze unikátní hodnoty.",
+                enum: "Prosím zadajte povolenou hodnotu.",
+                type: "Prosím zadejte hodnotu typu '{Type}'.",
+                multipleOf: "Prosím zadejte hodnotu dělitelnou číslem '{Divider}'."
             };
         },
         enumerable: true,

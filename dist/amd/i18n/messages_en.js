@@ -33,7 +33,13 @@ define(["require", "exports"], function(require, exports) {
                         NotEqual: "Please enter date different than {CompareTo}.",
                         GreaterThanEqual: "Please enter date greater than or equal {CompareTo}.",
                         GreaterThan: "Please enter date greter than {CompareTo}."
-                    }
+                    },
+                    minItems: "Please enter at least {Min} items.",
+                    maxItems: "Please enter at least {Max} items.",
+                    uniqItems: "Please enter unique items.",
+                    enum: "Please enter a value from list of permitted values.",
+                    type: "Please enter a value of type '{Type}'.",
+                    multipleOf: "Please enter a value that is multiple of {Divider}."
                 };
             },
             enumerable: true,

@@ -25,7 +25,13 @@ var Localization = (function () {
                     NotEqual: "Geben Sie bitte ein datum anderes von {CompareTo}.",
                     GreaterThanEqual: "Geben Sie bitte ein datum größer oder gleich {CompareTo}.",
                     GreaterThan: "Geben Sie bitte ein datum größer {CompareTo}."
-                }
+                },
+                minItems: "Geben Sie bitte minimal {Min} Einträge.",
+                maxItems: "Geben Sie bitte maximal {Max} Einträge.",
+                uniqItems: "Geben Sie bitte maximal unique Einträge.",
+                enum: "Geben Sie bitte einen Wert.",
+                type: "Geben Sie bitte einen Wert von '{Type}'.",
+                multipleOf: "Geben Sie bitte einen Wert als multiple of {Divider}."
             };
         },
         enumerable: true,

@@ -366,6 +366,43 @@ module Validators {
         isAsync = true;
         tagName = "contains";
     }
+
+    /**
+     *
+     url: 'validateEmail.php',
+     type: "post",
+     data:
+     {
+         email: function()
+         {
+             return $('#register-form :input[name="email"]').val();
+         }
+     }
+     */
+    export class RemoteValidator implements Validation.IAsyncPropertyValidator {
+
+        constructor(public Options:any) {
+            if (Options === undefined) this.Options = Q.when([]);
+        }
+        static RemoteService:Q.Promise<boolean>;
+
+        isAcceptable(s:string):Q.Promise<boolean> {
+            var deferred:Q.Deferred<boolean> = Q.defer<boolean>();
+
+//            .RemoteService.Options.then(function (result) {
+//                var hasSome = _.some(result, function (item) {
+//                    return item === s;
+//                });
+//                if (hasSome) deferred.resolve(true);
+//                deferred.resolve(false);
+//            });
+
+            return deferred.promise;
+        }
+
+        isAsync = true;
+        tagName = "remote";
+    }
 }
 export = Validators;
 

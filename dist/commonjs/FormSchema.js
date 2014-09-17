@@ -1,3 +1,9 @@
+var __extends = this.__extends || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
 var _ = require('underscore');
 
 var Validation = require("business-rules-engine");
@@ -5,10 +11,207 @@ var Validators = require('business-rules-engine/commonjs/BasicValidators');
 
 var FormSchema;
 (function (FormSchema) {
+    var JsonSchemaAbstractValidationRuleFactory = (function () {
+        function JsonSchemaAbstractValidationRuleFactory(jsonSchema) {
+            this.jsonSchema = jsonSchema;
+        }
+        JsonSchemaAbstractValidationRuleFactory.prototype.CreateRule = function (name) {
+            return this.ParseAbstractRule(this.jsonSchema).CreateRule(name);
+        };
+
+        JsonSchemaAbstractValidationRuleFactory.prototype.ParseAbstractRule = function (formSchema) {
+            var rule = new Validation.AbstractValidator();
+
+            for (var key in formSchema) {
+                var item = formSchema[key];
+                var type = item[Util.TYPE_KEY];
+                if (type === "object") {
+                    rule.ValidatorFor(key, this.ParseAbstractRule(item[Util.PROPERTIES_KEY]));
+                } else if (type === "array") {
+                    _.each(this.ParseValidationAttribute(item), function (validator) {
+                        rule.RuleFor(key, validator);
+                    });
+                    rule.ValidatorFor(key, this.ParseAbstractRule(item[Util.ARRAY_KEY][Util.PROPERTIES_KEY]), true);
+                } else {
+                    _.each(this.ParseValidationAttribute(item), function (validator) {
+                        rule.RuleFor(key, validator);
+                    });
+                }
+            }
+            return rule;
+        };
+
+        JsonSchemaAbstractValidationRuleFactory.prototype.ParseValidationAttribute = function (item) {
+            var validators = new Array();
+            if (item === undefined)
+                return validators;
+
+            validation = item["multipleOf"];
+            if (validation !== undefined) {
+                validators.push(new Validators.MultipleOfValidator(validation));
+            }
+
+            validation = item["maximum"];
+            if (validation !== undefined) {
+                validators.push(new Validators.MaxValidator(validation, item["exclusiveMaximum"]));
+            }
+
+            validation = item["minimum"];
+            if (validation !== undefined) {
+                validators.push(new Validators.MinValidator(validation, item["exclusiveMinimum"]));
+            }
+
+            validation = item["maxLength"];
+            if (validation !== undefined) {
+                validators.push(new Validators.MaxLengthValidator(validation));
+            }
+
+            validation = item["minLength"];
+            if (validation !== undefined) {
+                validators.push(new Validators.MinLengthValidator(validation));
+            }
+
+            validation = item["pattern"];
+            if (validation !== undefined) {
+                validators.push(new Validators.PatternValidator(validation));
+            }
+
+            validation = item["minItems"];
+            if (validation !== undefined) {
+                validators.push(new Validators.MinItemsValidator(validation));
+            }
+
+            validation = item["maxItems"];
+            if (validation !== undefined) {
+                validators.push(new Validators.MaxItemsValidator(validation));
+            }
+
+            validation = item["uniqueItems"];
+            if (validation !== undefined) {
+                validators.push(new Validators.UniqItemsValidator(validation));
+            }
+
+            var validation = item["required"];
+            if (validation !== undefined && validation) {
+                validators.push(new Validators.RequiredValidator());
+            }
+
+            validation = item["enum"];
+            if (validation !== undefined) {
+                validators.push(new Validators.EnumValidator(validation));
+            }
+
+            var validation = item["type"];
+            if (validation !== undefined) {
+                validators.push(new Validators.TypeValidator(validation));
+            }
+
+            return validators;
+        };
+        return JsonSchemaAbstractValidationRuleFactory;
+    })();
+    FormSchema.JsonSchemaAbstractValidationRuleFactory = JsonSchemaAbstractValidationRuleFactory;
+
+    var JQueryValidationAbstractValidationRuleFactory = (function (_super) {
+        __extends(JQueryValidationAbstractValidationRuleFactory, _super);
+        function JQueryValidationAbstractValidationRuleFactory() {
+            _super.apply(this, arguments);
+        }
+        JQueryValidationAbstractValidationRuleFactory.prototype.ParseValidationAttribute = function (itemEl) {
+            var validators = new Array();
+            if (itemEl === undefined)
+                return validators;
+
+            var item = itemEl.rules;
+
+            if (item === undefined)
+                return validators;
+
+            var validation = item["required"];
+            if (validation !== undefined && validation) {
+                validators.push(new Validators.RequiredValidator());
+            }
+
+            validation = item["maxlength"];
+            if (validation !== undefined) {
+                validators.push(new Validators.MaxLengthValidator(validation));
+            }
+
+            validation = item["minlength"];
+            if (validation !== undefined) {
+                validators.push(new Validators.MinLengthValidator(validation));
+            }
+
+            validation = item["rangelength"];
+            if (validation !== undefined) {
+                validators.push(new Validators.RangeLengthValidator(validation));
+            }
+
+            validation = item["max"];
+            if (validation !== undefined) {
+                validators.push(new Validators.MaxValidator(validation));
+            }
+
+            validation = item["min"];
+            if (validation !== undefined) {
+                validators.push(new Validators.MinValidator(validation));
+            }
+
+            validation = item["range"];
+            if (validation !== undefined) {
+                validators.push(new Validators.RangeValidator(validation));
+            }
+
+            validation = item["email"];
+            if (validation !== undefined) {
+                validators.push(new Validators.EmailValidator());
+            }
+
+            validation = item["url"];
+            if (validation !== undefined) {
+                validators.push(new Validators.UrlValidator());
+            }
+
+            validation = item["date"];
+            if (validation !== undefined) {
+                validators.push(new Validators.DateValidator());
+            }
+
+            validation = item["dateISO"];
+            if (validation !== undefined) {
+                validators.push(new Validators.DateISOValidator());
+            }
+
+            validation = item["number"];
+            if (validation !== undefined) {
+                validators.push(new Validators.NumberValidator());
+            }
+
+            validation = item["digits"];
+            if (validation !== undefined) {
+                validators.push(new Validators.DigitValidator());
+            }
+
+            validation = item["creditcard"];
+            if (validation !== undefined) {
+                validators.push(new Validators.CreditCardValidator());
+            }
+
+            validation = item["equalTo"];
+            if (validation !== undefined) {
+                validators.push(new Validators.EqualToValidator(validation));
+            }
+
+            return validators;
+        };
+        return JQueryValidationAbstractValidationRuleFactory;
+    })(JsonSchemaAbstractValidationRuleFactory);
+    FormSchema.JQueryValidationAbstractValidationRuleFactory = JQueryValidationAbstractValidationRuleFactory;
+
     var Util = (function () {
         function Util() {
         }
-        Util.GetFormValues = function (formSchema, data) {
+        Util.InitValues = function (formSchema, data) {
             var data = data || {};
 
             for (var key in formSchema) {
@@ -16,10 +219,9 @@ var FormSchema;
                 var type = item[Util.TYPE_KEY];
                 if (type === "object") {
                     data[key] = {};
-                    Util.GetFormValues(item[Util.PROPERTIES_KEY], data[key]);
+                    Util.InitValues(item[Util.PROPERTIES_KEY], data[key]);
                 } else if (type === "array") {
                     data[key] = [];
-                    continue;
                 } else {
                     var defaultValue = item[Util.DEFAULT_KEY];
                     if (defaultValue === undefined)
@@ -46,59 +248,9 @@ var FormSchema;
                     }
 
                     data[key] = defaultValue;
-                    continue;
                 }
             }
             return data;
-        };
-
-        Util.GetAbstractRule = function (formSchema, rule) {
-            rule = rule || new Validation.AbstractValidator();
-
-            for (var key in formSchema) {
-                var item = formSchema[key];
-                var type = item[Util.TYPE_KEY];
-                if (type === "object") {
-                    rule.ValidatorFor(key, Util.GetAbstractRule(item[Util.PROPERTIES_KEY]));
-                    continue;
-                } else if (type === "array") {
-                    var itemValidation = item["minItems"];
-                    if (itemValidation !== undefined) {
-                        rule.RuleFor(key, new Validators.MinItemsValidator(itemValidation));
-                    }
-
-                    itemValidation = item["maxItems"];
-                    if (itemValidation !== undefined) {
-                        rule.RuleFor(key, new Validators.MaxItemsValidator(itemValidation));
-                    }
-
-                    rule.ValidatorFor(key, Util.GetAbstractRule(item[Util.ARRAY_KEY][Util.PROPERTIES_KEY]), true);
-                    continue;
-                } else {
-                    var validation = item["required"];
-                    if (validation !== undefined && validation) {
-                        rule.RuleFor(key, new Validators.RequiredValidator());
-                    }
-
-                    validation = item["maxLength"];
-                    if (validation !== undefined) {
-                        rule.RuleFor(key, new Validators.MaxLengthValidator(validation));
-                    }
-
-                    validation = item["enum"];
-                    if (validation !== undefined) {
-                        rule.RuleFor(key, new Validators.EnumValidator(validation));
-                    }
-
-                    validation = item["pattern"];
-                    if (validation !== undefined) {
-                        rule.RuleFor(key, new Validators.PatternValidator(validation));
-                    }
-
-                    continue;
-                }
-            }
-            return rule;
         };
         Util.TYPE_KEY = "type";
         Util.PROPERTIES_KEY = "properties";

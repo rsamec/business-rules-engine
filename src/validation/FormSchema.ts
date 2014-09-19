@@ -164,11 +164,43 @@ module FormSchema {
      */
     export class JQueryValidationAbstractValidationRuleFactory extends JsonSchemaAbstractValidationRuleFactory  {
 
+        static RULES_KEY = "rules";
+       static DEFAULT_KEY = "default";
+
+        /**
+         * Returns the abstract validation rules structured according to JSON schema.
+         */
+        ParseAbstractRule(metaData:any):Validation.IAbstractValidator<any> {
+
+            var rule = new Validation.AbstractValidator<any>();
+
+            for (var key in metaData) {
+                var item = metaData[key];
+                var rules = item[JQueryValidationAbstractValidationRuleFactory.RULES_KEY];
+
+                if ( _.isArray(item)) {
+                    if (item[1] !== undefined) {
+                        _.each(this.ParseValidationAttribute(item[1]), function (validator) {
+                            rule.RuleFor(key, validator)
+                        });
+                    }
+                    rule.ValidatorFor(key, this.ParseAbstractRule(item[0]), true);
+                }
+                else if (rules !== undefined) {
+                    _.each(this.ParseValidationAttribute(rules),function(validator){ rule.RuleFor(key,validator)})
+                }
+                else {
+                    rule.ValidatorFor(key, this.ParseAbstractRule(item));
+                }
+            }
+            return rule;
+        }
+
         /**
          * Return list of property validators that corresponds json items for JQuery validation pluging tags.
          * See specification - http://jqueryvalidation.org/documentation/
          */
-        ParseValidationAttribute(itemEl:any):Array<Validation.IPropertyValidator> {
+        ParseValidationAttribute(item:any):Array<Validation.IPropertyValidator> {
 
 //            http://jqueryvalidation.org/documentation/
 //               required – Makes the element required.
@@ -190,10 +222,6 @@ module FormSchema {
 
 
            var validators = new Array<Validation.IPropertyValidator>();
-           if (itemEl === undefined) return validators;
-
-           var item = itemEl.rules;
-
            if (item === undefined) return validators;
 
            var validation = item["required"];
@@ -281,6 +309,31 @@ module FormSchema {
             validation = item["equalTo"];
             if (validation !== undefined) {
                 validators.push(new Validators.EqualToValidator(validation))
+            }
+
+
+            // min items validation
+            validation= item["minItems"];
+            if (validation !== undefined) {
+                validators.push( new Validators.MinItemsValidator(validation))
+            }
+
+            // max items validation
+            validation = item["maxItems"];
+            if (validation !== undefined) {
+                validators.push( new Validators.MaxItemsValidator(validation))
+            }
+
+            // uniqueItems validation
+            validation = item["uniqueItems"];
+            if (validation !== undefined) {
+                validators.push( new Validators.UniqItemsValidator(validation))
+            }
+
+            // enum validation
+            validation = item["enum"];
+            if (validation !== undefined) {
+                validators.push(new Validators.EnumValidator(validation))
             }
 
 //           // pattern validation

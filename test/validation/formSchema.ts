@@ -40,7 +40,7 @@ describe('JSON Form Schema', function () {
                     "Email": { "type": "string", "title": "Email", default: '', "required": "true", "maxLength": "100",
                         "pattern": "S*@S*",
                         "remote":{
-                            url:"https://api.mongolab.com/api/1/databases/documents/collections/docs?c=true&apiKey=SX4PfDQhzWoek3EnS6FdYo-fWaxO7cQI"
+                            url:"http://test.api"
                         }
                     },
                     "Mobile": {
@@ -249,3 +249,224 @@ describe('JSON Form Schema', function () {
     });
 });
 
+describe('JQuery validation plugin - data', function () {
+    //setup
+    var metaData = {
+        "FirstName": { "rules": {"required": "true", "maxlength": "15"}},
+        "LastName": { "rules": {"required": "true", "maxlength": "15"}},
+        "Contacts": [
+            {
+                "Email": {
+                    "rules": {
+                        "required": "true",
+                        "maxlength": "100",
+                        "email": true
+                    }
+                },
+                "Mobile": {
+                    "CountryCode": { "rules": {"required": "true", "maxlength": "3", "enum": ["FRA", "CZE", "USA", "GER"] }},
+                    "Number": { "rules": {"required": "true", "maxlength": "9" }}
+
+                },
+                "FixedLine": {
+                    "CountryCode": { "rules": {"required": "true", "maxlength": "3", "enum": ["FRA", "CZE", "USA", "GER"] }},
+                    "Number": { "rules": {"required": "true", "maxlength": "9" }}
+                }
+            },{"maxItems": "4", "minItems": "2"}
+        ]
+    };
+
+    //setup
+    var getData = function () {
+        return {
+            Checked: true,
+            FirstName: "John",
+            LastName: "Smith",
+            Contacts: []
+        }
+    };
+
+    //
+    var getItemDataTemplate = function() {
+        return  {
+            Email: 'mail@gmail.com',
+            Mobile: {
+                CountryCode: 'CZE',
+                Number: '736483690'
+            },
+            FixedLine: {
+                CountryCode: 'USA',
+                Number: '736483690'
+            }
+        }
+    };
+
+    beforeEach(function () {
+
+        this.Data = getData();
+
+        this.Data.FirstName = "John";
+        this.Data.LastName = "Smith";
+        this.MainValidator = new FormSchema.JQueryValidationAbstractValidationRuleFactory(metaData).CreateRule("Main");
+
+
+    });
+
+//    it('form values - parsing', function () {
+//
+//        var personData = FormSchema.Util.GetFormValues(this.FormSchema);
+//        console.log(JSON.stringify(personData));
+//
+//        var contactRow = FormSchema.Util.GetFormValues(this.FormSchema.Contacts.items.properties);
+//        console.log(JSON.stringify(contactRow));
+//    });
+//
+//    it('form rules', function () {
+//
+//        var personData = FormSchema.Util.GetAbstractRule(this.FormSchema);
+//        console.log(JSON.stringify(personData));
+//
+//
+////        var contactRow = FormSchema.Util.GetFormValues(this.FormSchema.Person.properties.Contacts.items.properties);
+////        console.log(JSON.stringify(contactRow));
+//    });
+
+    it('fill undefined - some errors', function () {
+
+        //when
+        this.Data.Contacts = undefined;
+
+        //excercise
+        var result = this.MainValidator.Validate(this.Data);
+
+        //verify
+        expect(result.HasErrors).to.equal(true);
+
+    });
+
+    it('fill 1 item - minItems errors', function () {
+
+        //when
+        this.Data.Contacts.push(getItemDataTemplate());
+
+        //excercise
+        var result = this.MainValidator.Validate(this.Data);
+
+        //verify
+        expect(result.Errors["Contacts"].ValidationFailures["minItems"].HasError).to.equal(true);
+
+    });
+
+    it('fill 5 items - maxItems errors', function () {
+
+        //when
+        this.Data.Contacts.push(getItemDataTemplate());
+        this.Data.Contacts.push(getItemDataTemplate());
+        this.Data.Contacts.push(getItemDataTemplate());
+        this.Data.Contacts.push(getItemDataTemplate());
+        this.Data.Contacts.push(getItemDataTemplate());
+
+
+        //excercise
+        var result = this.MainValidator.Validate(this.Data);
+
+        //verify
+        expect(result.Errors["Contacts"].ValidationFailures["maxItems"].HasError).to.equal(true);
+
+    });
+    it('fill correct data - no errors', function () {
+
+        //when
+        this.Data.Contacts.push(getItemDataTemplate());
+        this.Data.Contacts.push(getItemDataTemplate());
+        this.Data.Contacts.push(getItemDataTemplate());
+
+        //excercise
+        var result = this.MainValidator.Validate(this.Data);
+        //verify
+        expect(result.HasErrors).to.equal(false);
+
+    });
+
+
+    it('fill incorrect data - some errors', function () {
+
+        //when
+        this.Data.Contacts.push(getItemDataTemplate());
+        this.Data.Contacts.push(getItemDataTemplate());
+        this.Data.Contacts.push(getItemDataTemplate());
+
+        //simulate error at second item in list
+        this.Data.Contacts[1].Email = "";
+
+        //simulate async error at third item in list
+        this.Data.Contacts[2].Mobile.CountryCode = "BLA";
+
+        //excercise
+        var result = this.MainValidator.Validate(this.Data);
+
+        //verify
+        expect(result.HasErrors).to.equal(true);
+        expect(result.Errors["Contacts"].HasErrors).to.equal(true);
+        expect(result.Errors["Contacts"].Children[0].HasErrors).to.equal(false);
+        expect(result.Errors["Contacts"].Children[1].HasErrors).to.equal(true);
+        expect(result.Errors["Contacts"].Children[2].HasErrors).to.equal(true);
+
+    });
+
+    it('delete error item, leave correct item - no errors', function () {
+
+        //when
+        this.Data.Contacts.push(getItemDataTemplate());
+        this.Data.Contacts.push(getItemDataTemplate());
+        this.Data.Contacts.push(getItemDataTemplate());
+
+        //item list property error
+        this.Data.Contacts[2].Email = "";
+
+        //item list async property error
+        this.Data.Contacts[2].Mobile.CountryCode = "BLA";
+
+        //delete last error item
+        this.Data.Contacts.splice(2, 1)
+
+        //excercise
+        var result = this.MainValidator.Validate(this.Data);
+
+        //verify
+        expect(result.HasErrors).to.equal(false);
+        expect(result.Errors["Contacts"].HasErrors).to.equal(false);
+        expect(result.Errors["Contacts"].Children[0].HasErrors).to.equal(false);
+        expect(result.Errors["Contacts"].Children[1].HasErrors).to.equal(false);
+
+
+    });
+
+    it('delete correct item, leave error item - some errors', function () {
+
+        //when
+        this.Data.Contacts.push(getItemDataTemplate());
+        this.Data.Contacts.push(getItemDataTemplate());
+        this.Data.Contacts.push(getItemDataTemplate());
+
+        //item list property error
+        this.Data.Contacts[2].Email = "";
+
+        //item list async property error
+        this.Data.Contacts[2].Mobile.CountryCode = "BLA";
+
+        //delete correct item
+        this.Data.Contacts.splice(1, 1);
+
+        //excercise
+        var result = this.MainValidator.Validate(this.Data);
+
+        //verify
+        expect(result.HasErrors).to.equal(true);
+        expect(result.Errors["Contacts"].HasErrors).to.equal(true);
+        expect(result.Errors["Contacts"].Children[0].HasErrors).to.equal(false);
+        expect(result.Errors["Contacts"].Children[1].HasErrors).to.equal(true);
+
+
+    });
+});

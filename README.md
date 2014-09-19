@@ -51,32 +51,70 @@ This module is installed:
 + [JSON schema](http://json-schema.org/) with validation keywords [JSON Schema Validation](http://json-schema.org/latest/json-schema-validation.html)
 ``` js
     {
-        FirstName: { type: "string", title: "First name", required: "true", maxLength: 15 },
-        LastName: { type: "string", "title": "Last name", required: true, maxLength: 15},
+        FirstName: {
+            type: "string",
+            title: "First name",
+            required: "true",
+            maxLength: 15
+        },
+        LastName: {
+            type: "string",
+            "title": "Last name",
+            required: true,
+            maxLength: 15
+        },
         Contacts: {
             type: "array",
+            maxItems: 4,
+            minItems: 2,
             items: {
                 type: "object",
                 properties: {
-                    Email: { type: "string", title: "Email", default: '', required: true, maxLength: 100, pattern: "S*@S*" },
+                    Email: {
+                        type: "string",
+                        title: "Email",
+                        default: '',
+                        required: true,
+                        maxLength: 100,
+                        pattern: "S*@S*" },
                     Mobile: {
                         type: "object",
                         properties: {
-                            CountryCode: { type: "string", title: "Country code", required: true, maxLength: 3, enum: ["FRA", "CZE", "USA", "GER"] },
-                            Number: { type: "string", title: "Phone number", required: true, maxLength: 9 }
+                            CountryCode: {
+                                type: "string",
+                                title: "Country code",
+                                required: true,
+                                maxLength: 3,
+                                enum: ["FRA", "CZE", "USA", "GER"]
+                            },
+                            Number: {
+                                type: "string",
+                                title: "Phone number",
+                                required: true,
+                                maxLength: 9
+                            }
                         }
                     },
                     FixedLine: {
                         type: "object",
                         properties: {
-                            CountryCode: { type: "string", title: "Country code", required: true, maxLength: 3, enum: ["FRA", "CZE", "USA", "GER"]},
-                            Number: { type: "string", title: "Phone number", required: true, maxLength: 9 }
+                            CountryCode: {
+                                type: "string",
+                                title: "Country code",
+                                required: true,
+                                maxLength: 3,
+                                enum: ["FRA", "CZE", "USA", "GER"]
+                            },
+                            Number: {
+                                type: "string",
+                                title: "Phone number",
+                                required: true,
+                                maxLength: 9
+                            }
                         }
                     }
                 }
-            },
-            maxItems: 4,
-            minItems: 2
+            }
         }
     }
 ```
@@ -85,9 +123,11 @@ This module is installed:
 
 ``` js
 // define data structure + validation rules meta data
-    {
-        FirstName: { rules: {required: true, maxlength: 15}},
-        LastName: { rules: {required: true, maxlength: 15}},
+  {
+        FirstName: {
+            rules: {required: true, maxlength: 15}},
+        LastName: {
+            rules: {required: true, maxlength: 15}},
         Contacts: [
             {
                 Email: {
@@ -98,17 +138,24 @@ This module is installed:
                     }
                 },
                 Mobile: {
-                    CountryCode: { rules: {required: true, maxlength: 3, enum: ["FRA", "CZE", "USA", "GER"] }},
-                    Number: { rules: {required: true, maxlength: 9 }}
-
+                    CountryCode: {
+                        rules: {required: true, maxlength: 3, enum: ["FRA", "CZE", "USA", "GER"] }
+                    },
+                    Number: {
+                        rules: {required: true, maxlength: 9 }
+                    }
                 },
                 FixedLine: {
-                    CountryCode: { rules: {required: true, maxlength: 3, enum: ["FRA", "CZE", "USA", "GER"] }},
-                    Number: { rules: {required: true, maxlength: 9 }}
+                    CountryCode: {
+                        rules: {required: true, maxlength: 3, enum: ["FRA", "CZE", "USA", "GER"] }
+                    },
+                    Number: {
+                        rules: {required: true, maxlength: 9 }
+                    }
                 }
             },{maxItems: 4, minItems: 2}
         ]
-    };
+    }
 ```
 
 ### Imperative definition

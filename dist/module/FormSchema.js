@@ -132,6 +132,11 @@ var FormSchema;
                 validators.push(new Validators.RequiredValidator());
             }
 
+            var validation = item["remote"];
+            if (validation !== undefined && validation) {
+                validators.push(new Validators.RemoteValidator(validation));
+            }
+
             validation = item["maxlength"];
             if (validation !== undefined) {
                 validators.push(new Validators.MaxLengthValidator(validation));

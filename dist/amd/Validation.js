@@ -558,10 +558,6 @@ define(["require", "exports", 'underscore', 'q'], function(require, exports, _, 
                     }, this);
                 }
             };
-
-            AbstractValidationRule.prototype.getHashCode = function () {
-                return AbstractValidationRule.id++;
-            };
             AbstractValidationRule.id = 0;
             return AbstractValidationRule;
         })();

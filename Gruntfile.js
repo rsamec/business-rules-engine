@@ -217,7 +217,8 @@ module.exports = function (grunt) {
               files: [
                   // includes files within path
                   {expand: true, src: ['dist/commonjs/i18n/*.js'], dest: 'dist/module/i18n', filter: 'isFile',flatten:true},
-                  {expand: true, src: ['dist/commonjs/*.js'], dest: 'dist/module', filter: 'isFile',flatten:true}
+                  {expand: true, src: ['dist/commonjs/*.js'], dest: 'dist/module', filter: 'isFile',flatten:true},
+                  {expand: true, src: ['src/localization/*.json'], dest: 'dist/module/i18n', filter: 'isFile',flatten:true}
                   //{expand: true, src: ['src/customValidators/*.js'], dest: 'dist/customValidators', filter: 'isFile',flatten:true}
               ],
               options: {

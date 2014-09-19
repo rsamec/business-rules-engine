@@ -6,8 +6,8 @@ var __extends = this.__extends || function (d, b) {
 };
 var _ = require('underscore');
 
-var Validation = require("business-rules-engine");
-var Validators = require('business-rules-engine/commonjs/BasicValidators');
+var Validation = require('../validation/Validation.js');
+var Validators = require('../validation/BasicValidators.js');
 
 var FormSchema;
 (function (FormSchema) {
@@ -130,6 +130,11 @@ var FormSchema;
             var validation = item["required"];
             if (validation !== undefined && validation) {
                 validators.push(new Validators.RequiredValidator());
+            }
+
+            var validation = item["remote"];
+            if (validation !== undefined && validation) {
+                validators.push(new Validators.RemoteValidator(validation));
             }
 
             validation = item["maxlength"];

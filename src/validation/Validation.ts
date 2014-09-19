@@ -933,9 +933,7 @@ module Validation {
             }
         }
         static id:number =0;
-        public getHashCode(){
-            return AbstractValidationRule.id++;
-        }
+
 
     }
 

@@ -559,10 +559,6 @@ var Validation;
                 }, this);
             }
         };
-
-        AbstractValidationRule.prototype.getHashCode = function () {
-            return AbstractValidationRule.id++;
-        };
         AbstractValidationRule.id = 0;
         return AbstractValidationRule;
     })();

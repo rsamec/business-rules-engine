@@ -29,37 +29,32 @@ interface IPhone{
 describe('JSON Form Schema', function () {
     //JSOM form schema
     var formSchema = {
-        "FirstName": { "type": "string", "title": "First name", "required": "true", "maxLength": "15" },
-        "LastName": { "type": "string", "title": "Last name", "required": "true", "maxLength": "15"},
-        "Contacts": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "Email": { "type": "string", "title": "Email", default: '', "required": "true", "maxLength": "100",
-                        "pattern": "S*@S*",
-                        "remote":{
-                            url:"http://test.api"
+        FirstName: { type: "string", title: "First name", required: "true", maxLength: 15 },
+        LastName: { type: "string", "title": "Last name", required: true, maxLength: 15},
+        Contacts: {
+            type: "array",
+            items: {
+                type: "object",
+                properties: {
+                    Email: { type: "string", title: "Email", default: '', required: true, maxLength: 100, pattern: "S*@S*" },
+                    Mobile: {
+                        type: "object",
+                        properties: {
+                            CountryCode: { type: "string", title: "Country code", required: true, maxLength: 3, enum: ["FRA", "CZE", "USA", "GER"] },
+                            Number: { type: "string", title: "Phone number", required: true, maxLength: 9 }
                         }
                     },
-                    "Mobile": {
-                        "type": "object",
-                        "properties": {
-                            "CountryCode": { "type": "string", "title": "Country code", "required": "true", "maxLength": "3", "enum": ["FRA", "CZE", "USA", "GER"] },
-                            "Number": { "type": "string", "title": "Phone number", "required": "true", "maxLength": "9" }
-                        }
-                    },
-                    "FixedLine": {
-                        "type": "object",
-                        "properties": {
-                            "CountryCode": { "type": "string", "title": "Country code", "required": "true", "maxLength": "3", "enum": ["FRA", "CZE", "USA", "GER"]},
-                            "Number": { "type": "string", "title": "Phone number", "required": "true", "maxLength": "9" }
+                    FixedLine: {
+                        type: "object",
+                        properties: {
+                            CountryCode: { type: "string", title: "Country code", required: true, maxLength: 3, enum: ["FRA", "CZE", "USA", "GER"]},
+                            Number: { type: "string", title: "Phone number", required: true, maxLength: 9 }
                         }
                     }
                 }
             },
-            "maxItems": "4",
-            "minItems": "2"
+            maxItems: 4,
+            minItems: 2
         }
     }
 
@@ -251,27 +246,27 @@ describe('JSON Form Schema', function () {
 describe('JQuery validation plugin - data', function () {
     // define data structure + validation rules meta data
     var metaData = {
-        "FirstName": { "rules": {"required": "true", "maxlength": "15"}},
-        "LastName": { "rules": {"required": "true", "maxlength": "15"}},
-        "Contacts": [
+        FirstName: { rules: {required: true, maxlength: 15}},
+        LastName: { rules: {required: true, maxlength: 15}},
+        Contacts: [
             {
-                "Email": {
-                    "rules": {
-                        "required": "true",
-                        "maxlength": "100",
-                        "email": true
+                Email: {
+                    rules: {
+                        required: true,
+                        maxlength: 100,
+                        email: true
                     }
                 },
-                "Mobile": {
-                    "CountryCode": { "rules": {"required": "true", "maxlength": "3", "enum": ["FRA", "CZE", "USA", "GER"] }},
-                    "Number": { "rules": {"required": "true", "maxlength": "9" }}
+                Mobile: {
+                    CountryCode: { rules: {required: true, maxlength: 3, enum: ["FRA", "CZE", "USA", "GER"] }},
+                    Number: { rules: {required: true, maxlength: 9 }}
 
                 },
-                "FixedLine": {
-                    "CountryCode": { "rules": {"required": "true", "maxlength": "3", "enum": ["FRA", "CZE", "USA", "GER"] }},
-                    "Number": { "rules": {"required": "true", "maxlength": "9" }}
+                FixedLine: {
+                    CountryCode: { rules: {required: true, maxlength: 3, enum: ["FRA", "CZE", "USA", "GER"] }},
+                    Number: { rules: {required: true, maxlength: 9 }}
                 }
-            },{"maxItems": "4", "minItems": "2"}
+            },{maxItems: 4, minItems: 2}
         ]
     };
 

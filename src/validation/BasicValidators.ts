@@ -7,7 +7,7 @@
 import Q = require("q");
 import moment = require("moment");
 import _ = require("underscore");
-
+var axios = require('axios');
 
 module Validators {
     class NumberFce {
@@ -367,6 +367,11 @@ module Validators {
         tagName = "contains";
     }
 
+    export interface IRemoteOptions{
+        url:any;
+        type:string;
+        data:any;
+    }
     /**
      *
      url: 'validateEmail.php',
@@ -381,25 +386,31 @@ module Validators {
      */
     export class RemoteValidator implements Validation.IAsyncPropertyValidator {
 
-        constructor(public Options:any) {
-            if (Options === undefined) this.Options = Q.when([]);
-        }
-        static RemoteService:Q.Promise<boolean>;
+        constructor(public Options?:IRemoteOptions) {
 
-        isAcceptable(s:string):Q.Promise<boolean> {
+        }
+
+        isAcceptable(s:any):Q.Promise<boolean> {
             var deferred:Q.Deferred<boolean> = Q.defer<boolean>();
 
-//            .RemoteService.Options.then(function (result) {
-//                var hasSome = _.some(result, function (item) {
-//                    return item === s;
-//                });
-//                if (hasSome) deferred.resolve(true);
-//                deferred.resolve(false);
-//            });
+            axios.post(this.Options.url,
+                {
+                    method: this.Options.type || "get",
+                    data: _.extend({} || this.Options.data, {
+                        "value": s
+                    })
+                }
+            ).then(function (response) {
+                    var isAcceptable = response === true || response === "true";
+                    deferred.resolve(isAcceptable);
+                })
+                .catch(function (response) {
+                    deferred.resolve(false);
+                    console.log(response);
+                });
 
             return deferred.promise;
         }
-
         isAsync = true;
         tagName = "remote";
     }

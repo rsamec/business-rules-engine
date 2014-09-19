@@ -38,7 +38,10 @@ describe('JSON Form Schema', function () {
                 "type": "object",
                 "properties": {
                     "Email": { "type": "string", "title": "Email", default: '', "required": "true", "maxLength": "100",
-                        "pattern": "S*@S*"
+                        "pattern": "S*@S*",
+                        "remote":{
+                            url:"https://api.mongolab.com/api/1/databases/documents/collections/docs?c=true&apiKey=SX4PfDQhzWoek3EnS6FdYo-fWaxO7cQI"
+                        }
                     },
                     "Mobile": {
                         "type": "object",

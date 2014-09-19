@@ -201,6 +201,10 @@ module FormSchema {
                validators.push(new Validators.RequiredValidator());
            }
 
+            var validation = item["remote"];
+            if (validation !== undefined && validation) {
+                validators.push(new Validators.RemoteValidator(validation));
+            }
 
            // maxLength validation
            validation = item["maxlength"];

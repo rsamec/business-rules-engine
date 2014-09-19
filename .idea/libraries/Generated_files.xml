@@ -2,6 +2,7 @@
   <library name="Generated files" type="javaScript">
     <properties>
       <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/test/validation/basicValidators.js" />
         <item url="file://$PROJECT_DIR$/test/validation/rulesLists.js" />
         <item url="file://$PROJECT_DIR$/src/validation/FormSchema.js" />
         <item url="file://$PROJECT_DIR$/src/metaDataRules/util.js" />
@@ -44,6 +45,7 @@
       <root url="file://$PROJECT_DIR$/typings/node-form/node-form-tests.js" />
       <root url="file://$PROJECT_DIR$/dist/i18n/messages_de.js" />
       <root url="file://$PROJECT_DIR$/dist/i18n/messages_cs.js" />
+      <root url="file://$PROJECT_DIR$/test/validation/basicValidators.js" />
       <root url="file://$PROJECT_DIR$/src/validation/FormSchema.js" />
       <root url="file://$PROJECT_DIR$/test/validation/rulesLists.js" />
       <root url="file://$PROJECT_DIR$/src/metaDataRules/util.js" />

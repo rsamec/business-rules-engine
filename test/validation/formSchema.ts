@@ -27,9 +27,8 @@ interface IPhone{
 }
 
 describe('JSON Form Schema', function () {
-    //setup
+    //JSOM form schema
     var formSchema = {
-        "Checked": { "type": "boolean", "title": "Checked", "default": true },
         "FirstName": { "type": "string", "title": "First name", "required": "true", "maxLength": "15" },
         "LastName": { "type": "string", "title": "Last name", "required": "true", "maxLength": "15"},
         "Contacts": {
@@ -250,7 +249,7 @@ describe('JSON Form Schema', function () {
 });
 
 describe('JQuery validation plugin - data', function () {
-    //setup
+    // define data structure + validation rules meta data
     var metaData = {
         "FirstName": { "rules": {"required": "true", "maxlength": "15"}},
         "LastName": { "rules": {"required": "true", "maxlength": "15"}},

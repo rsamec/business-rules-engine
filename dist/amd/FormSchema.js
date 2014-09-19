@@ -116,13 +116,33 @@ define(["require", "exports", 'underscore'], function(require, exports, _) {
             function JQueryValidationAbstractValidationRuleFactory() {
                 _super.apply(this, arguments);
             }
-            JQueryValidationAbstractValidationRuleFactory.prototype.ParseValidationAttribute = function (itemEl) {
+            JQueryValidationAbstractValidationRuleFactory.prototype.ParseAbstractRule = function (metaData) {
+                var rule = new Validation.AbstractValidator();
+
+                for (var key in metaData) {
+                    var item = metaData[key];
+                    var rules = item[JQueryValidationAbstractValidationRuleFactory.RULES_KEY];
+
+                    if (_.isArray(item)) {
+                        if (item[1] !== undefined) {
+                            _.each(this.ParseValidationAttribute(item[1]), function (validator) {
+                                rule.RuleFor(key, validator);
+                            });
+                        }
+                        rule.ValidatorFor(key, this.ParseAbstractRule(item[0]), true);
+                    } else if (rules !== undefined) {
+                        _.each(this.ParseValidationAttribute(rules), function (validator) {
+                            rule.RuleFor(key, validator);
+                        });
+                    } else {
+                        rule.ValidatorFor(key, this.ParseAbstractRule(item));
+                    }
+                }
+                return rule;
+            };
+
+            JQueryValidationAbstractValidationRuleFactory.prototype.ParseValidationAttribute = function (item) {
                 var validators = new Array();
-                if (itemEl === undefined)
-                    return validators;
-
-                var item = itemEl.rules;
-
                 if (item === undefined)
                     return validators;
 
@@ -206,8 +226,30 @@ define(["require", "exports", 'underscore'], function(require, exports, _) {
                     validators.push(new Validators.EqualToValidator(validation));
                 }
 
+                validation = item["minItems"];
+                if (validation !== undefined) {
+                    validators.push(new Validators.MinItemsValidator(validation));
+                }
+
+                validation = item["maxItems"];
+                if (validation !== undefined) {
+                    validators.push(new Validators.MaxItemsValidator(validation));
+                }
+
+                validation = item["uniqueItems"];
+                if (validation !== undefined) {
+                    validators.push(new Validators.UniqItemsValidator(validation));
+                }
+
+                validation = item["enum"];
+                if (validation !== undefined) {
+                    validators.push(new Validators.EnumValidator(validation));
+                }
+
                 return validators;
             };
+            JQueryValidationAbstractValidationRuleFactory.RULES_KEY = "rules";
+            JQueryValidationAbstractValidationRuleFactory.DEFAULT_KEY = "default";
             return JQueryValidationAbstractValidationRuleFactory;
         })(JsonSchemaAbstractValidationRuleFactory);
         FormSchema.JQueryValidationAbstractValidationRuleFactory = JQueryValidationAbstractValidationRuleFactory;

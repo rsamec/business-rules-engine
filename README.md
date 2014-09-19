@@ -20,6 +20,9 @@ This validation engine is **UI agnostic** and that is why it can be used as **an
 It can be easily reused by different types of applications, libraries.
 
 +   It enables to decorate custom objects and its properties with validation rules.
++   It supports declarative and imperative validation rules definition
+    +  [JSON schema](http://json-schema.org/) with validation keywords [JSON Schema Validation](http://json-schema.org/latest/json-schema-validation.html)
+    +  raw JSON data  with rules meta data with validation keywords [JQuery validation plugin](http://jqueryvalidation.org/)
 +   It supports composition of validation rules, that enables to validate custom object with nested structures.
 +   It is ease to create your own custom validators.
 +   It supports asynchronous validation rules (uses promises).
@@ -43,6 +46,79 @@ This module is installed:
 
 ## Example Usage
 
+### Declarative syntax
+
++ [JSON schema](http://json-schema.org/) with validation keywords [JSON Schema Validation](http://json-schema.org/latest/json-schema-validation.html)
+``` js
+    {
+        "FirstName": { "type": "string", "title": "First name", "required": "true", "maxLength": "15" },
+        "LastName": { "type": "string", "title": "Last name", "required": "true", "maxLength": "15"},
+        "Contacts": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "Email": { "type": "string", "title": "Email", default: '', "required": "true", "maxLength": "100",
+                        "pattern": "S*@S*",
+                        "remote":{
+                            url:"http://test.api"
+                        }
+                    },
+                    "Mobile": {
+                        "type": "object",
+                        "properties": {
+                            "CountryCode": { "type": "string", "title": "Country code", "required": "true", "maxLength": "3", "enum": ["FRA", "CZE", "USA", "GER"] },
+                            "Number": { "type": "string", "title": "Phone number", "required": "true", "maxLength": "9" }
+                        }
+                    },
+                    "FixedLine": {
+                        "type": "object",
+                        "properties": {
+                            "CountryCode": { "type": "string", "title": "Country code", "required": "true", "maxLength": "3", "enum": ["FRA", "CZE", "USA", "GER"]},
+                            "Number": { "type": "string", "title": "Phone number", "required": "true", "maxLength": "9" }
+                        }
+                    }
+                }
+            },
+            "maxItems": "4",
+            "minItems": "2"
+        }
+    }
+```
+
++ raw JSON data annotated with meta data describing validation keywords [JQuery validation plugin](http://jqueryvalidation.org/)
+
+``` js
+// define data structure + validation rules meta data
+    {
+        "FirstName": { "rules": {"required": "true", "maxlength": "15"}},
+        "LastName": { "rules": {"required": "true", "maxlength": "15"}},
+        "Contacts": [
+            {
+                "Email": {
+                    "rules": {
+                        "required": "true",
+                        "maxlength": "100",
+                        "email": true
+                    }
+                },
+                "Mobile": {
+                    "CountryCode": { "rules": {"required": "true", "maxlength": "3", "enum": ["FRA", "CZE", "USA", "GER"] }},
+                    "Number": { "rules": {"required": "true", "maxlength": "9" }}
+
+                },
+                "FixedLine": {
+                    "CountryCode": { "rules": {"required": "true", "maxlength": "3", "enum": ["FRA", "CZE", "USA", "GER"] }},
+                    "Number": { "rules": {"required": "true", "maxlength": "9" }}
+                }
+            },
+            {"maxItems": "4", "minItems": "2"}
+        ]
+    };
+```
+
+### Imperative definition
+
 To define business rules for some object, you have to create abstract validator.
 ``` js
           //create new validator for object with structure<IPerson>
@@ -59,6 +135,8 @@ To define business rules for some object, you have to create abstract validator.
           //assigned validators to property
           personValidator.RuleFor("LastName", required);
           personValidator.RuleFor("LastName",maxLength);
+          
+          ...
 
 ```
 

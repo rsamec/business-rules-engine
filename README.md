@@ -12,7 +12,7 @@ It can be easily reused by different types of applications, libraries.
 +   It enables to decorate custom objects and its properties with validation rules.
 +   It supports declarative and imperative validation rules definition
     +  declarative [JSON schema](http://json-schema.org/) with validation keywords [JSON Schema Validation](http://json-schema.org/latest/json-schema-validation.html)
-    +  declarative raw JSON data  with rules meta data with validation keywords [JQuery validation plugin](http://jqueryvalidation.org/)
+    +  declarative raw JSON data  annotated with meta data - using keywords from [JQuery validation plugin](http://jqueryvalidation.org/)
     +  imperative - [validation API](http://rsamec.github.io/business-rules-engine/docs/modules/validation-validation.validation.html)
 +   It supports composition of validation rules, that enables to validate custom object with nested structures.
 +   It is ease to create your own custom validators.
@@ -38,9 +38,15 @@ This module is installed:
 
 ## Example Usage
 
-### Declarative syntax
+There are 3 ways how to define validation rules
 
-+ [JSON schema](http://json-schema.org/) with validation keywords [JSON Schema Validation](http://json-schema.org/latest/json-schema-validation.html)
++  declarative [JSON schema](http://json-schema.org/) with validation keywords [JSON Schema Validation](http://json-schema.org/latest/json-schema-validation.html)
++  declarative raw JSON data  annotated with meta data - using keywords from [JQuery validation plugin](http://jqueryvalidation.org/)
++  imperative - [validation API](http://rsamec.github.io/business-rules-engine/docs/modules/validation-validation.validation.html)
+
+
+### JSON Schema Validation declarative syntax definition
+
 ``` js
     {
         FirstName: {
@@ -110,9 +116,7 @@ This module is installed:
         }
     }
 ```
-
-+ raw JSON data annotated with meta data rules property
-+ using validation keywords [JQuery validation plugin](http://jqueryvalidation.org/)
+### JSON with meta data declarative definition
 
 ``` js
 // define data structure + validation rules meta data
@@ -151,7 +155,7 @@ This module is installed:
     }
 ```
 
-### Imperative definition
+### Imperative definition - using API
 
 To define business rules for some object, you have to create abstract validator.
 ``` js

@@ -946,6 +946,14 @@ var Validation;
             return deferred.promise;
         };
 
+        Object.defineProperty(Validator.prototype, "HasError", {
+            get: function () {
+                return this.HasErrors;
+            },
+            enumerable: true,
+            configurable: true
+        });
+
         Object.defineProperty(Validator.prototype, "Errors", {
             get: function () {
                 return this.ValidationFailures;

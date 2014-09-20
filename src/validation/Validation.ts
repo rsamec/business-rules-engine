@@ -1353,9 +1353,9 @@ module Validation {
             return deferred.promise;
         }
 
-//        public get HasError():boolean{
-//            return this.HasErrors;
-//        }
+        public get HasError():boolean{
+            return this.HasErrors;
+        }
 
         public get Errors() {
             return this.ValidationFailures;

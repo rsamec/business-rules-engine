@@ -11,8 +11,9 @@ It can be easily reused by different types of applications, libraries.
 
 +   It enables to decorate custom objects and its properties with validation rules.
 +   It supports declarative and imperative validation rules definition
-    +  [JSON schema](http://json-schema.org/) with validation keywords [JSON Schema Validation](http://json-schema.org/latest/json-schema-validation.html)
-    +  raw JSON data  with rules meta data with validation keywords [JQuery validation plugin](http://jqueryvalidation.org/)
+    +  declarative [JSON schema](http://json-schema.org/) with validation keywords [JSON Schema Validation](http://json-schema.org/latest/json-schema-validation.html)
+    +  declarative raw JSON data  with rules meta data with validation keywords [JQuery validation plugin](http://jqueryvalidation.org/)
+    +  imperative - [validation API](http://rsamec.github.io/business-rules-engine/docs/modules/validation-validation.validation.html)
 +   It supports composition of validation rules, that enables to validate custom object with nested structures.
 +   It is ease to create your own custom validators.
 +   It supports asynchronous validation rules (uses promises).
@@ -20,7 +21,8 @@ It can be easily reused by different types of applications, libraries.
 +   It supports assigning validation rules to collection-based structures - arrays and lists.
 +   It supports localization of error messages with TranslateArgs.
 +   It deploys as AMD, CommonJS or plain script module pattern.
-+   It offers basic build-in constrains validators. Other custom validators can be find in extensible repository of custom validators (work in progress).
++   It offers basic build-in constrains validators. See list [basic build-in constraints](http://rsamec.github.io/business-rules-engine/docs/modules/validation-basicvalidators.validators.html)
++   Other custom validators can be find in extensible repository of custom validators (work in progress).
 
 ## Installation
 

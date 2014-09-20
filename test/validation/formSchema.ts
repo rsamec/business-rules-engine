@@ -54,7 +54,7 @@ describe('JsonSchemaRuleFactory', function () {
                         default: '',
                         required: true,
                         maxLength: 100,
-                        pattern: "S*@S*" },
+                        email: true },
                     Mobile: {
                         type: "object",
                         properties: {
@@ -96,6 +96,7 @@ describe('JsonSchemaRuleFactory', function () {
         }
     }
 
+
     //
     var getItemDataTemplate = function () {
         var item = FormSchema.Util.InitValues(formSchema.Contacts.items.properties);
@@ -120,6 +121,45 @@ describe('JsonSchemaRuleFactory', function () {
         this.MainValidator = new FormSchema.JsonSchemaRuleFactory(this.FormSchema).CreateRule("Main");
 
 
+    });
+
+    describe('email', function () {
+
+        it('fill no email', function () {
+            //when
+            this.Data.Contacts.push(getItemDataTemplate());
+            this.Data.Contacts[0] = {};
+
+            //exec
+            var result = this.MainValidator.Validate(this.Data);
+
+            //verify
+            expect(result.Errors["Contacts"].Children[0].Errors["Email"].HasErrors).to.equal(true);
+        });
+
+        it('fill wrong email', function () {
+            //when
+            this.Data.Contacts.push(getItemDataTemplate());
+            this.Data.Contacts[0].Email = 'jsmith.com';
+
+            //exec
+            var result = this.MainValidator.Validate(this.Data);
+
+            //verify
+            expect(result.Errors["Contacts"].Children[0].Errors["Email"].HasErrors).to.equal(true);
+        });
+
+        it('fill some email', function () {
+            //when
+            this.Data.Contacts.push(getItemDataTemplate());
+            this.Data.Contacts[0].Email = 'jsmith@gmail.com';
+
+            //exec
+            var result = this.MainValidator.Validate(this.Data);
+
+            //verify
+            expect(result.Errors["Contacts"].Children[0].Errors["Email"].HasErrors).to.equal(false);
+        });
     });
 
 //    it('form values - parsing', function () {
@@ -351,6 +391,45 @@ describe('JQueryValidationRuleFactory', function () {
         this.MainValidator = new FormSchema.JQueryValidationRuleFactory(metaData).CreateRule("Main");
 
 
+    });
+
+    describe('email', function () {
+
+        it('fill no email', function () {
+            //when
+            this.Data.Contacts.push(getItemDataTemplate());
+            this.Data.Contacts[0] = {};
+
+            //exec
+            var result = this.MainValidator.Validate(this.Data);
+
+            //verify
+            expect(result.Errors["Contacts"].Children[0].Errors["Email"].HasErrors).to.equal(true);
+        });
+
+        it('fill wrong email', function () {
+            //when
+            this.Data.Contacts.push(getItemDataTemplate());
+            this.Data.Contacts[0].Email = 'jsmith.com';
+
+            //exec
+            var result = this.MainValidator.Validate(this.Data);
+
+            //verify
+            expect(result.Errors["Contacts"].Children[0].Errors["Email"].HasErrors).to.equal(true);
+        });
+
+        it('fill some email', function () {
+            //when
+            this.Data.Contacts.push(getItemDataTemplate());
+            this.Data.Contacts[0].Email = 'jsmith@gmail.com';
+
+            //exec
+            var result = this.MainValidator.Validate(this.Data);
+
+            //verify
+            expect(result.Errors["Contacts"].Children[0].Errors["Email"].HasErrors).to.equal(false);
+        });
     });
 
 //    it('form values - parsing', function () {

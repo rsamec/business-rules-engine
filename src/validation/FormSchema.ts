@@ -6,11 +6,11 @@
 import _ = require('underscore');
 import Q = require('q');
 
-//var Validation = require("business-rules-engine");
-//var Validators = require('business-rules-engine/commonjs/BasicValidators');
+var Validation = require("business-rules-engine");
+var Validators = require('business-rules-engine/commonjs/BasicValidators');
 
-var Validation = require('../validation/Validation.js');
-var Validators = require('../validation/BasicValidators.js');
+//var Validation = require('../validation/Validation.js');
+//var Validators = require('../validation/BasicValidators.js');
 
 module FormSchema {
 
@@ -163,6 +163,17 @@ module FormSchema {
             var validation = item["type"];
             if (validation !== undefined) {
                 validators.push(new Validators.TypeValidator(validation));
+            }
+            //7.3.2 email
+            validation = item["email"];
+            if (validation !== undefined) {
+                validators.push(new Validators.EmailValidator())
+            }
+
+            //7.3.6 url
+            validation = item["uri"];
+            if (validation !== undefined) {
+                validators.push(new Validators.UrlValidator())
             }
 
             //TODO: allOf,anyOf,oneOf,not,definitions

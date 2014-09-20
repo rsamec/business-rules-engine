@@ -101,6 +101,16 @@ define(["require", "exports", 'underscore'], function(require, exports, _) {
                     validators.push(new Validators.TypeValidator(validation));
                 }
 
+                validation = item["email"];
+                if (validation !== undefined) {
+                    validators.push(new Validators.EmailValidator());
+                }
+
+                validation = item["uri"];
+                if (validation !== undefined) {
+                    validators.push(new Validators.UrlValidator());
+                }
+
                 return validators;
             };
             return JsonSchemaRuleFactory;

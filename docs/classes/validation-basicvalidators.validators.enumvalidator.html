@@ -1,0 +1,324 @@
+﻿<!doctype html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>EnumValidator | Business rules engine</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+
+<header>
+    <div class="tsd-page-toolbar">
+        <div class="container">
+            <div id="tsd-filter">
+                <input type="checkbox" id="tsd-filter-inherited" checked />
+                <label for="tsd-filter-inherited">Inherited</label>
+
+                <input type="checkbox" id="tsd-filter-private" checked />
+                <label for="tsd-filter-private">Private</label>
+
+                <input type="checkbox" id="tsd-filter-only-exported" />
+                <label for="tsd-filter-only-exported">Only exported</label>
+            </div>
+
+            <a href="../index.html">Business rules engine</a>
+        </div>
+    </div>
+    <div class="tsd-page-title">
+        <div class="container">
+            <ul class="breadcrumb">
+                            
+    <li>
+        <a href="../modules/validation-basicvalidators.html">validation/BasicValidators</a>
+    </li>
+
+    <li>
+        <a href="../modules/validation-basicvalidators.validators.html">Validators</a>
+    </li>
+
+    <li>
+        <a href="validation-basicvalidators.validators.enumvalidator.html">EnumValidator</a>
+    </li>
+
+            </ul>
+            <h1>Class EnumValidator</h1>
+        </div>
+    </div>
+</header>
+
+<div class="container container-main">
+    <div class="row">
+        <div class="col-8">
+                    <p>Return true if an value is any of predefined values (using strict equality), otherwise false.</p>
+    
+    
+        <p> @require underscore</p>
+    
+    
+
+
+    <section class="tsd-member-index">
+        <h2>Index</h2>
+            <section class="tsd-member-index-group ">
+                <h3>Constructor methods</h3>
+                <ul class="tsd-member-index">
+                        <li class="tsd-kind-constructor-method tsd-parent-kind-class"><a href="validation-basicvalidators.validators.enumvalidator.html#constructor" class="tsd-kind-icon">constructor</a></li>
+                </ul>
+            </section>
+            <section class="tsd-member-index-group ">
+                <h3>Properties</h3>
+                <ul class="tsd-member-index">
+                        <li class="tsd-kind-property tsd-parent-kind-class"><a href="validation-basicvalidators.validators.enumvalidator.html#enum" class="tsd-kind-icon">Enum</a></li>
+                        <li class="tsd-kind-property tsd-parent-kind-class"><a href="validation-basicvalidators.validators.enumvalidator.html#tagname" class="tsd-kind-icon">tagName</a></li>
+                </ul>
+            </section>
+            <section class="tsd-member-index-group ">
+                <h3>Methods</h3>
+                <ul class="tsd-member-index">
+                        <li class="tsd-kind-method tsd-parent-kind-class"><a href="validation-basicvalidators.validators.enumvalidator.html#isacceptable" class="tsd-kind-icon">isAcceptable</a></li>
+                </ul>
+            </section>
+    </section>            <section class="tsd-member-group ">
+                <h2>Constructor methods</h2>
+                        <section class="tsd-member tsd-kind-constructor-method tsd-parent-kind-class">
+                            <a name="constructor"></a>
+                                    <h3 class="tsd-kind-icon">constructor<span class="tsd-signature-symbols">(</span>Enum<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">Array&lt;number&gt;</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><a href="validation-basicvalidators.validators.enumvalidator.html" class="tsd-signature-type">EnumValidator</a></h3>
+                                    
+                                    <aside class="tsd-sources">
+                                            <ul>
+                                                    <li>Defined in validation/BasicValidators.ts:429</li>
+                                            </ul>
+                                    </aside>    <p>Default constructor.</p>
+                                    
+                                    
+                                    
+                                    
+                                        <h4>Parameters</h4>
+                                        <ul>
+                                                <li>
+                                                    <h5>Enum?:         <span class="tsd-signature-type">Array&lt;number&gt;</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+                                                        <ul>
+                                                    <li>array of values</li>
+                                                    </ul>
+                                                    
+                                                    
+                                                    
+                                                </li>
+                                        </ul>
+                                    
+                                        <h4>Returns</h4>
+                                        <p>        <a href="validation-basicvalidators.validators.enumvalidator.html" class="tsd-signature-type">EnumValidator</a>
+                                    </p>
+                        
+                        </section></section>        <section class="tsd-member-group ">
+                <h2>Properties</h2>
+                        <section class="tsd-member tsd-kind-property tsd-parent-kind-class">
+                            <a name="enum"></a>
+                                <h3 class="tsd-kind-icon"><span class="tsd-flag ts-flagpublic">public</span> Enum<span class="tsd-signature-symbols">:</span>         <span class="tsd-signature-type">Array&lt;number&gt;</span></h3>
+                                
+                                <aside class="tsd-sources">
+                                        <ul>
+                                                <li>Defined in validation/BasicValidators.ts:429</li>
+                                        </ul>
+                                </aside>
+                                
+                        
+                        </section>            <section class="tsd-member tsd-kind-property tsd-parent-kind-class">
+                            <a name="tagname"></a>
+                                <h3 class="tsd-kind-icon"><span class="tsd-flag ts-flagpublic">public</span> tagName<span class="tsd-signature-symbols">:</span>         <span class="tsd-signature-type">string</span></h3>
+                                
+                                <aside class="tsd-sources">
+                                        <ul>
+                                                <li>Defined in validation/BasicValidators.ts:436</li>
+                                        </ul>
+                                </aside>
+                                
+                        
+                        </section></section>        <section class="tsd-member-group ">
+                <h2>Methods</h2>
+                        <section class="tsd-member tsd-kind-method tsd-parent-kind-class">
+                            <a name="isacceptable"></a>
+                                    <h3 class="tsd-kind-icon"><span class="tsd-flag ts-flagpublic">public</span> isAcceptable<span class="tsd-signature-symbols">(</span>s<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">boolean</span></h3>
+                                    
+                                    <aside class="tsd-sources">
+                                            <ul>
+                                                    <li>Defined in validation/BasicValidators.ts:433</li>
+                                            </ul>
+                                    </aside>
+                                    
+                                    
+                                        <h4>Parameters</h4>
+                                        <ul>
+                                                <li>
+                                                    <h5>s:         <span class="tsd-signature-type">any</span></h5>
+                                                    
+                                                    
+                                                </li>
+                                        </ul>
+                                    
+                                        <h4>Returns</h4>
+                                        <p>        <span class="tsd-signature-type">boolean</span>
+                                    </p>
+                        
+                        </section></section>
+        </div>
+        <div class="offset-1 col-3">
+            <nav class="tsd-navigation primary">
+                <ul>
+                        <li class=" ">
+                            <a href="../globals.html"><em>Globals</em></a>
+                        </li>                        <li class=" tsd-kind-dynamic-module">
+                            <a href="../modules/validation-basicvalidators.html">validation/BasicValidators</a>
+                        </li>                        <li class="current tsd-kind-container tsd-parent-kind-dynamic-module">
+                            <a href="../modules/validation-basicvalidators.validators.html">validation/BasicValidators.Validators</a>
+                                    <ul>
+                                    </ul>
+                        </li>                        <li class=" tsd-kind-dynamic-module">
+                            <a href="../modules/validation-formschema.html">validation/FormSchema</a>
+                        </li>                        <li class=" tsd-kind-container tsd-parent-kind-dynamic-module">
+                            <a href="../modules/validation-formschema.formschema.html">validation/FormSchema.FormSchema</a>
+                        </li>                        <li class=" tsd-kind-dynamic-module">
+                            <a href="../modules/validation-utils.html">validation/Utils</a>
+                        </li>                        <li class=" tsd-kind-container tsd-parent-kind-dynamic-module">
+                            <a href="../modules/validation-utils.utils.html">validation/Utils.Utils</a>
+                        </li>                        <li class=" tsd-kind-dynamic-module">
+                            <a href="../modules/validation-validation.html">validation/Validation</a>
+                        </li>                        <li class=" tsd-kind-container tsd-parent-kind-dynamic-module">
+                            <a href="../modules/validation-validation.validation.html">validation/Validation.Validation</a>
+                        </li>                        <li class=" tsd-kind-dynamic-module">
+                            <a href="../modules/customvalidators-datecomparevalidator.html">customValidators/DateCompareValidator</a>
+                        </li>                        <li class=" tsd-kind-dynamic-module">
+                            <a href="../modules/customvalidators-icovalidator.html">customValidators/ICOValidator</a>
+                        </li>                        <li class=" tsd-kind-dynamic-module">
+                            <a href="../modules/customvalidators-paramvalidator.html">customValidators/ParamValidator</a>
+                        </li>                        <li class=" tsd-kind-dynamic-module">
+                            <a href="../modules/customvalidators-rcvalidator.html">customValidators/RCValidator</a>
+                        </li>                </ul>
+            </nav>
+
+            <nav class="tsd-navigation secondary">
+                        <ul>
+                                    <li class=" tsd-kind-variable tsd-parent-kind-container tsd-is-not-exported">
+                                        <a href="../modules/validation-basicvalidators.validators.html#maximaldefaultvalue" class="tsd-kind-icon">MaximalDefaultValue</a>
+                                    </li>
+                                    <li class=" tsd-kind-variable tsd-parent-kind-container tsd-is-not-exported">
+                                        <a href="../modules/validation-basicvalidators.validators.html#minimaldefaultvalue" class="tsd-kind-icon">MinimalDefaultValue</a>
+                                    </li>
+                                    <li class=" tsd-kind-interface tsd-parent-kind-container">
+                                        <a href="../interfaces/validation-basicvalidators.validators.iremoteoptions.html" class="tsd-kind-icon">IRemoteOptions</a>
+                                    </li>
+                                    <li class=" tsd-kind-class tsd-parent-kind-container">
+                                        <a href="validation-basicvalidators.validators.containsvalidator.html" class="tsd-kind-icon">ContainsValidator</a>
+                                    </li>
+                                    <li class=" tsd-kind-class tsd-parent-kind-container">
+                                        <a href="validation-basicvalidators.validators.creditcardvalidator.html" class="tsd-kind-icon">CreditCardValidator</a>
+                                    </li>
+                                    <li class=" tsd-kind-class tsd-parent-kind-container">
+                                        <a href="validation-basicvalidators.validators.dateisovalidator.html" class="tsd-kind-icon">DateISOValidator</a>
+                                    </li>
+                                    <li class=" tsd-kind-class tsd-parent-kind-container">
+                                        <a href="validation-basicvalidators.validators.datevalidator.html" class="tsd-kind-icon">DateValidator</a>
+                                    </li>
+                                    <li class=" tsd-kind-class tsd-parent-kind-container">
+                                        <a href="validation-basicvalidators.validators.digitvalidator.html" class="tsd-kind-icon">DigitValidator</a>
+                                    </li>
+                                    <li class=" tsd-kind-class tsd-parent-kind-container">
+                                        <a href="validation-basicvalidators.validators.emailvalidator.html" class="tsd-kind-icon">EmailValidator</a>
+                                    </li>
+                                    <li class="current tsd-kind-class tsd-parent-kind-container">
+                                        <a href="validation-basicvalidators.validators.enumvalidator.html" class="tsd-kind-icon">EnumValidator</a>
+                                            <ul>
+                                                        <li class=" tsd-kind-constructor-method tsd-parent-kind-class">
+                                                            <a href="validation-basicvalidators.validators.enumvalidator.html#constructor" class="tsd-kind-icon">constructor</a>
+                                                        </li>
+                                                        <li class=" tsd-kind-property tsd-parent-kind-class">
+                                                            <a href="validation-basicvalidators.validators.enumvalidator.html#enum" class="tsd-kind-icon">Enum</a>
+                                                        </li>
+                                                        <li class=" tsd-kind-property tsd-parent-kind-class">
+                                                            <a href="validation-basicvalidators.validators.enumvalidator.html#tagname" class="tsd-kind-icon">tagName</a>
+                                                        </li>
+                                                        <li class=" tsd-kind-method tsd-parent-kind-class">
+                                                            <a href="validation-basicvalidators.validators.enumvalidator.html#isacceptable" class="tsd-kind-icon">isAcceptable</a>
+                                                        </li>
+                                            </ul>
+                                    </li>
+                                    <li class=" tsd-kind-class tsd-parent-kind-container">
+                                        <a href="validation-basicvalidators.validators.equaltovalidator.html" class="tsd-kind-icon">EqualToValidator</a>
+                                    </li>
+                                    <li class=" tsd-kind-class tsd-parent-kind-container">
+                                        <a href="validation-basicvalidators.validators.lettersonlyvalidator.html" class="tsd-kind-icon">LettersOnlyValidator</a>
+                                    </li>
+                                    <li class=" tsd-kind-class tsd-parent-kind-container">
+                                        <a href="validation-basicvalidators.validators.maxitemsvalidator.html" class="tsd-kind-icon">MaxItemsValidator</a>
+                                    </li>
+                                    <li class=" tsd-kind-class tsd-parent-kind-container">
+                                        <a href="validation-basicvalidators.validators.maxlengthvalidator.html" class="tsd-kind-icon">MaxLengthValidator</a>
+                                    </li>
+                                    <li class=" tsd-kind-class tsd-parent-kind-container">
+                                        <a href="validation-basicvalidators.validators.maxvalidator.html" class="tsd-kind-icon">MaxValidator</a>
+                                    </li>
+                                    <li class=" tsd-kind-class tsd-parent-kind-container">
+                                        <a href="validation-basicvalidators.validators.minitemsvalidator.html" class="tsd-kind-icon">MinItemsValidator</a>
+                                    </li>
+                                    <li class=" tsd-kind-class tsd-parent-kind-container">
+                                        <a href="validation-basicvalidators.validators.minlengthvalidator.html" class="tsd-kind-icon">MinLengthValidator</a>
+                                    </li>
+                                    <li class=" tsd-kind-class tsd-parent-kind-container">
+                                        <a href="validation-basicvalidators.validators.minvalidator.html" class="tsd-kind-icon">MinValidator</a>
+                                    </li>
+                                    <li class=" tsd-kind-class tsd-parent-kind-container">
+                                        <a href="validation-basicvalidators.validators.multipleofvalidator.html" class="tsd-kind-icon">MultipleOfValidator</a>
+                                    </li>
+                                    <li class=" tsd-kind-class tsd-parent-kind-container tsd-is-not-exported">
+                                        <a href="validation-basicvalidators.validators.numberfce.html" class="tsd-kind-icon">NumberFce</a>
+                                    </li>
+                                    <li class=" tsd-kind-class tsd-parent-kind-container">
+                                        <a href="validation-basicvalidators.validators.numbervalidator.html" class="tsd-kind-icon">NumberValidator</a>
+                                    </li>
+                                    <li class=" tsd-kind-class tsd-parent-kind-container">
+                                        <a href="validation-basicvalidators.validators.patternvalidator.html" class="tsd-kind-icon">PatternValidator</a>
+                                    </li>
+                                    <li class=" tsd-kind-class tsd-parent-kind-container">
+                                        <a href="validation-basicvalidators.validators.rangelengthvalidator.html" class="tsd-kind-icon">RangeLengthValidator</a>
+                                    </li>
+                                    <li class=" tsd-kind-class tsd-parent-kind-container">
+                                        <a href="validation-basicvalidators.validators.rangevalidator.html" class="tsd-kind-icon">RangeValidator</a>
+                                    </li>
+                                    <li class=" tsd-kind-class tsd-parent-kind-container">
+                                        <a href="validation-basicvalidators.validators.remotevalidator.html" class="tsd-kind-icon">RemoteValidator</a>
+                                    </li>
+                                    <li class=" tsd-kind-class tsd-parent-kind-container">
+                                        <a href="validation-basicvalidators.validators.requiredvalidator.html" class="tsd-kind-icon">RequiredValidator</a>
+                                    </li>
+                                    <li class=" tsd-kind-class tsd-parent-kind-container">
+                                        <a href="validation-basicvalidators.validators.signeddigitvalidator.html" class="tsd-kind-icon">SignedDigitValidator</a>
+                                    </li>
+                                    <li class=" tsd-kind-class tsd-parent-kind-container">
+                                        <a href="validation-basicvalidators.validators.stepvalidator.html" class="tsd-kind-icon">StepValidator</a>
+                                    </li>
+                                    <li class=" tsd-kind-class tsd-parent-kind-container">
+                                        <a href="validation-basicvalidators.validators.typevalidator.html" class="tsd-kind-icon">TypeValidator</a>
+                                    </li>
+                                    <li class=" tsd-kind-class tsd-parent-kind-container">
+                                        <a href="validation-basicvalidators.validators.uniqitemsvalidator.html" class="tsd-kind-icon">UniqItemsValidator</a>
+                                    </li>
+                                    <li class=" tsd-kind-class tsd-parent-kind-container">
+                                        <a href="validation-basicvalidators.validators.urlvalidator.html" class="tsd-kind-icon">UrlValidator</a>
+                                    </li>
+                                    <li class=" tsd-kind-class tsd-parent-kind-container">
+                                        <a href="validation-basicvalidators.validators.zipcodevalidator.html" class="tsd-kind-icon">ZipCodeValidator</a>
+                                    </li>
+                        </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<script src="../assets/js/main.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,356 @@
+﻿<!doctype html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Business rules engine | Business rules engine</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+
+<header>
+    <div class="tsd-page-toolbar">
+        <div class="container">
+            <div id="tsd-filter">
+                <input type="checkbox" id="tsd-filter-inherited" checked />
+                <label for="tsd-filter-inherited">Inherited</label>
+
+                <input type="checkbox" id="tsd-filter-private" checked />
+                <label for="tsd-filter-private">Private</label>
+
+                <input type="checkbox" id="tsd-filter-only-exported" />
+                <label for="tsd-filter-only-exported">Only exported</label>
+            </div>
+
+            <a href="index.html">Business rules engine</a>
+        </div>
+    </div>
+    <div class="tsd-page-title">
+        <div class="container">
+            <ul class="breadcrumb">
+                
+            </ul>
+            <h1> Business rules engine</h1>
+        </div>
+    </div>
+</header>
+
+<div class="container container-main">
+    <div class="row">
+        <div class="col-8">
+            <h1 id="business-rules-engine">Business rules engine</h1>
+<p><img src="https://github.com/rsamec/form/blob/master/form_logo.jpg" alt="logo"></p>
+<p>Business rules engine is a lightweight JavaScript library for easy business rules definition of the product, the contract, the form etc.</p>
+<ul>
+<li>[Business rules engine - Tutorial] (<a href="https://github.com/rsamec/business-rules-engine/wiki">https://github.com/rsamec/business-rules-engine/wiki</a>)</li>
+<li>[Business rules engine - API] (<a href="http://rsamec.github.io/business-rules-engine/docs/globals.html">http://rsamec.github.io/business-rules-engine/docs/globals.html</a>)</li>
+<li>[Business rules repository - sources] (<a href="https://github.com/rsamec/business-rules">https://github.com/rsamec/business-rules</a>)</li>
+<li>[Business rules repository - API] (<a href="http://rsamec.github.io/business-rules/docs/globals.html">http://rsamec.github.io/business-rules/docs/globals.html</a>)</li>
+<li>[NodeJS Example] (<a href="https://github.com/rsamec/node-form-app">https://github.com/rsamec/node-form-app</a>)</li>
+<li>[AngularJS Example] (<a href="https://github.com/rsamec/angular-form-app">https://github.com/rsamec/angular-form-app</a>)</li>
+<li>[AngularJS Demo - Forms app] (<a href="http://nodejs-formvalidation.rhcloud.com/">http://nodejs-formvalidation.rhcloud.com/</a>)<ul>
+<li>[Vacation Request form] (<a href="http://nodejs-formvalidation.rhcloud.com/#/vacationApproval/new">http://nodejs-formvalidation.rhcloud.com/#/vacationApproval/new</a>)</li>
+<li>[Hobbies form] (<a href="http://nodejs-formvalidation.rhcloud.com/#/hobbies/new">http://nodejs-formvalidation.rhcloud.com/#/hobbies/new</a>)</li>
+</ul>
+</li>
+</ul>
+<h2 id="key-features">Key features</h2>
+<p>The main benefit is that business rules engine is not tight to HTML DOM or any other UI framework.
+This validation engine is <strong>UI agnostic</strong> and that is why it can be used as <strong>an independent representation of business rules</strong> of a product, contract, etc.
+It can be easily reused by different types of applications, libraries.</p>
+<ul>
+<li>It enables to decorate custom objects and its properties with validation rules.</li>
+<li>It supports declarative and imperative validation rules definition<ul>
+<li><a href="http://json-schema.org/">JSON schema</a> with validation keywords <a href="http://json-schema.org/latest/json-schema-validation.html">JSON Schema Validation</a></li>
+<li>raw JSON data  with rules meta data with validation keywords <a href="http://jqueryvalidation.org/">JQuery validation plugin</a></li>
+</ul>
+</li>
+<li>It supports composition of validation rules, that enables to validate custom object with nested structures.</li>
+<li>It is ease to create your own custom validators.</li>
+<li>It supports asynchronous validation rules (uses promises).</li>
+<li>It supports shared validation rules.</li>
+<li>It supports assigning validation rules to collection-based structures - arrays and lists.</li>
+<li>It supports localization of error messages with TranslateArgs.</li>
+<li>It deploys as AMD, CommonJS or plain script module pattern.</li>
+<li>It offers basic build-in constrains validators. Other custom validators can be find in extensible repository of custom validators (work in progress).</li>
+</ul>
+<h2 id="installation">Installation</h2>
+<p>This module is installed:</p>
+<ul>
+<li>Node.js<ul>
+<li>npm install business-rules-engine</li>
+<li>use require(&#39;business-rules-engine&#39;);</li>
+</ul>
+</li>
+<li>Bower<ul>
+<li>bower install business-rules-engine</li>
+<li>Require.js - require([&quot;business-rules-engine/amd/Validation&quot;], ...</li>
+<li>Script tag -&gt; add reference to business-rules-engine/module/Validation.js file.</li>
+</ul>
+</li>
+</ul>
+<h2 id="example-usage">Example Usage</h2>
+<h3 id="declarative-syntax">Declarative syntax</h3>
+<ul>
+<li><p><a href="http://json-schema.org/">JSON schema</a> with validation keywords <a href="http://json-schema.org/latest/json-schema-validation.html">JSON Schema Validation</a></p>
+<pre><code class="lang-js">  {
+<span class="hljs-label">      FirstName:</span> {
+<span class="hljs-label">          type:</span> <span class="hljs-string">"string"</span>,
+<span class="hljs-label">          title:</span> <span class="hljs-string">"First name"</span>,
+<span class="hljs-label">          required:</span> <span class="hljs-string">"true"</span>,
+<span class="hljs-label">          maxLength:</span> <span class="hljs-number">15</span>
+      },
+<span class="hljs-label">      LastName:</span> {
+<span class="hljs-label">          type:</span> <span class="hljs-string">"string"</span>,
+          <span class="hljs-string">"title"</span>: <span class="hljs-string">"Last name"</span>,
+<span class="hljs-label">          required:</span> <span class="hljs-literal">true</span>,
+<span class="hljs-label">          maxLength:</span> <span class="hljs-number">15</span>
+      },
+<span class="hljs-label">      Contacts:</span> {
+<span class="hljs-label">          type:</span> <span class="hljs-string">"array"</span>,
+<span class="hljs-label">          maxItems:</span> <span class="hljs-number">4</span>,
+<span class="hljs-label">          minItems:</span> <span class="hljs-number">2</span>,
+<span class="hljs-label">          items:</span> {
+<span class="hljs-label">              type:</span> <span class="hljs-string">"object"</span>,
+<span class="hljs-label">              properties:</span> {
+<span class="hljs-label">                  Email:</span> {
+<span class="hljs-label">                      type:</span> <span class="hljs-string">"string"</span>,
+<span class="hljs-label">                      title:</span> <span class="hljs-string">"Email"</span>,
+<span class="hljs-label">                      default:</span> <span class="hljs-string">''</span>,
+<span class="hljs-label">                      required:</span> <span class="hljs-literal">true</span>,
+<span class="hljs-label">                      maxLength:</span> <span class="hljs-number">100</span>,
+<span class="hljs-label">                      pattern:</span> <span class="hljs-string">"S*@S*"</span> },
+<span class="hljs-label">                  Mobile:</span> {
+<span class="hljs-label">                      type:</span> <span class="hljs-string">"object"</span>,
+<span class="hljs-label">                      properties:</span> {
+<span class="hljs-label">                          CountryCode:</span> {
+<span class="hljs-label">                              type:</span> <span class="hljs-string">"string"</span>,
+<span class="hljs-label">                              title:</span> <span class="hljs-string">"Country code"</span>,
+<span class="hljs-label">                              required:</span> <span class="hljs-literal">true</span>,
+<span class="hljs-label">                              maxLength:</span> <span class="hljs-number">3</span>,
+<span class="hljs-label">                              enum:</span> [<span class="hljs-string">"FRA"</span>, <span class="hljs-string">"CZE"</span>, <span class="hljs-string">"USA"</span>, <span class="hljs-string">"GER"</span>]
+                          },
+<span class="hljs-label">                          Number:</span> {
+<span class="hljs-label">                              type:</span> <span class="hljs-string">"string"</span>,
+<span class="hljs-label">                              title:</span> <span class="hljs-string">"Phone number"</span>,
+<span class="hljs-label">                              required:</span> <span class="hljs-literal">true</span>,
+<span class="hljs-label">                              maxLength:</span> <span class="hljs-number">9</span>
+                          }
+                      }
+                  },
+<span class="hljs-label">                  FixedLine:</span> {
+<span class="hljs-label">                      type:</span> <span class="hljs-string">"object"</span>,
+<span class="hljs-label">                      properties:</span> {
+<span class="hljs-label">                          CountryCode:</span> {
+<span class="hljs-label">                              type:</span> <span class="hljs-string">"string"</span>,
+<span class="hljs-label">                              title:</span> <span class="hljs-string">"Country code"</span>,
+<span class="hljs-label">                              required:</span> <span class="hljs-literal">true</span>,
+<span class="hljs-label">                              maxLength:</span> <span class="hljs-number">3</span>,
+<span class="hljs-label">                              enum:</span> [<span class="hljs-string">"FRA"</span>, <span class="hljs-string">"CZE"</span>, <span class="hljs-string">"USA"</span>, <span class="hljs-string">"GER"</span>]
+                          },
+<span class="hljs-label">                          Number:</span> {
+<span class="hljs-label">                              type:</span> <span class="hljs-string">"string"</span>,
+<span class="hljs-label">                              title:</span> <span class="hljs-string">"Phone number"</span>,
+<span class="hljs-label">                              required:</span> <span class="hljs-literal">true</span>,
+<span class="hljs-label">                              maxLength:</span> <span class="hljs-number">9</span>
+                          }
+                      }
+                  }
+              }
+          }
+      }
+  }
+</code></pre>
+</li>
+<li><p>raw JSON data annotated with meta data rules property</p>
+</li>
+<li>using validation keywords <a href="http://jqueryvalidation.org/">JQuery validation plugin</a></li>
+</ul>
+<pre><code class="lang-js"><span class="hljs-comment">// define data structure + validation rules meta data</span>
+  {
+        FirstName: {
+            rules: {<span class="hljs-keyword">required</span>: <span class="hljs-literal">true</span>, maxlength: <span class="hljs-number">15</span>}},
+        LastName: {
+            rules: {<span class="hljs-keyword">required</span>: <span class="hljs-literal">true</span>, maxlength: <span class="hljs-number">15</span>}},
+        Contacts: [
+            {
+                Email: {
+                    rules: {
+                        <span class="hljs-keyword">required</span>: <span class="hljs-literal">true</span>,
+                        maxlength: <span class="hljs-number">100</span>,
+                        email: <span class="hljs-literal">true</span>
+                    }
+                },
+                Mobile: {
+                    CountryCode: {
+                        rules: {<span class="hljs-keyword">required</span>: <span class="hljs-literal">true</span>, maxlength: <span class="hljs-number">3</span>, <span class="hljs-class"><span class="hljs-keyword">enum</span>: ["<span class="hljs-title">FRA</span>", "CZE", "USA", "GER"] }
+                    },
+                    Number: </span>{
+                        rules: {<span class="hljs-keyword">required</span>: <span class="hljs-literal">true</span>, maxlength: <span class="hljs-number">9</span> }
+                    }
+                },
+                FixedLine: {
+                    CountryCode: {
+                        rules: {<span class="hljs-keyword">required</span>: <span class="hljs-literal">true</span>, maxlength: <span class="hljs-number">3</span>, <span class="hljs-class"><span class="hljs-keyword">enum</span>: ["<span class="hljs-title">FRA</span>", "CZE", "USA", "GER"] }
+                    },
+                    Number: </span>{
+                        rules: {<span class="hljs-keyword">required</span>: <span class="hljs-literal">true</span>, maxlength: <span class="hljs-number">9</span> }
+                    }
+                }
+            },{maxItems: <span class="hljs-number">4</span>, minItems: <span class="hljs-number">2</span>}
+        ]
+    }
+</code></pre>
+<h3 id="imperative-definition">Imperative definition</h3>
+<p>To define business rules for some object, you have to create abstract validator.</p>
+<pre><code class="lang-js">          <span class="hljs-comment">//create new validator for object with structure&lt;IPerson&gt;</span>
+          <span class="hljs-built_in">var</span> personValidator <span class="hljs-subst">=</span> <span class="hljs-literal">new</span> Validation<span class="hljs-built_in">.</span>AbstractValidator();
+
+          <span class="hljs-comment">//basic validators</span>
+          <span class="hljs-built_in">var</span> required <span class="hljs-subst">=</span> <span class="hljs-literal">new</span> Validators<span class="hljs-built_in">.</span>RequiredValidator();
+          <span class="hljs-built_in">var</span> maxLength <span class="hljs-subst">=</span> <span class="hljs-literal">new</span> Validators<span class="hljs-built_in">.</span>MaxLengthValidator(<span class="hljs-number">15</span>);
+
+          <span class="hljs-comment">//assigned validators to property</span>
+          personValidator<span class="hljs-built_in">.</span>RuleFor(<span class="hljs-string">"FirstName"</span>, required);
+          personValidator<span class="hljs-built_in">.</span>RuleFor(<span class="hljs-string">"FirstName"</span>,maxLength);
+
+          <span class="hljs-comment">//assigned validators to property</span>
+          personValidator<span class="hljs-built_in">.</span>RuleFor(<span class="hljs-string">"LastName"</span>, required);
+          personValidator<span class="hljs-built_in">.</span>RuleFor(<span class="hljs-string">"LastName"</span>,maxLength);
+
+          <span class="hljs-attribute">...</span>
+</code></pre>
+<p>To use business rules and execute them on particular data</p>
+<pre><code class="lang-js">          //create test data
+          <span class="hljs-keyword">var</span> data = {
+                <span class="hljs-type">Person1</span>:
+                {
+                    <span class="hljs-type">FirstName</span>:'<span class="hljs-type">John</span>',
+                    <span class="hljs-type">LastName</span>: '<span class="hljs-type">Smith</span>'
+                },
+                <span class="hljs-type">Person2</span>:{}
+
+          }
+
+          //create concrete rule
+          <span class="hljs-keyword">var</span> person1Validator = personValidator.<span class="hljs-type">CreateRule</span>(<span class="hljs-string">"Person 1"</span>);
+
+          //execute validation
+          <span class="hljs-keyword">var</span> <span class="hljs-literal">result</span> = person1Validator.<span class="hljs-type">Validate</span>(this.<span class="hljs-type">Data</span>.<span class="hljs-type">Person1</span>);
+
+          //verify results
+          <span class="hljs-keyword">if</span> (<span class="hljs-literal">result</span>.<span class="hljs-type">HasErrors</span>){
+              console.log(<span class="hljs-literal">result</span>.<span class="hljs-type">ErrorMessage</span>);
+          }
+          //---------
+          //--outputs
+          //---------
+
+          //create concrete rule
+          <span class="hljs-keyword">var</span> person2Validator = personValidator.<span class="hljs-type">CreateRule</span>(<span class="hljs-string">"Person 2"</span>);
+
+          //execute validation
+          <span class="hljs-keyword">var</span> <span class="hljs-literal">result</span> = person2Validator.<span class="hljs-type">Validate</span>(this.<span class="hljs-type">Data</span>.<span class="hljs-type">Person1</span>);
+
+           //verify results
+          <span class="hljs-keyword">if</span> (<span class="hljs-literal">result</span>.<span class="hljs-type">HasErrors</span>){
+              console.log(<span class="hljs-literal">result</span>.<span class="hljs-type">ErrorMessage</span>);
+          }
+
+          //---------
+          //--outputs
+          //---------
+          // <span class="hljs-type">FirstName</span>: <span class="hljs-type">Field</span> <span class="hljs-keyword">is</span> required.
+          // <span class="hljs-type">LastName</span>: <span class="hljs-type">Field</span> <span class="hljs-keyword">is</span> required.
+</code></pre>
+<h2 id="source-code">Source code</h2>
+<p>All code is written in typescript.</p>
+<pre><code class="lang-bash"><span class="hljs-built_in">npm</span> install -g typescript
+</code></pre>
+<p>To compile to javascript.</p>
+<pre><code class="lang-bash"><span class="hljs-comment">tsc</span> <span class="hljs-comment">src/validation/Validation</span><span class="hljs-string">.</span><span class="hljs-comment">ts</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">target</span> <span class="hljs-comment">ES5</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">module</span> <span class="hljs-comment">commonjs</span>
+</code></pre>
+<h2 id="tests">Tests</h2>
+<pre><code class="lang-bash"><span class="hljs-built_in">npm</span> install -g mocha
+<span class="hljs-built_in">npm</span> install -g expect.js
+</code></pre>
+<p>To run tests</p>
+<pre><code class="lang-bash"><span class="hljs-title">mocha</span> test
+</code></pre>
+<h2 id="grunt-automatization">Grunt automatization</h2>
+<h3 id="basic-steps">Basic steps</h3>
+<ul>
+<li>git clone <a href="https://github.com/rsamec/business-rules-engine">https://github.com/rsamec/business-rules-engine</a></li>
+<li>npm install - get npm packages</li>
+<li>tsd update - get external typings definition</li>
+<li>grunt typings - create node-form typings definition - used by custom validators</li>
+</ul>
+<p>To build all sources to dist folder (generates AMD, CommonJS and module pattern)</p>
+<pre><code class="lang-bash"><span class="hljs-variable">$ </span>grunt dist
+</code></pre>
+<p>To run code analyze - complexity + jshint.</p>
+<pre><code class="lang-bash"><span class="hljs-variable">$ </span>grunt ci
+</code></pre>
+<p>To generate api documentation.</p>
+<pre><code class="lang-bash"><span class="hljs-variable">$ </span>grunt document
+</code></pre>
+<p>To generate typings -&gt; typescript definition files.</p>
+<pre><code class="lang-bash"><span class="hljs-variable">$ </span>grunt typings
+</code></pre>
+<p>To run tests</p>
+<pre><code class="lang-bash"><span class="hljs-variable">$ </span>grunt test
+</code></pre>
+<h2 id="roadmap">Roadmap</h2>
+<ul>
+<li>Add validation groups to shared validation rules</li>
+<li>Separate ValidationResult from execution of validation rules</li>
+<li>Add depedency injection for managing dependencies among components</li>
+<li>Support for meta data definitions</li>
+</ul>
+
+        </div>
+        <div class="offset-1 col-3">
+            <nav class="tsd-navigation primary">
+                <ul>
+                        <li class=" ">
+                            <a href="globals.html"><em>Globals</em></a>
+                        </li>                        <li class=" tsd-kind-dynamic-module">
+                            <a href="modules/validation-basicvalidators.html">validation/BasicValidators</a>
+                        </li>                        <li class=" tsd-kind-container tsd-parent-kind-dynamic-module">
+                            <a href="modules/validation-basicvalidators.validators.html">validation/BasicValidators.Validators</a>
+                        </li>                        <li class=" tsd-kind-dynamic-module">
+                            <a href="modules/validation-formschema.html">validation/FormSchema</a>
+                        </li>                        <li class=" tsd-kind-container tsd-parent-kind-dynamic-module">
+                            <a href="modules/validation-formschema.formschema.html">validation/FormSchema.FormSchema</a>
+                        </li>                        <li class=" tsd-kind-dynamic-module">
+                            <a href="modules/validation-utils.html">validation/Utils</a>
+                        </li>                        <li class=" tsd-kind-container tsd-parent-kind-dynamic-module">
+                            <a href="modules/validation-utils.utils.html">validation/Utils.Utils</a>
+                        </li>                        <li class=" tsd-kind-dynamic-module">
+                            <a href="modules/validation-validation.html">validation/Validation</a>
+                        </li>                        <li class=" tsd-kind-container tsd-parent-kind-dynamic-module">
+                            <a href="modules/validation-validation.validation.html">validation/Validation.Validation</a>
+                        </li>                        <li class=" tsd-kind-dynamic-module">
+                            <a href="modules/customvalidators-datecomparevalidator.html">customValidators/DateCompareValidator</a>
+                        </li>                        <li class=" tsd-kind-dynamic-module">
+                            <a href="modules/customvalidators-icovalidator.html">customValidators/ICOValidator</a>
+                        </li>                        <li class=" tsd-kind-dynamic-module">
+                            <a href="modules/customvalidators-paramvalidator.html">customValidators/ParamValidator</a>
+                        </li>                        <li class=" tsd-kind-dynamic-module">
+                            <a href="modules/customvalidators-rcvalidator.html">customValidators/RCValidator</a>
+                        </li>                </ul>
+            </nav>
+
+            <nav class="tsd-navigation secondary">
+            </nav>
+        </div>
+    </div>
+</div>
+
+<script src="assets/js/main.js"></script>
+
+</body>
+</html>

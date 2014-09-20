@@ -26,7 +26,7 @@ interface IPhone{
     Number:string
 }
 
-describe('JSON Form Schema', function () {
+describe('JsonSchemaRuleFactory', function () {
     //JSOM form schema
     var formSchema = {
         FirstName: {
@@ -117,7 +117,7 @@ describe('JSON Form Schema', function () {
         this.Data.FirstName = "John";
         this.Data.LastName = "Smith";
 
-        this.MainValidator = new FormSchema.JsonSchemaAbstractValidationRuleFactory(this.FormSchema).CreateRule("Main");
+        this.MainValidator = new FormSchema.JsonSchemaRuleFactory(this.FormSchema).CreateRule("Main");
 
 
     });
@@ -238,7 +238,7 @@ describe('JSON Form Schema', function () {
         this.Data.Contacts[2].Mobile.CountryCode = "BLA";
 
         //delete last error item
-        this.Data.Contacts.splice(2, 1)
+        this.Data.Contacts.splice(2, 1);
 
         //excercise
         var result = this.MainValidator.Validate(this.Data);
@@ -281,7 +281,7 @@ describe('JSON Form Schema', function () {
     });
 });
 
-describe('JQuery validation plugin - data', function () {
+describe('JQueryValidationRuleFactory', function () {
     // define data structure + validation rules meta data
     var metaData = {
         FirstName: {
@@ -348,7 +348,7 @@ describe('JQuery validation plugin - data', function () {
 
         this.Data.FirstName = "John";
         this.Data.LastName = "Smith";
-        this.MainValidator = new FormSchema.JQueryValidationAbstractValidationRuleFactory(metaData).CreateRule("Main");
+        this.MainValidator = new FormSchema.JQueryValidationRuleFactory(metaData).CreateRule("Main");
 
 
     });
@@ -424,6 +424,7 @@ describe('JQuery validation plugin - data', function () {
 
         //excercise
         var result = this.MainValidator.Validate(this.Data);
+
         //verify
         expect(result.HasErrors).to.equal(false);
 
@@ -469,7 +470,7 @@ describe('JQuery validation plugin - data', function () {
         this.Data.Contacts[2].Mobile.CountryCode = "BLA";
 
         //delete last error item
-        this.Data.Contacts.splice(2, 1)
+        this.Data.Contacts.splice(2, 1);
 
         //excercise
         var result = this.MainValidator.Validate(this.Data);

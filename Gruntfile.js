@@ -75,7 +75,7 @@ module.exports = function (grunt) {
               options: {
                   module: 'commonjs',
                   out: './docs',
-                  name: 'ValidationEngine',
+                  name: 'Business rules engine',
                   target: 'es5'
               },
               src: ['src/validation/*','src/customValidators/*']

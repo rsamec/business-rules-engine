@@ -119,7 +119,8 @@ This module is installed:
     }
 ```
 
-+ raw JSON data annotated with meta data describing validation keywords [JQuery validation plugin](http://jqueryvalidation.org/)
++ raw JSON data annotated with meta data rules property
++ using validation keywords [JQuery validation plugin](http://jqueryvalidation.org/)
 
 ``` js
 // define data structure + validation rules meta data

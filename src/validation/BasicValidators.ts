@@ -1,15 +1,18 @@
 ///<reference path='../../typings/underscore/underscore.d.ts'/>
 ///<reference path='../../typings/q/Q.d.ts'/>
-///<reference path='../../typings/moment/moment.d.ts'/>
 ///<reference path='../../typings/node/node.d.ts'/>
 ///<reference path='../../typings/business-rules-engine/business-rules-engine.d.ts'/>
 
 import Q = require("q");
-import moment = require("moment");
 import _ = require("underscore");
 var axios = require('axios');
 
+/**
+ * Basic validation rules that enables to validate an value against common constraints. They are assertions with conditions.
+ * Basic constraints (Type,EqualTo,Required), string constraints (Email,Pattern, Url,MinLength,MaxLength), numeric constraints (Digits,SignedDigits,Min,Max,Range,MultipleOf), date constraints (Data,DateISO)
+ */
 module Validators {
+
     class NumberFce {
         static GetNegDigits(value:string):number {
             if (value === undefined) return 0;
@@ -21,46 +24,63 @@ module Validators {
         }
     }
 
-    var lettersRegexp = /^[A-Za-z]+$/;
+
+    /**
+     * Return true if it is a valid string letter representation, otherwise false.
+     */
     export class LettersOnlyValidator implements Validation.IStringValidator {
+        private lettersRegexp = /^[A-Za-z]+$/;
         isAcceptable(s:string) {
-            return lettersRegexp.test(s);
+            return this.lettersRegexp.test(s);
         }
 
         tagName = "lettersonly";
     }
 
-    var numberRegexp = /^[0-9]+$/;
+    /**
+     * Return true if it is a valid zip code, otherwise false.
+     */
     export class ZipCodeValidator implements Validation.IStringValidator {
+        private numberRegexp = /^[0-9]+$/;
         isAcceptable(s:string) {
-            return s.length === 5 && numberRegexp.test(s);
+            return s.length === 5 && this.numberRegexp.test(s);
         }
 
         tagName = "zipcode";
     }
 
-    // contributed by Scott Gonzalez: http://projects.scottsplayground.com/email_address_validation/
-    var emailRegexp = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i;
+    /**
+     * Return true if it is a valid Internet email address as defined by RFC 5322, section 3.4.1, otherwise false
+     */
     export class EmailValidator implements Validation.IStringValidator {
+
+        // contributed by Scott Gonzalez: http://projects.scottsplayground.com/email_address_validation/
+        private emailRegexp = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i;
         isAcceptable(s:string) {
-            return emailRegexp.test(s);
+            return this.emailRegexp.test(s);
         }
 
         tagName = "email";
     }
-    // contributed by Scott Gonzalez: http://projects.scottsplayground.com/iri/
-    var urlRegexp = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i;
+    /**
+     * Return true if it is a valid URI, according to [RFC3986], otherwise false.
+     */
     export class UrlValidator implements Validation.IStringValidator {
+        // contributed by Scott Gonzalez: http://projects.scottsplayground.com/iri/
+        private urlRegexp = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i;
+
         isAcceptable(s:string) {
-            return urlRegexp.test(s);
+            return this.urlRegexp.test(s);
         }
 
         tagName = "url";
     }
 
-    // http://jqueryvalidation.org/creditcard-method/
-    // based on http://en.wikipedia.org/wiki/Luhn/
+    /**
+     * Return true if it is a valid Luhn card number based on http://en.wikipedia.org/wiki/Luhn/, otherwise false;
+     */
     export class CreditCardValidator implements Validation.IStringValidator {
+        //taken from http://jqueryvalidation.org/creditcard-method/
         isAcceptable(value:string) {
 
 
@@ -99,6 +119,9 @@ module Validators {
         tagName = "creditcard";
     }
 
+    /**
+     * Return true if it is not empty value, otherwise false.
+     */
     export class RequiredValidator implements Validation.IStringValidator {
         isAcceptable(s:string) {
             return s !== undefined && s !== "";
@@ -106,7 +129,15 @@ module Validators {
 
         tagName = "required";
     }
+    /**
+     * Return true if a value is equal (using strict equal) to passed value, otherwise false.
+     */
     export class EqualToValidator implements Validation.IPropertyValidator {
+
+        /**
+         *
+         * @param Value
+         */
         constructor(public Value?:any) {
 
         }
@@ -116,6 +147,10 @@ module Validators {
 
         tagName = "equalTo";
     }
+
+    /**
+     * Return true if it is a valid string date representation (can be parsed as date), otherwise false.
+     */
     export class DateValidator implements Validation.IStringValidator {
         isAcceptable(s:string) {
             return !/Invalid|NaN/.test(new Date(s).toString());
@@ -123,6 +158,10 @@ module Validators {
 
         tagName = "date";
     }
+
+    /**
+     * Return true if it is a valid string ISO date representation (can be parsed as ISO date), otherwise false.
+     */
     export class DateISOValidator implements Validation.IStringValidator {
         isAcceptable(s:string) {
             return  /^\d{4}[\/\-]\d{1,2}[\/\-]\d{1,2}$/.test(s);
@@ -130,6 +169,10 @@ module Validators {
 
         tagName = "dateISO";
     }
+
+    /**
+     * Return true if it is a valid number representation, otherwise false.
+     */
     export class NumberValidator implements Validation.IStringValidator {
         isAcceptable(s:string) {
             return /^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/.test(s);
@@ -137,6 +180,9 @@ module Validators {
 
         tagName = "number";
     }
+    /**
+     * Return true if it is a valid digit representation, otherwise false.
+     */
     export class DigitValidator implements Validation.IStringValidator {
         isAcceptable(s:string) {
             return /^\d+$/.test(s);
@@ -144,7 +190,9 @@ module Validators {
 
         tagName = "digit";
     }
-
+    /**
+     * Return true if it is a valid positive or negative digit representation, otherwise false.
+     */
     export class SignedDigitValidator implements Validation.IStringValidator {
         isAcceptable(s:string) {
             return /^-?\d+$/.test(s);
@@ -153,7 +201,14 @@ module Validators {
         tagName = "signedDigit";
     }
     var MinimalDefaultValue = 0;
+    /**
+     * Return true if string length is greater or equal to MinLength property.
+     */
     export class MinLengthValidator implements Validation.IStringValidator {
+        /**
+         * Default constructor
+         * @param MinLength - minimal number of characters.
+         */
         constructor(public MinLength?:number) {
             if (MinLength === undefined) this.MinLength = MinimalDefaultValue;
         }
@@ -165,7 +220,15 @@ module Validators {
         tagName = "minlength";
     }
     var MaximalDefaultValue = 0;
+    /**
+     * Return true if string length is less or equal to MaxLength property.
+     */
     export class MaxLengthValidator implements Validation.IStringValidator {
+
+        /**
+         * Default constructor.
+         * @param MaxLength - maximal number of characters.
+         */
         constructor(public MaxLength?:number) {
             if (MaxLength === undefined) this.MaxLength = MaximalDefaultValue;
         }
@@ -177,7 +240,14 @@ module Validators {
         tagName = "maxlength";
     }
 
+    /**
+     * Return true if string length is between MinLength and MaxLength property.
+     */
     export class RangeLengthValidator implements Validation.IStringValidator {
+        /**
+         * Default constructor.
+         * @param RangeLength - array [minimal number of characters, maximal number of characters]
+         */
         constructor(public RangeLength?:Array<number>) {
             if (RangeLength === undefined) this.RangeLength = [MinimalDefaultValue, MaximalDefaultValue];
         }
@@ -196,7 +266,21 @@ module Validators {
 
         tagName = "rangelength";
     }
+
+    /**
+     * Return true only for these conditions
+     * if "Exclusive" is false, then the instance is valid if it is greater than, or equal to, the value of "minimum";
+     * if "Exclusive" is true, the instance is valid if it is strictly greater than the value of "minimum".
+     *
+     *  @require underscore
+     */
     export class MinValidator implements Validation.IPropertyValidator {
+
+        /**
+         * Default constructor.
+         * @param Min - the value of "minimum"
+         * @param Exclusive - true = strictly greater, otherwise greater or equal to the value of "minimum";
+         */
         constructor(public Min?:number,public Exclusive?:boolean) {
             if (Min === undefined) this.Min = MinimalDefaultValue;
         }
@@ -208,7 +292,17 @@ module Validators {
 
         tagName = "min";
     }
+
+    /**
+     * Return true if the number of items in array is lower or equal to the value of "minimum".
+     *
+     *  @require underscore
+     */
     export class MinItemsValidator implements Validation.IPropertyValidator {
+        /**
+         * Default constructor.
+         * @param Max - the value of "minimum"
+         */
         constructor(public Min?:number) {
             if (Min === undefined) this.Min = MinimalDefaultValue;
         }
@@ -220,7 +314,20 @@ module Validators {
 
         tagName = "minItems";
     }
+    /**
+     * Return true only for these conditions
+     * if "Exclusive" is false, then the instance is valid if it is lower than, or equal to, the value of "maximum";
+     * if "Exclusive" is true, the instance is valid if it is strictly lower than the value of "maximum".
+     *
+     *  @require underscore
+     */
     export class MaxValidator implements Validation.IPropertyValidator {
+
+        /**
+         * Default constructor
+         * @param Max - the value of "maximum"
+         * @param Exclusive - true = strictly lower, otherwise lower or equal to the value of "maximum";
+         */
         constructor(public Max?:number, public Exclusive?:boolean) {
             if (Max === undefined) this.Max = MaximalDefaultValue;
         }
@@ -233,7 +340,16 @@ module Validators {
 
         tagName = "max";
     }
+    /**
+     * Return true if an number of items in array is greater or equal to the value of "maximum".
+     *
+     *  @require underscore
+     */
     export class MaxItemsValidator implements Validation.IPropertyValidator {
+        /**
+         * Default constructor.
+         * @param Max - the value of "maximum"
+         */
         constructor(public Max?:number) {
             if (Max === undefined) this.Max = MaximalDefaultValue;
         }
@@ -245,6 +361,12 @@ module Validators {
 
         tagName = "maxItems";
     }
+
+    /**
+     * Return true if the array contains unique items (using strict equality), otherwise false.
+     *
+     *  @require underscore
+     */
     export class UniqItemsValidator implements Validation.IPropertyValidator {
 
         isAcceptable(s:any) {
@@ -255,7 +377,17 @@ module Validators {
         tagName = "uniqItems";
     }
 
+    /**
+     * Return true if value is between Min and Max property.
+     *
+     *  @require underscore
+     */
     export class RangeValidator implements Validation.IPropertyValidator {
+
+        /**
+         * Default constructor.
+         * @param Range - array [the value of "minimum", the value of "maximum"]
+         */
         constructor(public Range?:Array<number>) {
             if (Range === undefined) this.Range = [MinimalDefaultValue, MaximalDefaultValue];
         }
@@ -265,17 +397,36 @@ module Validators {
             return s.length >= this.Min && s.length <= this.Max;
         }
 
+        /**
+         * Return the value of "minimum"
+         * @returns {number}
+         */
         public get Min():number {
             return this.Range[0];
         }
 
+        /**
+         * Return the value of "maximum"
+         * @returns {number}
+         */
         public get Max():number {
             return this.Range[1];
         }
 
         tagName = "range";
     }
+
+    /**
+     * Return true if an value is any of predefined values (using strict equality), otherwise false.
+     *
+     *  @require underscore
+     */
     export class EnumValidator implements Validation.IPropertyValidator {
+
+        /**
+         * Default constructor.
+         * @param Enum - array of values
+         */
         constructor(public Enum?:Array<number>) {
             if (Enum === undefined) this.Enum = [];
         }
@@ -286,7 +437,17 @@ module Validators {
         tagName = "enum";
     }
 
+    /**
+     * Return true if an value is a specified type, otherwise false.
+     *
+     *  @require underscore
+     */
     export class TypeValidator implements Validation.IPropertyValidator {
+
+        /**
+         * Default constructor.
+         * @param Type - keywords that defines an concrete type
+         */
         constructor(public Type:string) {
             if (this.Type === undefined) this.Type = "string";
         }
@@ -302,10 +463,19 @@ module Validators {
         }
         tagName = "type";
     }
-    var StepDefaultValue = "1";
+
+    /**
+     * Return true if an value is multiplier of passed number step, otherwise false.
+     */
     export class StepValidator implements Validation.IPropertyValidator {
+        private StepDefaultValue = "1";
+
+        /**
+         * Default constructor.
+         * @param Step - step multiplier
+         */
         constructor(public Step?:string) {
-            if (Step === undefined) this.Step = StepDefaultValue;
+            if (Step === undefined) this.Step = this.StepDefaultValue;
         }
 
         isAcceptable(s:any) {
@@ -318,10 +488,20 @@ module Validators {
         tagName = "step";
     }
 
-    var MultipleOfDefaultValue = 1;
+    /**
+     * Return true if a numeric instance is valid against "multipleOf" if the result of the division of the instance by this keyword's value is an integer, otherwise false.
+     *
+     *  @require underscore
+     */
     export class MultipleOfValidator implements Validation.IPropertyValidator {
+        private MultipleOfDefaultValue = 1;
+
+        /**
+         * Default constructor
+         * @param Divider
+         */
         constructor(public Divider?:number) {
-            if (Divider === undefined) this.Divider = MultipleOfDefaultValue;
+            if (Divider === undefined) this.Divider = this.MultipleOfDefaultValue;
         }
 
         isAcceptable(s:any) {
@@ -331,10 +511,16 @@ module Validators {
 
         tagName = "multipleOf";
     }
-    var PatternDefaultValue = "*";
+    /**
+     * Return true if an value is valid against specified pattern, otherwise false.
+     */
     export class PatternValidator implements Validation.IStringValidator {
+
+        /**
+         * Default constructor.
+         * @param Pattern - pattern
+         */
         constructor(public Pattern?:string) {
-            if (Pattern === undefined) this.Pattern = PatternDefaultValue;
         }
 
         isAcceptable(s:string) {
@@ -343,8 +529,22 @@ module Validators {
 
         tagName = "pattern";
     }
+
+    /**
+     * Return true if an value is any of predefined values (using strict equality), otherwise false.
+     * Predefined values are fetched async with options service.
+     *
+     * @require underscore
+     * @require Q
+     */
     export class ContainsValidator implements Validation.IAsyncPropertyValidator {
 
+        /**
+         * Default constructor.
+         * @param Options - async service that returns array of values.
+         *
+         *
+         */
         constructor(public Options:Q.Promise<Array<any>>) {
             if (Options === undefined) this.Options = Q.when([]);
         }
@@ -373,19 +573,23 @@ module Validators {
         data:any;
     }
     /**
+     * Return true if remote service returns true, otherwise false.
      *
-     url: 'validateEmail.php',
-     type: "post",
-     data:
-     {
-         email: function()
-         {
-             return $('#register-form :input[name="email"]').val();
-         }
-     }
+     * @require underscore
+     * @require Q
+     * @require axios
+     *
+     * @example
+     * ```typescript
+     *  url: 'http://test/validateEmail',
+     *  ```
      */
     export class RemoteValidator implements Validation.IAsyncPropertyValidator {
 
+        /**
+         * Default constructor
+         * @param Options - remote service url + options
+         */
         constructor(public Options?:IRemoteOptions) {
 
         }

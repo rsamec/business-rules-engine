@@ -2,7 +2,6 @@
 
 
 
-
 var Validators;
 (function (Validators) {
     var NumberFce = (function () {
@@ -20,49 +19,49 @@ var Validators;
         return NumberFce;
     })();
 
-    var lettersRegexp = /^[A-Za-z]+$/;
     var LettersOnlyValidator = (function () {
         function LettersOnlyValidator() {
+            this.lettersRegexp = /^[A-Za-z]+$/;
             this.tagName = "lettersonly";
         }
         LettersOnlyValidator.prototype.isAcceptable = function (s) {
-            return lettersRegexp.test(s);
+            return this.lettersRegexp.test(s);
         };
         return LettersOnlyValidator;
     })();
     Validators.LettersOnlyValidator = LettersOnlyValidator;
 
-    var numberRegexp = /^[0-9]+$/;
     var ZipCodeValidator = (function () {
         function ZipCodeValidator() {
+            this.numberRegexp = /^[0-9]+$/;
             this.tagName = "zipcode";
         }
         ZipCodeValidator.prototype.isAcceptable = function (s) {
-            return s.length === 5 && numberRegexp.test(s);
+            return s.length === 5 && this.numberRegexp.test(s);
         };
         return ZipCodeValidator;
     })();
     Validators.ZipCodeValidator = ZipCodeValidator;
 
-    var emailRegexp = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i;
     var EmailValidator = (function () {
         function EmailValidator() {
+            this.emailRegexp = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i;
             this.tagName = "email";
         }
         EmailValidator.prototype.isAcceptable = function (s) {
-            return emailRegexp.test(s);
+            return this.emailRegexp.test(s);
         };
         return EmailValidator;
     })();
     Validators.EmailValidator = EmailValidator;
 
-    var urlRegexp = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i;
     var UrlValidator = (function () {
         function UrlValidator() {
+            this.urlRegexp = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i;
             this.tagName = "url";
         }
         UrlValidator.prototype.isAcceptable = function (s) {
-            return urlRegexp.test(s);
+            return this.urlRegexp.test(s);
         };
         return UrlValidator;
     })();
@@ -112,6 +111,7 @@ var Validators;
         return RequiredValidator;
     })();
     Validators.RequiredValidator = RequiredValidator;
+
     var EqualToValidator = (function () {
         function EqualToValidator(Value) {
             this.Value = Value;
@@ -123,6 +123,7 @@ var Validators;
         return EqualToValidator;
     })();
     Validators.EqualToValidator = EqualToValidator;
+
     var DateValidator = (function () {
         function DateValidator() {
             this.tagName = "date";
@@ -133,6 +134,7 @@ var Validators;
         return DateValidator;
     })();
     Validators.DateValidator = DateValidator;
+
     var DateISOValidator = (function () {
         function DateISOValidator() {
             this.tagName = "dateISO";
@@ -143,6 +145,7 @@ var Validators;
         return DateISOValidator;
     })();
     Validators.DateISOValidator = DateISOValidator;
+
     var NumberValidator = (function () {
         function NumberValidator() {
             this.tagName = "number";
@@ -153,6 +156,7 @@ var Validators;
         return NumberValidator;
     })();
     Validators.NumberValidator = NumberValidator;
+
     var DigitValidator = (function () {
         function DigitValidator() {
             this.tagName = "digit";
@@ -175,6 +179,7 @@ var Validators;
     })();
     Validators.SignedDigitValidator = SignedDigitValidator;
     var MinimalDefaultValue = 0;
+
     var MinLengthValidator = (function () {
         function MinLengthValidator(MinLength) {
             this.MinLength = MinLength;
@@ -189,6 +194,7 @@ var Validators;
     })();
     Validators.MinLengthValidator = MinLengthValidator;
     var MaximalDefaultValue = 0;
+
     var MaxLengthValidator = (function () {
         function MaxLengthValidator(MaxLength) {
             this.MaxLength = MaxLength;
@@ -232,6 +238,7 @@ var Validators;
         return RangeLengthValidator;
     })();
     Validators.RangeLengthValidator = RangeLengthValidator;
+
     var MinValidator = (function () {
         function MinValidator(Min, Exclusive) {
             this.Min = Min;
@@ -248,6 +255,7 @@ var Validators;
         return MinValidator;
     })();
     Validators.MinValidator = MinValidator;
+
     var MinItemsValidator = (function () {
         function MinItemsValidator(Min) {
             this.Min = Min;
@@ -263,6 +271,7 @@ var Validators;
         return MinItemsValidator;
     })();
     Validators.MinItemsValidator = MinItemsValidator;
+
     var MaxValidator = (function () {
         function MaxValidator(Max, Exclusive) {
             this.Max = Max;
@@ -280,6 +289,7 @@ var Validators;
         return MaxValidator;
     })();
     Validators.MaxValidator = MaxValidator;
+
     var MaxItemsValidator = (function () {
         function MaxItemsValidator(Max) {
             this.Max = Max;
@@ -295,6 +305,7 @@ var Validators;
         return MaxItemsValidator;
     })();
     Validators.MaxItemsValidator = MaxItemsValidator;
+
     var UniqItemsValidator = (function () {
         function UniqItemsValidator() {
             this.tagName = "uniqItems";
@@ -339,6 +350,7 @@ var Validators;
         return RangeValidator;
     })();
     Validators.RangeValidator = RangeValidator;
+
     var EnumValidator = (function () {
         function EnumValidator(Enum) {
             this.Enum = Enum;
@@ -378,13 +390,14 @@ var Validators;
         return TypeValidator;
     })();
     Validators.TypeValidator = TypeValidator;
-    var StepDefaultValue = "1";
+
     var StepValidator = (function () {
         function StepValidator(Step) {
             this.Step = Step;
+            this.StepDefaultValue = "1";
             this.tagName = "step";
             if (Step === undefined)
-                this.Step = StepDefaultValue;
+                this.Step = this.StepDefaultValue;
         }
         StepValidator.prototype.isAcceptable = function (s) {
             var maxNegDigits = Math.max(NumberFce.GetNegDigits(s), NumberFce.GetNegDigits(this.Step));
@@ -395,13 +408,13 @@ var Validators;
     })();
     Validators.StepValidator = StepValidator;
 
-    var MultipleOfDefaultValue = 1;
     var MultipleOfValidator = (function () {
         function MultipleOfValidator(Divider) {
             this.Divider = Divider;
+            this.MultipleOfDefaultValue = 1;
             this.tagName = "multipleOf";
             if (Divider === undefined)
-                this.Divider = MultipleOfDefaultValue;
+                this.Divider = this.MultipleOfDefaultValue;
         }
         MultipleOfValidator.prototype.isAcceptable = function (s) {
             if (!_.isNumber(s))
@@ -411,13 +424,11 @@ var Validators;
         return MultipleOfValidator;
     })();
     Validators.MultipleOfValidator = MultipleOfValidator;
-    var PatternDefaultValue = "*";
+
     var PatternValidator = (function () {
         function PatternValidator(Pattern) {
             this.Pattern = Pattern;
             this.tagName = "pattern";
-            if (Pattern === undefined)
-                this.Pattern = PatternDefaultValue;
         }
         PatternValidator.prototype.isAcceptable = function (s) {
             return new RegExp(this.Pattern).test(s);
@@ -425,6 +436,7 @@ var Validators;
         return PatternValidator;
     })();
     Validators.PatternValidator = PatternValidator;
+
     var ContainsValidator = (function () {
         function ContainsValidator(Options) {
             this.Options = Options;

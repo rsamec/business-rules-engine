@@ -15,9 +15,21 @@ var Validators = require('../validation/BasicValidators.js');
 module FormSchema {
 
     /**
-     * It represents the JSON schema factory for creating validation rules based on JSON form schema.
+     * It represents factory that creates an concrete validation rule.
      */
-    export class JsonSchemaAbstractValidationRuleFactory  {
+    export interface IValidationRuleFactory{
+        /**
+         * Create an abstract validation rule
+         * @param name - the name of rule
+         */
+        CreateRule(name:string);
+    }
+
+    /**
+     * It represents the JSON schema factory for creating validation rules based on JSON form schema.
+     * It uses constraints keywords from JSON Schema Validation specification.
+     */
+    export class JsonSchemaRuleFactory implements IValidationRuleFactory{
 
         /**
          * Default constructor
@@ -37,9 +49,9 @@ module FormSchema {
 
 
         /**
-         * Returns the abstract validation rules structured according to JSON schema.
+         * Returns an concrete validation rules structured according to JSON schema.
          */
-        ParseAbstractRule(formSchema:any):Validation.IAbstractValidator<any> {
+        private ParseAbstractRule(formSchema:any):Validation.IAbstractValidator<any> {
 
             var rule = new Validation.AbstractValidator<any>();
 
@@ -63,7 +75,7 @@ module FormSchema {
          * Return list of property validators that corresponds json items for JSON form validation tags.
          * See keywords specifications -> http://json-schema.org/latest/json-schema-validation.html
          */
-        ParseValidationAttribute(item:any):Array<Validation.IPropertyValidator> {
+        private ParseValidationAttribute(item:any):Array<Validation.IPropertyValidator> {
 
             var validators = new Array<Validation.IPropertyValidator>();
             if (item === undefined) return validators;
@@ -160,23 +172,40 @@ module FormSchema {
     }
 
     /**
-     * It represents the JSON schema factory for creating validation rules based on JSON form schema.
+     * It represents the JSON schema factory for creating validation rules based on raw JSON data annotated by validation rules.
+     * It uses constraints keywords from JQuery validation plugin.
      */
-    export class JQueryValidationAbstractValidationRuleFactory extends JsonSchemaAbstractValidationRuleFactory  {
+    export class JQueryValidationRuleFactory implements IValidationRuleFactory  {
 
-        static RULES_KEY = "rules";
+       static RULES_KEY = "rules";
        static DEFAULT_KEY = "default";
 
         /**
-         * Returns the abstract validation rules structured according to JSON schema.
+         * Default constructor
+         * @param metaData -  raw JSON data annotated by validation rules
          */
-        ParseAbstractRule(metaData:any):Validation.IAbstractValidator<any> {
+        constructor(private metaData:any){
+        }
+
+        /**
+         * Return an concrete validation rule by traversing raw JSON data annotated by validation rules.
+         * @param name validation rule name
+         * @returns {IAbstractValidationRule<any>} return validation rule
+         */
+        public CreateRule(name:string):Validation.IAbstractValidationRule<any>{
+            return this.ParseAbstractRule(this.metaData).CreateRule(name);
+        }
+
+        /**
+         * Returns an concrete validation rule structured according to JSON schema.
+         */
+        private ParseAbstractRule(metaData:any):Validation.IAbstractValidator<any> {
 
             var rule = new Validation.AbstractValidator<any>();
 
             for (var key in metaData) {
                 var item = metaData[key];
-                var rules = item[JQueryValidationAbstractValidationRuleFactory.RULES_KEY];
+                var rules = item[JQueryValidationRuleFactory.RULES_KEY];
 
                 if ( _.isArray(item)) {
                     if (item[1] !== undefined) {
@@ -200,26 +229,7 @@ module FormSchema {
          * Return list of property validators that corresponds json items for JQuery validation pluging tags.
          * See specification - http://jqueryvalidation.org/documentation/
          */
-        ParseValidationAttribute(item:any):Array<Validation.IPropertyValidator> {
-
-//            http://jqueryvalidation.org/documentation/
-//               required – Makes the element required.
-//               remote – Requests a resource to check the element for validity.
-//                minlength – Makes the element require a given minimum length.
-//                maxlength – Makes the element require a given maxmimum length.
-//                rangelength – Makes the element require a given value range.
-//                min – Makes the element require a given minimum.
-//                max – Makes the element require a given maximum.
-//                range – Makes the element require a given value range.
-//                email – Makes the element require a valid email
-//                url – Makes the element require a valid url
-//                date – Makes the element require a date.
-//                dateISO – Makes the element require an ISO date.
-//                number – Makes the element require a decimal number.
-//                digits – Makes the element require digits only.
-//                creditcard – Makes the element require a credit card number.
-//                equalTo – Requires the element to be the same as another one
-
+        private ParseValidationAttribute(item:any):Array<Validation.IPropertyValidator> {
 
            var validators = new Array<Validation.IPropertyValidator>();
            if (item === undefined) return validators;

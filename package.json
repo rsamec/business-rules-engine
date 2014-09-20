@@ -44,6 +44,7 @@
     "grunt-ngdocs": "^0.2.2",
     "grunt-run": "^0.2.3",
     "grunt-typedoc": "^0.1.1",
-    "grunt-typescript": "^0.3.8"
+    "grunt-typescript": "^0.3.8",
+    "typedoc": "^0.1.1"
   }
 }

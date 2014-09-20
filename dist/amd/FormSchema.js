@@ -1,24 +1,20 @@
-var __extends = this.__extends || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
-};
 define(["require", "exports", 'underscore'], function(require, exports, _) {
     var Validation = require('../validation/Validation.js');
     var Validators = require('../validation/BasicValidators.js');
 
     var FormSchema;
     (function (FormSchema) {
-        var JsonSchemaAbstractValidationRuleFactory = (function () {
-            function JsonSchemaAbstractValidationRuleFactory(jsonSchema) {
+        
+
+        var JsonSchemaRuleFactory = (function () {
+            function JsonSchemaRuleFactory(jsonSchema) {
                 this.jsonSchema = jsonSchema;
             }
-            JsonSchemaAbstractValidationRuleFactory.prototype.CreateRule = function (name) {
+            JsonSchemaRuleFactory.prototype.CreateRule = function (name) {
                 return this.ParseAbstractRule(this.jsonSchema).CreateRule(name);
             };
 
-            JsonSchemaAbstractValidationRuleFactory.prototype.ParseAbstractRule = function (formSchema) {
+            JsonSchemaRuleFactory.prototype.ParseAbstractRule = function (formSchema) {
                 var rule = new Validation.AbstractValidator();
 
                 for (var key in formSchema) {
@@ -40,7 +36,7 @@ define(["require", "exports", 'underscore'], function(require, exports, _) {
                 return rule;
             };
 
-            JsonSchemaAbstractValidationRuleFactory.prototype.ParseValidationAttribute = function (item) {
+            JsonSchemaRuleFactory.prototype.ParseValidationAttribute = function (item) {
                 var validators = new Array();
                 if (item === undefined)
                     return validators;
@@ -107,21 +103,24 @@ define(["require", "exports", 'underscore'], function(require, exports, _) {
 
                 return validators;
             };
-            return JsonSchemaAbstractValidationRuleFactory;
+            return JsonSchemaRuleFactory;
         })();
-        FormSchema.JsonSchemaAbstractValidationRuleFactory = JsonSchemaAbstractValidationRuleFactory;
+        FormSchema.JsonSchemaRuleFactory = JsonSchemaRuleFactory;
 
-        var JQueryValidationAbstractValidationRuleFactory = (function (_super) {
-            __extends(JQueryValidationAbstractValidationRuleFactory, _super);
-            function JQueryValidationAbstractValidationRuleFactory() {
-                _super.apply(this, arguments);
+        var JQueryValidationRuleFactory = (function () {
+            function JQueryValidationRuleFactory(metaData) {
+                this.metaData = metaData;
             }
-            JQueryValidationAbstractValidationRuleFactory.prototype.ParseAbstractRule = function (metaData) {
+            JQueryValidationRuleFactory.prototype.CreateRule = function (name) {
+                return this.ParseAbstractRule(this.metaData).CreateRule(name);
+            };
+
+            JQueryValidationRuleFactory.prototype.ParseAbstractRule = function (metaData) {
                 var rule = new Validation.AbstractValidator();
 
                 for (var key in metaData) {
                     var item = metaData[key];
-                    var rules = item[JQueryValidationAbstractValidationRuleFactory.RULES_KEY];
+                    var rules = item[JQueryValidationRuleFactory.RULES_KEY];
 
                     if (_.isArray(item)) {
                         if (item[1] !== undefined) {
@@ -141,7 +140,7 @@ define(["require", "exports", 'underscore'], function(require, exports, _) {
                 return rule;
             };
 
-            JQueryValidationAbstractValidationRuleFactory.prototype.ParseValidationAttribute = function (item) {
+            JQueryValidationRuleFactory.prototype.ParseValidationAttribute = function (item) {
                 var validators = new Array();
                 if (item === undefined)
                     return validators;
@@ -248,11 +247,11 @@ define(["require", "exports", 'underscore'], function(require, exports, _) {
 
                 return validators;
             };
-            JQueryValidationAbstractValidationRuleFactory.RULES_KEY = "rules";
-            JQueryValidationAbstractValidationRuleFactory.DEFAULT_KEY = "default";
-            return JQueryValidationAbstractValidationRuleFactory;
-        })(JsonSchemaAbstractValidationRuleFactory);
-        FormSchema.JQueryValidationAbstractValidationRuleFactory = JQueryValidationAbstractValidationRuleFactory;
+            JQueryValidationRuleFactory.RULES_KEY = "rules";
+            JQueryValidationRuleFactory.DEFAULT_KEY = "default";
+            return JQueryValidationRuleFactory;
+        })();
+        FormSchema.JQueryValidationRuleFactory = JQueryValidationRuleFactory;
 
         var Util = (function () {
             function Util() {

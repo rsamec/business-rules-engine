@@ -1,6 +1,6 @@
 define(["require", "exports", 'underscore'], function(require, exports, _) {
-    var Validation = require('../validation/Validation.js');
-    var Validators = require('../validation/BasicValidators.js');
+    var Validation = require("business-rules-engine");
+    var Validators = require('business-rules-engine/commonjs/BasicValidators');
 
     var FormSchema;
     (function (FormSchema) {

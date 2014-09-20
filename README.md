@@ -45,7 +45,7 @@ There are 3 ways how to define validation rules
 +  imperative - [validation API](http://rsamec.github.io/business-rules-engine/docs/modules/validation-validation.validation.html)
 
 
-### JSON Schema Validation declarative syntax definition
+### JSON Schema Validation
 
 ``` js
     {
@@ -116,7 +116,7 @@ There are 3 ways how to define validation rules
         }
     }
 ```
-### JSON with meta data declarative definition
+### JSON data annotated with meta data 
 
 ``` js
 // define data structure + validation rules meta data

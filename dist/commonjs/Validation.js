@@ -729,6 +729,12 @@ var Validation;
             "step": "Please enter a value with step {Step}.",
             "contains": "Please enter a value from list of values. Attempted value '{AttemptedValue}'.",
             "mask": "Please enter a value corresponding with {Mask}.",
+            minItems: "Please enter at least {Min} items.",
+            maxItems: "Please enter no more than {Max} items.",
+            uniqItems: "Please enter unique items.",
+            enum: "Please enter a value from list of permitted values.",
+            type: "Please enter a value of type '{Type}'.",
+            multipleOf: "Please enter a value that is multiple of {Divider}.",
             "custom": MessageLocalization.customMsg
         };
 

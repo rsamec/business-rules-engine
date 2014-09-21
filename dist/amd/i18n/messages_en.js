@@ -35,7 +35,7 @@ define(["require", "exports"], function(require, exports) {
                         GreaterThan: "Please enter date greter than {CompareTo}."
                     },
                     minItems: "Please enter at least {Min} items.",
-                    maxItems: "Please enter at least {Max} items.",
+                    maxItems: "Please enter no more than {Max} items.",
                     uniqItems: "Please enter unique items.",
                     enum: "Please enter a value from list of permitted values.",
                     type: "Please enter a value of type '{Type}'.",

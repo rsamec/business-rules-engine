@@ -5,7 +5,7 @@
 
 import Q = require("q");
 import _ = require("underscore");
-var axios = require('axios');
+
 
 /**
  * Basic validation rules that enables to validate an value against common constraints. They are assertions with conditions.
@@ -585,19 +585,20 @@ module Validators {
      *  ```
      */
     export class RemoteValidator implements Validation.IAsyncPropertyValidator {
-
+        private axios:any;
         /**
          * Default constructor
          * @param Options - remote service url + options
          */
         constructor(public Options?:IRemoteOptions) {
 
+            this.axios = require('axios');
         }
 
         isAcceptable(s:any):Q.Promise<boolean> {
             var deferred:Q.Deferred<boolean> = Q.defer<boolean>();
 
-            axios.post(this.Options.url,
+            this.axios.post(this.Options.url,
                 {
                     method: this.Options.type || "get",
                     data: _.extend({} || this.Options.data, {

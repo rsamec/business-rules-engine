@@ -1,7 +1,7 @@
 var _ = require('underscore');
 
-var Validation = require("business-rules-engine");
-var Validators = require('business-rules-engine/commonjs/BasicValidators');
+var Validation = require('../validation/Validation.js');
+var Validators = require('../validation/BasicValidators.js');
 
 var FormSchema;
 (function (FormSchema) {

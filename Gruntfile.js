@@ -203,12 +203,11 @@ module.exports = function (grunt) {
       uglify: {
           options: {
               // the banner is inserted at the top of the output
-              banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
+              banner: '/*! <%= pkg.name %>, v.<%= pkg.version %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
           },
           dist: {
               files: {
-                  'dist/<%= pkg.name %>.min.js': ['<%= typescript.base.dest %>'],
-                  'dist/node-<%= pkg.name %>.min.js': ['dist/node-<%= pkg.name %>.js']
+                  'dist/<%= pkg.name %>.min.js': ['dist/<%= pkg.name %>.js']
               }
           }
       },
@@ -230,7 +229,15 @@ module.exports = function (grunt) {
           }
       },
       concat: {
-        typings:{
+          module:{
+              options: {
+                  banner: '/*! <%= pkg.name %>, v.<%= pkg.version %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
+              },
+              files: {
+                  'dist/business-rules-engine.js': ['dist/module/Validation.js','dist/module/BasicValidators.js','dist/module/Utils.js','dist/module/FormSchema.js']
+              }
+          },
+          typings:{
 
               options:{
                   banner: '// Type definitions for <%= pkg.name %> - v<%= pkg.version %>\n' +
@@ -280,7 +287,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('test', ['typescript:src','typescript:test', 'mochacli', 'watch']);
   grunt.registerTask('ci', ['complexity', 'jshint', 'mochacli']);
-  grunt.registerTask('dist', ['typescript:commonjs','typescript:amd','typescript:customValidatorsCommonjs','typescript:customValidatorsAmd','typescript:localCommonjs','typescript:localAmd','copy']);
+  grunt.registerTask('dist', ['typescript:commonjs','typescript:amd','typescript:customValidatorsCommonjs','typescript:customValidatorsAmd','typescript:localCommonjs','typescript:localAmd','copy','concat:module','uglify:dist']);
   grunt.registerTask('typings',['typescript:typings','concat:typings','typescript:otherTypings','concat:otherTypings']);
   grunt.registerTask('document', ['typedoc']);
 };

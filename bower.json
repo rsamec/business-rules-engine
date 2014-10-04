@@ -29,10 +29,12 @@
     "src",
     "docs",
     "content",
-    "app.js"
+    "app.js",
+    "dist/commonjs"
   ],
   "dependencies": {
     "underscore": "~1.6.0",
-    "q": "~2.0.0"
+    "q": "~2.0.0",
+    "observe-js": "^0.1.0"
   }
 }

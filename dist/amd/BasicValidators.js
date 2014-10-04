@@ -1,6 +1,4 @@
 define(["require", "exports", "q", "underscore"], function(require, exports, Q, _) {
-    var axios = require('axios');
-
     var Validators;
     (function (Validators) {
         var NumberFce = (function () {
@@ -467,11 +465,12 @@ define(["require", "exports", "q", "underscore"], function(require, exports, Q, 
                 this.Options = Options;
                 this.isAsync = true;
                 this.tagName = "remote";
+                this.axios = require('axios');
             }
             RemoteValidator.prototype.isAcceptable = function (s) {
                 var deferred = Q.defer();
 
-                axios.post(this.Options.url, {
+                this.axios.post(this.Options.url, {
                     method: this.Options.type || "get",
                     data: _.extend({} || this.Options.data, {
                         "value": s

@@ -1,6 +1,6 @@
 {
   "name": "business-rules-engine",
-  "version": "1.0.32",
+  "version": "1.1.1",
   "description": "business rules engine",
   "main": "./commonjs/Validation",
   "repository": {
@@ -21,7 +21,7 @@
     "Q": "latest",
     "hashmap": "^1.1.0",
     "underscore": "latest",
-    "axios": "latest"
+    "observe-js": "^0.1.0"
   },
   "devDependencies": {
     "expect.js": "~0.2.0",

@@ -6,6 +6,7 @@ var __extends = this.__extends || function (d, b) {
 };
 var _ = require('underscore');
 var Q = require('q');
+
 var HashMap = require('hashmap').HashMap;
 
 var Validation;

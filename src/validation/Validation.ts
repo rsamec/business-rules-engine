@@ -5,6 +5,7 @@
 
 import _ = require('underscore');
 import Q = require('q');
+//var ObserveJs = require('observe-js');
 var HashMap = require('hashmap').HashMap;
 
 module Validation {
@@ -981,6 +982,7 @@ module Validation {
     class AbstractListValidationRule<T> extends AbstractValidationRule<T>  implements  IAbstractListValidationRule<T>{
 
         public RowsMap = new HashMap<any,IAbstractValidationRule>();
+        //private RowsObserver;
         constructor(public Name:string, public validator:AbstractValidator<T>) {
             super(Name, validator, true);
         }
@@ -1028,7 +1030,17 @@ module Validation {
             return this.RowsMap.values();
         }
         public RefreshRows(list:Array<any>) {
+
             this.refreshList(list);
+//            var self = this;
+//            this.RowsObserver = new ObserveJs.ArrayObserver(list, function(splices) {
+//                // respond to changes to the elements of arr.
+//                splices.forEach(function(splice) {
+//                    //var newContext = ObserveJs.ArrayObserver.applySplices(splice, context);
+//                    var newList = list.splice.apply(list,[splice.index,splice.removed.length].concat(splice.added));
+//                    self.refreshList(newList);
+//                });
+//            });
         }
         private ClearRows(list:Array<any>){
             var keysToRemove = _.difference(this.RowsMap.keys(),list);

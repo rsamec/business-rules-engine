@@ -13,7 +13,7 @@ It can be easily reused by different types of applications, libraries.
 +   It supports declarative and imperative validation rules definition
     +  declarative [JSON schema](http://json-schema.org/) with validation keywords [JSON Schema Validation](http://json-schema.org/latest/json-schema-validation.html)
     +  declarative raw JSON data  annotated with meta data - using keywords from [JQuery validation plugin](http://jqueryvalidation.org/)
-    +  imperative - [validation API](http://rsamec.github.io/business-rules-engine/docs/modules/validation-validation.validation.html)
+    +  imperative - [validation API](http://rsamec.github.io/business-rules-engine/docs/modules/_validation_validation_.html)
 +   It supports composition of validation rules, that enables to validate custom object with nested structures.
 +   It is ease to create your own custom validators.
 +   It supports asynchronous validation rules (uses promises).
@@ -21,7 +21,7 @@ It can be easily reused by different types of applications, libraries.
 +   It supports assigning validation rules to collection-based structures - arrays and lists.
 +   It supports localization of error messages with TranslateArgs.
 +   It deploys as AMD, CommonJS or plain script module pattern.
-+   It offers basic build-in constrains validators. See list [basic build-in constraints](http://rsamec.github.io/business-rules-engine/docs/modules/validation-basicvalidators.validators.html)
++   It offers basic build-in constrains validators. See list [basic build-in constraints](http://rsamec.github.io/business-rules-engine/docs/modules/_validation_basicvalidators_.html)
 +   Other custom validators can be find in extensible repository of custom validators (work in progress).
 
 ## Installation
@@ -42,7 +42,7 @@ There are 3 ways how to define validation rules
 
 +  declarative [JSON schema](http://json-schema.org/) with validation keywords [JSON Schema Validation](http://json-schema.org/latest/json-schema-validation.html)
 +  declarative raw JSON data  annotated with meta data - using keywords from [JQuery validation plugin](http://jqueryvalidation.org/)
-+  imperative - [validation API](http://rsamec.github.io/business-rules-engine/docs/modules/validation-validation.validation.html)
++  imperative - [validation API](http://rsamec.github.io/business-rules-engine/docs/modules/_validation_validation_.html)
 
 
 ### JSON Schema Validation
@@ -226,16 +226,21 @@ To use business rules and execute them on particular data
 
 ## Additional information
 
++ [author blog] (http://rsamec.github.io/)
 + [Business rules engine - Tutorial] (https://github.com/rsamec/business-rules-engine/wiki)
-+ [Business rules engine - API] (http://rsamec.github.io/business-rules-engine/docs/globals.html)
-+ [Business rules repository - sources] (https://github.com/rsamec/business-rules)
-+ [Business rules repository - API] (http://rsamec.github.io/business-rules/docs/globals.html)
-+ [NodeJS Example] (https://github.com/rsamec/node-form-app)
-+ [AngularJS Example] (https://github.com/rsamec/angular-form-app)
-+ [AngularJS Demo - Forms app] (http://nodejs-formvalidation.rhcloud.com/)
-   + [Vacation Request form] (http://nodejs-formvalidation.rhcloud.com/#/vacationApproval/new)
-   + [Hobbies form] (http://nodejs-formvalidation.rhcloud.com/#/hobbies/new)
++ [Business rules engine - API] (http://rsamec.github.io/business-rules-engine/docs/index.html)
 
++ Examples - rules
+    + [Business rules repository - sources] (https://github.com/rsamec/business-rules)
+    + [Business rules repository - API] (http://rsamec.github.io/business-rules/docs/index.html)
+
++ Examples - UI with rules
+    + [NodeJS Example] (https://github.com/rsamec/node-form-app)
+    + [AngularJS Example] (https://github.com/rsamec/angular-form-app)
+    + [AngularJS Demo - Forms app] (http://nodejs-formvalidation.rhcloud.com/)
+       + [Vacation Request form] (http://nodejs-formvalidation.rhcloud.com/#/vacationApproval/new)
+       + [Hobbies form] (http://nodejs-formvalidation.rhcloud.com/#/hobbies/new)
+       + [Hobbies form - try it in plunkr] (http://embed.plnkr.co/vbp9aFw7Lc2EyNyhUf5y/preview)    
 
 ## Source code
 
@@ -301,9 +306,20 @@ $ grunt test
 
 ## Roadmap
 
+Priority
+
++ Refactor validation API - simplify and better naming
++ Support for changes notification -> consider to use framework like ObserveJs or similer notification frameworks
++ Refactor implemenation
+    +   use depedency injection for managing dependencies among internal components
+    +   remove depedencies or make them optional - Q, underscore, moment, axiom
+    +   lazy loading + consider better data structure for composite 
+
+Others
+
++ Polymer example (using web components)
 + Add validation groups to shared validation rules
 + Separate ValidationResult from execution of validation rules
-+ Add depedency injection for managing dependencies among components
-+ Support for meta data definitions
++ Improve documentation + more examples
 
 

@@ -11,7 +11,12 @@ import Q = require('q');
 
 var Validation = require('../validation/Validation.js');
 var Validators = require('../validation/BasicValidators.js');
-
+/**
+ * Support for declarative validation rules definition.
+ *
+ *  +  declarative [JSON schema](http://json-schema.org/) with validation keywords [JSON Schema Validation](http://json-schema.org/latest/json-schema-validation.html)
+ *  +  declarative raw JSON data  annotated with meta data - using keywords from [JQuery validation plugin](http://jqueryvalidation.org/)
+ */
 module FormSchema {
 
     /**

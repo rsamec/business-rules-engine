@@ -8,6 +8,30 @@ import Q = require('q');
 //var ObserveJs = require('observe-js');
 var HashMap = require('hashmap').HashMap;
 
+/**
+ * It represents a lightweight JavaScript library for easy business rules definition of the product, the contract, the form etc.
+ * This validation engine is not tight to HTML DOM or any other UI framework.
+ * This validation engine is **UI agnostic** and that is why it can be used as **an independent representation of business rules** of a product, contract, etc.
+ *
+ * Key features
+ *
+ * +   It enables to decorate custom objects and its properties with validation rules.
+ * +   It supports declarative and imperative validation rules definition
+ *      +  declarative [JSON schema](http://json-schema.org/) with validation keywords [JSON Schema Validation](http://json-schema.org/latest/json-schema-validation.html)
+ *      +  declarative raw JSON data  annotated with meta data - using keywords from [JQuery validation plugin](http://jqueryvalidation.org/)
+ *      +  imperative - [validation API](http://rsamec.github.io/business-rules-engine/docs/modules/validation-validation.validation.html)
+ * +   It supports composition of validation rules, that enables to validate custom object with nested structures.
+ * +   It is ease to create your own custom validators.
+ * +   It supports asynchronous validation rules (uses promises).
+ * +   It supports shared validation rules.
+ * +   It supports assigning validation rules to collection-based structures - arrays and lists.
+ * +   It supports localization of error messages with TranslateArgs.
+ * +   It deploys as AMD, CommonJS or plain script module pattern.
+ * +   It offers basic build-in constrains validators. See list [basic build-in constraints](http://rsamec.github.io/business-rules-engine/docs/modules/validation-basicvalidators.validators.html)
+ * +   Other custom validators can be find in extensible repository of custom validators (work in progress).
+ *
+ *
+ */
 module Validation {
 
     /**

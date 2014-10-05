@@ -8,8 +8,14 @@ import _ = require("underscore");
 
 
 /**
- * Basic validation rules that enables to validate an value against common constraints. They are assertions with conditions.
- * Basic constraints (Type,EqualTo,Required), string constraints (Email,Pattern, Url,MinLength,MaxLength), numeric constraints (Digits,SignedDigits,Min,Max,Range,MultipleOf), date constraints (Data,DateISO)
+ * Basic validation rules that enables to validate an value against common constraints.
+ *
+ * Assertions with conditions.
+ *
+ * + basic constraints (Type,EqualTo,Required)
+ * + string constraints (Email,Pattern, Url,MinLength,MaxLength)
+ * + numeric constraints (Digits,SignedDigits,Min,Max,Range,MultipleOf)
+ * + date constraints (Data,DateISO)
  */
 module Validators {
 

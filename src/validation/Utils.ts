@@ -2,7 +2,12 @@
 ///<reference path='../../typings/underscore/underscore.d.ts'/>
 
 import _ = require('underscore');
-
+/**
+ * Utility functions for business rules purposes.
+ *
+ *  +  String functions
+ *  +  Number functions
+ */
 module Utils {
 
     /*

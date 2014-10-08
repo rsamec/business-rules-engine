@@ -5,6 +5,7 @@
 
 import _ = require('underscore');
 import Q = require('q');
+import Util = require('Utils');
 //var ObserveJs = require('observe-js');
 var HashMap = require('hashmap').HashMap;
 

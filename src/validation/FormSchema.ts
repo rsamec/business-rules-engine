@@ -6,11 +6,14 @@
 import _ = require('underscore');
 import Q = require('q');
 
+import Validation = require('Validation');
+import Validators = require('BasicValidators');
+
 //var Validation = require("business-rules-engine");
 //var Validators = require('business-rules-engine/commonjs/BasicValidators');
 
-var Validation = require('../validation/Validation.js');
-var Validators = require('../validation/BasicValidators.js');
+//var Validation = require('../validation/Validation.js');
+//var Validators = require('../validation/BasicValidators.js');
 /**
  * Support for declarative validation rules definition.
  *
@@ -80,9 +83,9 @@ module FormSchema {
          * Return list of property validators that corresponds json items for JSON form validation tags.
          * See keywords specifications -> http://json-schema.org/latest/json-schema-validation.html
          */
-        private ParseValidationAttribute(item:any):Array<Validation.IPropertyValidator> {
+        private ParseValidationAttribute(item:any):Array<any> {
 
-            var validators = new Array<Validation.IPropertyValidator>();
+            var validators = new Array<any>();
             if (item === undefined) return validators;
 
             //5.  Validation keywords sorted by instance types
@@ -145,7 +148,7 @@ module FormSchema {
             // uniqueItems validation
             validation = item["uniqueItems"];
             if (validation !== undefined) {
-                validators.push( new Validators.UniqItemsValidator(validation))
+                validators.push( new Validators.UniqItemsValidator())
             }
 
             //5.4.  Validation keywords for objects
@@ -245,9 +248,9 @@ module FormSchema {
          * Return list of property validators that corresponds json items for JQuery validation pluging tags.
          * See specification - http://jqueryvalidation.org/documentation/
          */
-        private ParseValidationAttribute(item:any):Array<Validation.IPropertyValidator> {
+        private ParseValidationAttribute(item:any):Array<any> {
 
-           var validators = new Array<Validation.IPropertyValidator>();
+           var validators = new Array<any>();
            if (item === undefined) return validators;
 
            var validation = item["required"];
@@ -353,7 +356,7 @@ module FormSchema {
             // uniqueItems validation
             validation = item["uniqueItems"];
             if (validation !== undefined) {
-                validators.push( new Validators.UniqItemsValidator(validation))
+                validators.push( new Validators.UniqItemsValidator())
             }
 
             // enum validation

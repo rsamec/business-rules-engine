@@ -5,7 +5,7 @@
 
 import _ = require('underscore');
 import Q = require('q');
-import Util = require('Utils');
+import Utils = require('Utils');
 //var ObserveJs = require('observe-js');
 var HashMap = require('hashmap').HashMap;
 
@@ -1140,19 +1140,10 @@ module Validation {
                 msgText = MessageLocalization.customMsg;
             }
 
-            return StringFce.format(msgText, validator);
+            return Utils.StringFce.format(msgText, validator);
         }
     }
-    class StringFce {
-        static format(s:string, args:any):string {
-            var formatted = s;
-            for (var prop in args) {
-                var regexp = new RegExp('\\{' + prop + '\\}', 'gi');
-                formatted = formatted.replace(regexp, args[prop]);
-            }
-            return formatted;
-        }
-    }
+
     /**
      *
      * @ngdoc object

@@ -84,7 +84,7 @@ var FormSchema;
 
             validation = item["uniqueItems"];
             if (validation !== undefined) {
-                validators.push(new Validators.UniqItemsValidator(validation));
+                validators.push(new Validators.UniqItemsValidator());
             }
 
             var validation = item["required"];
@@ -248,7 +248,7 @@ var FormSchema;
 
             validation = item["uniqueItems"];
             if (validation !== undefined) {
-                validators.push(new Validators.UniqItemsValidator(validation));
+                validators.push(new Validators.UniqItemsValidator());
             }
 
             validation = item["enum"];

@@ -1,7 +1,4 @@
-define(["require", "exports", 'underscore'], function(require, exports, _) {
-    var Validation = require('../validation/Validation.js');
-    var Validators = require('../validation/BasicValidators.js');
-
+define(["require", "exports", 'underscore', './Validation', './BasicValidators'], function(require, exports, _, Validation, Validators) {
     var FormSchema;
     (function (FormSchema) {
         
@@ -83,7 +80,7 @@ define(["require", "exports", 'underscore'], function(require, exports, _) {
 
                 validation = item["uniqueItems"];
                 if (validation !== undefined) {
-                    validators.push(new Validators.UniqItemsValidator(validation));
+                    validators.push(new Validators.UniqItemsValidator());
                 }
 
                 var validation = item["required"];
@@ -247,7 +244,7 @@ define(["require", "exports", 'underscore'], function(require, exports, _) {
 
                 validation = item["uniqueItems"];
                 if (validation !== undefined) {
-                    validators.push(new Validators.UniqItemsValidator(validation));
+                    validators.push(new Validators.UniqItemsValidator());
                 }
 
                 validation = item["enum"];

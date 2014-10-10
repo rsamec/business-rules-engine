@@ -6,8 +6,8 @@
 import _ = require('underscore');
 import Q = require('q');
 
-import Validation = require('Validation');
-import Validators = require('BasicValidators');
+import Validation = require('./Validation');
+import Validators = require('./BasicValidators');
 
 //var Validation = require("business-rules-engine");
 //var Validators = require('business-rules-engine/commonjs/BasicValidators');

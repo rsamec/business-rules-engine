@@ -4,7 +4,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", 'underscore', 'q'], function(require, exports, _, Q) {
+define(["require", "exports", 'underscore', 'q', './Utils'], function(require, exports, _, Q, Utils) {
     var HashMap = require('hashmap').HashMap;
 
     var Validation;
@@ -703,7 +703,7 @@ define(["require", "exports", 'underscore', 'q'], function(require, exports, _, 
                     msgText = MessageLocalization.customMsg;
                 }
 
-                return StringFce.format(msgText, validator);
+                return Utils.StringFce.format(msgText, validator);
             };
             MessageLocalization.customMsg = "Please, fix the field.";
 
@@ -741,19 +741,6 @@ define(["require", "exports", 'underscore', 'q'], function(require, exports, _, 
             return MessageLocalization;
         })();
         _Validation.MessageLocalization = MessageLocalization;
-        var StringFce = (function () {
-            function StringFce() {
-            }
-            StringFce.format = function (s, args) {
-                var formatted = s;
-                for (var prop in args) {
-                    var regexp = new RegExp('\\{' + prop + '\\}', 'gi');
-                    formatted = formatted.replace(regexp, args[prop]);
-                }
-                return formatted;
-            };
-            return StringFce;
-        })();
 
         var PropertyValidationRule = (function (_super) {
             __extends(PropertyValidationRule, _super);

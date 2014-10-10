@@ -1,7 +1,7 @@
 var _ = require('underscore');
 
-var Validation = require('../validation/Validation.js');
-var Validators = require('../validation/BasicValidators.js');
+var Validation = require('./Validation');
+var Validators = require('./BasicValidators');
 
 var FormSchema;
 (function (FormSchema) {
@@ -84,7 +84,7 @@ var FormSchema;
 
             validation = item["uniqueItems"];
             if (validation !== undefined) {
-                validators.push(new Validators.UniqItemsValidator(validation));
+                validators.push(new Validators.UniqItemsValidator());
             }
 
             var validation = item["required"];
@@ -248,7 +248,7 @@ var FormSchema;
 
             validation = item["uniqueItems"];
             if (validation !== undefined) {
-                validators.push(new Validators.UniqItemsValidator(validation));
+                validators.push(new Validators.UniqItemsValidator());
             }
 
             validation = item["enum"];

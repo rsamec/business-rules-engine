@@ -3,9 +3,10 @@
 ///<reference path='../../typings/hashmap/hashmap.d.ts'/>
 ///<reference path='../../typings/node/node.d.ts'/>
 
+
 import _ = require('underscore');
 import Q = require('q');
-import Utils = require('Utils');
+import Utils = require('./Utils');
 //var ObserveJs = require('observe-js');
 var HashMap = require('hashmap').HashMap;
 

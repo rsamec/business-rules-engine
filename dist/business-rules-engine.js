@@ -1,10 +1,11 @@
-/*! business-rules-engine, v.1.1.1 05-10-2014 */
+/*! business-rules-engine, v.1.1.1 10-10-2014 */
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+
 
 
 
@@ -706,7 +707,7 @@ var Validation;
                 msgText = MessageLocalization.customMsg;
             }
 
-            return StringFce.format(msgText, validator);
+            return Utils.StringFce.format(msgText, validator);
         };
         MessageLocalization.customMsg = "Please, fix the field.";
 
@@ -744,19 +745,6 @@ var Validation;
         return MessageLocalization;
     })();
     _Validation.MessageLocalization = MessageLocalization;
-    var StringFce = (function () {
-        function StringFce() {
-        }
-        StringFce.format = function (s, args) {
-            var formatted = s;
-            for (var prop in args) {
-                var regexp = new RegExp('\\{' + prop + '\\}', 'gi');
-                formatted = formatted.replace(regexp, args[prop]);
-            }
-            return formatted;
-        };
-        return StringFce;
-    })();
 
     var PropertyValidationRule = (function (_super) {
         __extends(PropertyValidationRule, _super);
@@ -1544,6 +1532,59 @@ var Utils;
         return NumberFce;
     })();
     Utils.NumberFce = NumberFce;
+
+    var Signal = (function () {
+        function Signal() {
+            this.listeners = [];
+            this.priorities = [];
+        }
+        Signal.prototype.add = function (listener, priority) {
+            if (typeof priority === "undefined") { priority = 0; }
+            var index = this.listeners.indexOf(listener);
+            if (index !== -1) {
+                this.priorities[index] = priority;
+                return;
+            }
+            for (var i = 0, l = this.priorities.length; i < l; i++) {
+                if (this.priorities[i] < priority) {
+                    this.priorities.splice(i, 0, priority);
+                    this.listeners.splice(i, 0, listener);
+                    return;
+                }
+            }
+            this.priorities.push(priority);
+            this.listeners.push(listener);
+        };
+
+        Signal.prototype.remove = function (listener) {
+            var index = this.listeners.indexOf(listener);
+            if (index >= 0) {
+                this.priorities.splice(index, 1);
+                this.listeners.splice(index, 1);
+            }
+        };
+
+        Signal.prototype.dispatch = function (parameter) {
+            var indexesToRemove;
+            var hasBeenCanceled = this.listeners.every(function (listener) {
+                var result = listener(parameter);
+                return result !== false;
+            });
+
+            return hasBeenCanceled;
+        };
+
+        Signal.prototype.clear = function () {
+            this.listeners = [];
+            this.priorities = [];
+        };
+
+        Signal.prototype.hasListeners = function () {
+            return this.listeners.length > 0;
+        };
+        return Signal;
+    })();
+    Utils.Signal = Signal;
 })(Utils || (Utils = {}));
 
 
@@ -1633,7 +1674,7 @@ var FormSchema;
 
             validation = item["uniqueItems"];
             if (validation !== undefined) {
-                validators.push(new Validators.UniqItemsValidator(validation));
+                validators.push(new Validators.UniqItemsValidator());
             }
 
             var validation = item["required"];
@@ -1797,7 +1838,7 @@ var FormSchema;
 
             validation = item["uniqueItems"];
             if (validation !== undefined) {
-                validators.push(new Validators.UniqItemsValidator(validation));
+                validators.push(new Validators.UniqItemsValidator());
             }
 
             validation = item["enum"];

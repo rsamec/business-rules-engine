@@ -9,6 +9,7 @@ var __extends = this.__extends || function (d, b) {
 
 
 
+
 var Validation;
 (function (_Validation) {
     
@@ -705,7 +706,7 @@ var Validation;
                 msgText = MessageLocalization.customMsg;
             }
 
-            return StringFce.format(msgText, validator);
+            return Utils.StringFce.format(msgText, validator);
         };
         MessageLocalization.customMsg = "Please, fix the field.";
 
@@ -743,19 +744,6 @@ var Validation;
         return MessageLocalization;
     })();
     _Validation.MessageLocalization = MessageLocalization;
-    var StringFce = (function () {
-        function StringFce() {
-        }
-        StringFce.format = function (s, args) {
-            var formatted = s;
-            for (var prop in args) {
-                var regexp = new RegExp('\\{' + prop + '\\}', 'gi');
-                formatted = formatted.replace(regexp, args[prop]);
-            }
-            return formatted;
-        };
-        return StringFce;
-    })();
 
     var PropertyValidationRule = (function (_super) {
         __extends(PropertyValidationRule, _super);

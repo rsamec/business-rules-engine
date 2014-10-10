@@ -3,6 +3,7 @@
 ///<reference path='../../typings/node/node.d.ts'/>
 ///<reference path='../../typings/business-rules-engine/business-rules-engine.d.ts'/>
 
+
 import Q = require("q");
 import _ = require("underscore");
 
@@ -575,8 +576,8 @@ module Validators {
 
     export interface IRemoteOptions{
         url:any;
-        type:string;
-        data:any;
+        type?:string;
+        data?:any;
     }
     /**
      * Return true if remote service returns true, otherwise false.

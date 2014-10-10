@@ -3,14 +3,20 @@
 ///<reference path='../../typings/underscore/underscore.d.ts'/>
 ///<reference path='../../typings/q/q.d.ts'/>
 
-var Validation = require('../../src/validation/Validation.js');
-var Validators = require('../../src/validation/BasicValidators.js');
+//require["config"](
+//    { baseUrl: '../../src/validation' }
+//);
+
+
+import Validation = require('../../src/validation/Validation');
+import Validators = require('../../src/validation/BasicValidators');
+
 var expect = require('expect.js');
 var _:UnderscoreStatic = require('underscore');
 import Q = require('q');
 
-
 describe('basic validators', function () {
+
     describe('remote validator', function () {
         var remote = new Validators.RemoteValidator();
         remote.Options = {

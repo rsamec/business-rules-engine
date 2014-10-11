@@ -177,6 +177,11 @@ module Validation {
         Optional?: IOptional;
 
         /**
+         * Occurs when the validation errors have changed for a property or for the entire entity.
+         */
+        ErrorsChanged:Utils.ISignal<any>;
+
+        /**
          * It enables support for localization of error messages.
          */
         TranslateArgs?:Array<IErrorTranslateArgs>
@@ -361,7 +366,7 @@ module Validation {
     /**
      * It represents property validation rule for type of <T>.
      */
-    export interface IPropertyValidationRule<T> {
+    export interface IPropertyValidationRule<T> extends IValidationResult {
         /**
          *The validators that are grouped under this rule.
          */
@@ -435,7 +440,7 @@ module Validation {
      */
     export class Error implements IError{
 
-        public HasError: boolean = true;
+        public HasError: boolean = false;
         public ErrorMessage: string = "";
 
         constructor() {
@@ -493,6 +498,11 @@ module Validation {
         public Remove(index: number) {
             throw ("Cannot remove ValidationResult from leaf node.");
         }
+        public ErrorsChanged:Utils.ISignal<any> = new Utils.Signal();
+
+        public DispatchErrorsChanged(){
+            if (this.ErrorsChanged !== undefined) this.ErrorsChanged.dispatch(this);
+        }
 
         public Optional: IOptional;
         public TranslateArgs:Array<IErrorTranslateArgs>;
@@ -511,10 +521,7 @@ module Validation {
         public get ErrorMessage(): string {
             return "";
         }
-
-
     }
-
 
     /**
      *
@@ -535,6 +542,7 @@ module Validation {
 
         public Optional: IOptional;
 
+        public ErrorsChanged:Utils.ISignal<any> = new Utils.Signal();
 
         public AddFirst(error: IValidationResult) {
             this.Children.unshift(error);
@@ -784,6 +792,8 @@ module Validation {
      */
     class AbstractValidationRule<T> implements IAbstractValidationRule<T>{
         public get ValidationResult():IValidationResult {return this.ValidationResultVisitor.ValidationResult;}
+        public set ValidationResult(value:IValidationResult) { this.ValidationResultVisitor.ValidationResult = value; }
+
         public Rules:{ [name: string]: IPropertyValidationRule<T> ; } = {};
         public Validators: { [name: string]: IValidator ; } = {};
         public Children:{ [name: string]: IAbstractValidationRule<any> ; } = {};
@@ -838,9 +848,9 @@ module Validation {
         public SetOptional(fce:IOptional){
 
             this.ValidationResult.Optional = fce;
-//            _.each(this.Rules, function(value:IValidationResult, key:string){value.Optional = fce;});
-//            _.each(this.Validators, function(value:any, key:string){value.Optional = fce;});
-//            _.each(this.Children, function(value:any, key:string){value.SetOptional(fce);});
+            _.each(this.Rules, function(value:IValidationResult, key:string){value.Optional = fce;});
+            _.each(this.Validators, function(value:any, key:string){value.Optional = fce;});
+            _.each(this.Children, function(value:any, key:string){value.SetOptional(fce);});
         }
 
         private createRuleFor(prop:string){
@@ -873,6 +883,7 @@ module Validation {
                     if (validator !== undefined) validator.Validate(context);
                 },this)
             },this);
+
 
             return this.ValidationResult;
         }
@@ -944,6 +955,7 @@ module Validation {
         }
 
         public AddRule(rule:PropertyValidationRule<any>){
+            //if (this.ValidationResult.ErrorsChanged !== undefined) rule.ErrorsChanged = this.ValidationResult.ErrorsChanged;
             this.ValidationResult.Add(rule);
         }
 
@@ -1157,7 +1169,6 @@ module Validation {
      */
     class PropertyValidationRule<T> extends ValidationResult implements  IPropertyValidationRule<T> {
 
-
         public Validators:{[name:string]: any} = {};
         public ValidationFailures:{[name:string]: IValidationFailure} = {};
         //public AsyncValidationFailures:{[name:string]: IAsyncValidationFailure} = {};
@@ -1233,6 +1244,8 @@ module Validation {
             var lastPriority:number = 0;
             var shortCircuited:boolean = false;
 
+            var original = this.HasErrors;
+
             for (var index in this.ValidationFailures) {
 
                 var validation:IValidationFailure = this.ValidationFailures[index];
@@ -1253,6 +1266,7 @@ module Validation {
 
                         shortCircuited = hasError;
                         lastPriority = priority;
+
                     }
 
                 } catch (e) {
@@ -1262,6 +1276,7 @@ module Validation {
                     throw e;
                 }
             }
+            if (original !== this.HasErrors)  this.DispatchErrorsChanged();
             return _.filter(this.ValidationFailures,function(item){return !item.IsAsync;});
         }
 
@@ -1272,12 +1287,14 @@ module Validation {
         ValidateAsync(context:IValidationContext<T>):Q.Promise<Array<IValidationFailure>> {
             return this.ValidateAsyncEx(context.Value);
         }
-            /**
+
+        /**
          * Performs validation using a validation context and returns a collection of Validation Failures asynchronoulsy.
          */
         ValidateAsyncEx(value:string):Q.Promise<Array<IValidationFailure>> {
             var deferred = Q.defer<Array<IValidationFailure>>();
             var promises = [];
+            var original = this.HasErrors;
             var setResultFce = function (result) {
                 var hasError = !result;
 
@@ -1307,7 +1324,10 @@ module Validation {
             }
 
             var self = this;
-            Q.all(promises).then(function(result){deferred.resolve(_.filter(self.ValidationFailures,function(item){return item.IsAsync;}))});
+            Q.all(promises).then(function(result){
+                if (original !== self.HasErrors)  self.DispatchErrorsChanged();
+                deferred.resolve(_.filter(self.ValidationFailures,function(item){return item.IsAsync;}))
+            });
             return deferred.promise;
 
         }
@@ -1337,7 +1357,9 @@ module Validation {
         public Optional:IOptional;
 
         public Validate(context:any):IValidationFailure {
+            var original = this.Error.HasError;
             if (this.ValidateFce !== undefined)  this.ValidateFce.bind(context)(this.Error);
+            if (original !== this.Error.HasError) this.DispatchErrorsChanged();
             return this.ValidationFailures[this.Name];
         }
 
@@ -1348,8 +1370,10 @@ module Validation {
                 deferred.resolve(this.ValidationFailures[this.Name]);
             }
             else {
+                var original = this.Error.HasError;
                 var self = this;
                 this.AsyncValidationFce.bind(context)(this.Error).then(function () {
+                    if (original !== self.Error.HasError) self.DispatchErrorsChanged();
                     deferred.resolve(self.ValidationFailures[self.Name]);
                 });
             }

@@ -31,6 +31,9 @@
     },
     "hashmap/hashmap.d.ts": {
       "commit": "3505d15d991ddaa4f5efa13edcd8543bae1e46de"
+    },
+    "sinon/sinon.d.ts": {
+      "commit": "bba33bcb0b363ae41db8517a09d1a4d07828616b"
     }
   }
 }

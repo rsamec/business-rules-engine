@@ -3,7 +3,6 @@
 ///<reference path='../../typings/hashmap/hashmap.d.ts'/>
 ///<reference path='../../typings/node/node.d.ts'/>
 
-
 import _ = require('underscore');
 import Q = require('q');
 import Utils = require('./Utils');

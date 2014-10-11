@@ -69,7 +69,7 @@ var Validation;
 
     var Error = (function () {
         function Error() {
-            this.HasError = true;
+            this.HasError = false;
             this.ErrorMessage = "";
         }
         return Error;
@@ -109,6 +109,7 @@ var Validation;
     var ValidationResult = (function () {
         function ValidationResult(Name) {
             this.Name = Name;
+            this.ErrorsChanged = new Utils.Signal();
         }
         Object.defineProperty(ValidationResult.prototype, "Children", {
             get: function () {
@@ -123,6 +124,11 @@ var Validation;
         };
         ValidationResult.prototype.Remove = function (index) {
             throw ("Cannot remove ValidationResult from leaf node.");
+        };
+
+        ValidationResult.prototype.DispatchErrorsChanged = function () {
+            if (this.ErrorsChanged !== undefined)
+                this.ErrorsChanged.dispatch(this);
         };
 
         Object.defineProperty(ValidationResult.prototype, "HasErrorsDirty", {
@@ -163,6 +169,7 @@ var Validation;
         function CompositeValidationResult(Name) {
             this.Name = Name;
             this.Children = [];
+            this.ErrorsChanged = new Utils.Signal();
         }
         CompositeValidationResult.prototype.AddFirst = function (error) {
             this.Children.unshift(error);
@@ -454,6 +461,9 @@ var Validation;
             get: function () {
                 return this.ValidationResultVisitor.ValidationResult;
             },
+            set: function (value) {
+                this.ValidationResultVisitor.ValidationResult = value;
+            },
             enumerable: true,
             configurable: true
         });
@@ -477,6 +487,15 @@ var Validation;
 
         AbstractValidationRule.prototype.SetOptional = function (fce) {
             this.ValidationResult.Optional = fce;
+            _.each(this.Rules, function (value, key) {
+                value.Optional = fce;
+            });
+            _.each(this.Validators, function (value, key) {
+                value.Optional = fce;
+            });
+            _.each(this.Children, function (value, key) {
+                value.SetOptional(fce);
+            });
         };
 
         AbstractValidationRule.prototype.createRuleFor = function (prop) {
@@ -834,6 +853,8 @@ var Validation;
             var lastPriority = 0;
             var shortCircuited = false;
 
+            var original = this.HasErrors;
+
             for (var index in this.ValidationFailures) {
                 var validation = this.ValidationFailures[index];
                 if (validation.IsAsync)
@@ -860,6 +881,8 @@ var Validation;
                     throw e;
                 }
             }
+            if (original !== this.HasErrors)
+                this.DispatchErrorsChanged();
             return _.filter(this.ValidationFailures, function (item) {
                 return !item.IsAsync;
             });
@@ -872,6 +895,7 @@ var Validation;
         PropertyValidationRule.prototype.ValidateAsyncEx = function (value) {
             var deferred = Q.defer();
             var promises = [];
+            var original = this.HasErrors;
             var setResultFce = function (result) {
                 var hasError = !result;
 
@@ -900,6 +924,8 @@ var Validation;
 
             var self = this;
             Q.all(promises).then(function (result) {
+                if (original !== self.HasErrors)
+                    self.DispatchErrorsChanged();
                 deferred.resolve(_.filter(self.ValidationFailures, function (item) {
                     return item.IsAsync;
                 }));
@@ -921,8 +947,11 @@ var Validation;
             this.ValidationFailures[this.Name] = new ValidationFailure(this.Error, false);
         }
         Validator.prototype.Validate = function (context) {
+            var original = this.Error.HasError;
             if (this.ValidateFce !== undefined)
                 this.ValidateFce.bind(context)(this.Error);
+            if (original !== this.Error.HasError)
+                this.DispatchErrorsChanged();
             return this.ValidationFailures[this.Name];
         };
 
@@ -932,8 +961,11 @@ var Validation;
             if (this.AsyncValidationFce === undefined) {
                 deferred.resolve(this.ValidationFailures[this.Name]);
             } else {
+                var original = this.Error.HasError;
                 var self = this;
                 this.AsyncValidationFce.bind(context)(this.Error).then(function () {
+                    if (original !== self.Error.HasError)
+                        self.DispatchErrorsChanged();
                     deferred.resolve(self.ValidationFailures[self.Name]);
                 });
             }

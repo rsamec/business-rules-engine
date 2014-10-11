@@ -1,6 +1,6 @@
 {
   "name": "business-rules-engine",
-  "version": "1.1.1",
+  "version": "1.2.1",
   "description": "business rules engine",
   "main": "src/validation",
   "scripts": {
@@ -24,9 +24,7 @@
     "Q": "latest",
     "axios": "^0.3.1",
     "hashmap": "^1.1.0",
-    "jasmine": "^2.0.1",
     "moment": "^2.7.0",
-    "observe-js": "^0.1.0",
     "underscore": "latest",
     "underscore.string": "^2.3.3"
   },

@@ -1,6 +1,6 @@
 {
   "name": "business-rules-engine",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "business rules engine",
   "main": "src/validation",
   "scripts": {
@@ -21,11 +21,11 @@
     "url": "https://github.com/rsamec/business-rules-engine/issues"
   },
   "dependencies": {
-    "Q": "latest",
+    "Q": "1.0.1",
     "axios": "^0.3.1",
     "hashmap": "^1.1.0",
     "moment": "^2.7.0",
-    "underscore": "latest",
+    "underscore": "1.0.6",
     "underscore.string": "^2.3.3"
   },
   "devDependencies": {

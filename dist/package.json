@@ -1,6 +1,6 @@
 {
   "name": "business-rules-engine",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "business rules engine",
   "main": "./commonjs/Validation",
   "repository": {
@@ -18,10 +18,9 @@
     "url": "https://github.com/rsamec/business-rules-engine/issues"
   },
   "dependencies": {
-    "Q": "latest",
+    "Q": "1.0.1",
     "hashmap": "^1.1.0",
-    "underscore": "latest",
-    "observe-js": "^0.1.0"
+    "underscore": "^1.0.7"
   },
   "devDependencies": {
     "expect.js": "~0.2.0",

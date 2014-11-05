@@ -325,12 +325,18 @@ describe('JQueryValidationRuleFactory', function () {
     // define data structure + validation rules meta data
     var metaData = {
         FirstName: {
-            rules: {required: true, maxlength: 15}},
+            rules: {required: true, maxlength: 15},
+            label:"Email"
+        },
         LastName: {
             rules: {required: true, maxlength: 15}},
+        NickName:{
+            label:'Nick name'
+        },
         Contacts: [
             {
                 Email: {
+                    label:"Email",
                     rules: {
                         required: true,
                         maxlength: 100,

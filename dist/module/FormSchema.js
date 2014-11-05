@@ -11,6 +11,10 @@ var FormSchema;
         function JsonSchemaRuleFactory(jsonSchema) {
             this.jsonSchema = jsonSchema;
         }
+        JsonSchemaRuleFactory.prototype.CreateAbstractValidator = function () {
+            return this.ParseAbstractRule(this.jsonSchema);
+        };
+
         JsonSchemaRuleFactory.prototype.CreateRule = function (name) {
             return this.ParseAbstractRule(this.jsonSchema).CreateRule(name);
         };
@@ -122,6 +126,10 @@ var FormSchema;
         function JQueryValidationRuleFactory(metaData) {
             this.metaData = metaData;
         }
+        JQueryValidationRuleFactory.prototype.CreateAbstractValidator = function () {
+            return this.ParseAbstractRule(this.metaData);
+        };
+
         JQueryValidationRuleFactory.prototype.CreateRule = function (name) {
             return this.ParseAbstractRule(this.metaData).CreateRule(name);
         };
@@ -144,8 +152,10 @@ var FormSchema;
                     _.each(this.ParseValidationAttribute(rules), function (validator) {
                         rule.RuleFor(key, validator);
                     });
-                } else {
+                } else if (_.isObject(item)) {
                     rule.ValidatorFor(key, this.ParseAbstractRule(item));
+                } else {
+                    continue;
                 }
             }
             return rule;

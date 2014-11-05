@@ -27,10 +27,15 @@ module FormSchema {
      */
     export interface IValidationRuleFactory{
         /**
-         * Create an abstract validation rule
+         * Create an validation rule
          * @param name - the name of rule
          */
-        CreateRule(name:string);
+        CreateRule(name:string):Validation.IAbstractValidationRule<any>;
+
+        /**
+         * Create an abstract validator.
+         */
+        CreateAbstractValidator():Validation.IAbstractValidator<any>;
     }
 
     /**
@@ -44,6 +49,14 @@ module FormSchema {
          * @param jsonSchema JSON schema for business rules.
          */
         constructor(private jsonSchema:any){
+        }
+
+        /**
+         * Return abstract validation rule by traversing  JSON schema.
+         * @returns {IAbstractValidator<any>} return validation rule
+         */
+        public CreateAbstractValidator():Validation.IAbstractValidator<any>{
+            return this.ParseAbstractRule(this.jsonSchema);
         }
 
         /**
@@ -207,9 +220,17 @@ module FormSchema {
         }
 
         /**
+         * Return abstract validation rule by traversing raw JSON data annotated by validation rules.
+         * @returns {IAbstractValidator<any>} return validation rule
+         */
+        public CreateAbstractValidator():Validation.IAbstractValidator<any>{
+            return this.ParseAbstractRule(this.metaData);
+        }
+
+        /**
          * Return an concrete validation rule by traversing raw JSON data annotated by validation rules.
          * @param name validation rule name
-         * @returns {IAbstractValidationRule<any>} return validation rule
+         * @returns {IValidationRule<any>} return validation rule
          */
         public CreateRule(name:string):Validation.IAbstractValidationRule<any>{
             return this.ParseAbstractRule(this.metaData).CreateRule(name);
@@ -237,8 +258,12 @@ module FormSchema {
                 else if (rules !== undefined) {
                     _.each(this.ParseValidationAttribute(rules),function(validator){ rule.RuleFor(key,validator)})
                 }
-                else {
+                else if (_.isObject(item)) {
                     rule.ValidatorFor(key, this.ParseAbstractRule(item));
+                }
+                else {
+                    //ignore
+                    continue;
                 }
             }
             return rule;
@@ -374,6 +399,9 @@ module FormSchema {
            return validators;
        }
     }
+
+
+
     /**
      * It represents utility for JSON schema form manipulation.
      */

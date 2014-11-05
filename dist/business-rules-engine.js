@@ -1,4 +1,4 @@
-/*! business-rules-engine, v.1.2.1 11-10-2014 */
+/*! business-rules-engine, v.1.2.3 05-11-2014 */
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -1633,6 +1633,10 @@ var FormSchema;
         function JsonSchemaRuleFactory(jsonSchema) {
             this.jsonSchema = jsonSchema;
         }
+        JsonSchemaRuleFactory.prototype.CreateAbstractValidator = function () {
+            return this.ParseAbstractRule(this.jsonSchema);
+        };
+
         JsonSchemaRuleFactory.prototype.CreateRule = function (name) {
             return this.ParseAbstractRule(this.jsonSchema).CreateRule(name);
         };
@@ -1744,6 +1748,10 @@ var FormSchema;
         function JQueryValidationRuleFactory(metaData) {
             this.metaData = metaData;
         }
+        JQueryValidationRuleFactory.prototype.CreateAbstractValidator = function () {
+            return this.ParseAbstractRule(this.metaData);
+        };
+
         JQueryValidationRuleFactory.prototype.CreateRule = function (name) {
             return this.ParseAbstractRule(this.metaData).CreateRule(name);
         };
@@ -1766,8 +1774,10 @@ var FormSchema;
                     _.each(this.ParseValidationAttribute(rules), function (validator) {
                         rule.RuleFor(key, validator);
                     });
-                } else {
+                } else if (_.isObject(item)) {
                     rule.ValidatorFor(key, this.ParseAbstractRule(item));
+                } else {
+                    continue;
                 }
             }
             return rule;

@@ -278,7 +278,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-mocha-cli');
   grunt.loadNpmTasks('grunt-ngdocs');
   grunt.loadNpmTasks('grunt-typedoc');
-  grunt.loadNpmTasks('grunt-typescript');
+    grunt.loadNpmTasks('grunt-typescript');
   grunt.loadNpmTasks('grunt-contrib-commands');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-concat');

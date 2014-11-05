@@ -117,6 +117,11 @@ There are 3 ways how to define validation rules
         }
     }
 ```
+
+```js
+var rules = new FormSchema.JsonSchemaRuleFactory(json).CreateRule("Main");
+```
+
 ### JSON data annotated with meta data 
 
 ``` js
@@ -156,6 +161,9 @@ There are 3 ways how to define validation rules
     }
 ```
 
+```js
+var rules = new FormSchema.JQueryValidationRuleFactory(json).CreateRule("Main");
+```
 ### Imperative definition - using API
 
 To define business rules for some object, you have to create abstract validator.
@@ -227,8 +235,6 @@ To use business rules and execute them on particular data
 
 ## Additional information
 
-+ [author blog] (http://rsamec.github.io/)
-
 + Business rules engine
     + [Business rules engine - Tutorial] (https://github.com/rsamec/business-rules-engine/wiki)
     + [Business rules engine - API] (http://rsamec.github.io/business-rules-engine/docs/index.html)
@@ -238,12 +244,18 @@ To use business rules and execute them on particular data
     + [Business rules repository - API] (http://rsamec.github.io/business-rules/docs/index.html)
 
 + Examples - UI with rules
+    + [Polymer example]
+        + [demo](http://polymer-formvalidation.rhcloud.com/)
+        + [sources](https://github.com/rsamec/clever-form-demo)
+        + [tutorial] (http://rsamec.github.io/lessons/2014/10/19/the-fastest-way-to-create-clever-application)
     + [NodeJS Example] (https://github.com/rsamec/node-form-app)
     + [AngularJS Example] (https://github.com/rsamec/angular-form-app)
     + [AngularJS Demo - Forms app] (http://nodejs-formvalidation.rhcloud.com/)
        + [Vacation Request form] (http://nodejs-formvalidation.rhcloud.com/#/vacationApproval/new)
        + [Hobbies form] (http://nodejs-formvalidation.rhcloud.com/#/hobbies/new)
-       + [Hobbies form - try it in plunkr] (http://embed.plnkr.co/vbp9aFw7Lc2EyNyhUf5y/preview)    
+       + [Hobbies form - try it in plunkr] (http://embed.plnkr.co/vbp9aFw7Lc2EyNyhUf5y/preview)
+
++ [author blog] (http://rsamec.github.io/)
 
 ## Source code
 
@@ -312,7 +324,7 @@ $ grunt test
 Priority
 
 + Refactor validation API - simplify and better naming
-+ Support for changes notification -> consider to use framework like ObserveJs or similer notification frameworks
++ Support for changes notification -> partially done, but consider to use framework like ObserveJs or similer notification frameworks
 + Refactor implemenation
     +   use depedency injection for managing dependencies among internal components
     +   remove depedencies or make them optional - Q, underscore, moment, axiom
@@ -320,7 +332,6 @@ Priority
 
 Others
 
-+ Polymer example (using web components)
 + Add validation groups to shared validation rules
 + Separate ValidationResult from execution of validation rules
 + Improve documentation + more examples

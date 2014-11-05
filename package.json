@@ -1,6 +1,6 @@
 {
   "name": "business-rules-engine",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "business rules engine",
   "main": "src/validation",
   "scripts": {

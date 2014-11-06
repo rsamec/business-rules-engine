@@ -244,16 +244,18 @@ To use business rules and execute them on particular data
     + [Business rules repository - API] (http://rsamec.github.io/business-rules/docs/index.html)
 
 + Examples - UI with rules
-    + [Polymer example]
+    + Polymer example
         + [demo](http://polymer-formvalidation.rhcloud.com/)
         + [sources](https://github.com/rsamec/clever-form-demo)
         + [tutorial] (http://rsamec.github.io/lessons/2014/10/19/the-fastest-way-to-create-clever-application)
-    + [NodeJS Example] (https://github.com/rsamec/node-form-app)
-    + [AngularJS Example] (https://github.com/rsamec/angular-form-app)
-    + [AngularJS Demo - Forms app] (http://nodejs-formvalidation.rhcloud.com/)
-       + [Vacation Request form] (http://nodejs-formvalidation.rhcloud.com/#/vacationApproval/new)
-       + [Hobbies form] (http://nodejs-formvalidation.rhcloud.com/#/hobbies/new)
-       + [Hobbies form - try it in plunkr] (http://embed.plnkr.co/vbp9aFw7Lc2EyNyhUf5y/preview)
+    + NodeJS Example
+        + [sources] (https://github.com/rsamec/node-form-app)
+    + AngularJS Example
+        + [sources] (https://github.com/rsamec/angular-form-app)
+        + [demo -forms app] (http://nodejs-formvalidation.rhcloud.com/)
+        + [demo - vacation Request form] (http://nodejs-formvalidation.rhcloud.com/#/vacationApproval/new)
+        + [demo - hobbies form] (http://nodejs-formvalidation.rhcloud.com/#/hobbies/new)
+        + [demo - hobbies form - try it in plunkr] (http://embed.plnkr.co/vbp9aFw7Lc2EyNyhUf5y/preview)
 
 + [author blog] (http://rsamec.github.io/)
 

@@ -291,7 +291,7 @@ module Validation {
     /**
      * It represents concrete validation rule for type of <T>.
      */
-    export interface IAbstractValidationRule<T> {
+    export interface IAbstractValidationRule<T>  extends Utils.IComponent  {
 
         /**
          * It executes sync validation rules using a validation context and returns a collection of Validation Failures.
@@ -940,6 +940,27 @@ module Validation {
         }
         static id:number =0;
 
+        public add(child:IAbstractValidationRule<T>):boolean
+        {
+            throw "not implemented";
+            //return false;
+        }
+        public remove(child:IAbstractValidationRule<T>):boolean
+        {
+            throw "not implemented";
+            //return false;
+        }
+        public getChildren():IAbstractValidationRule<T>[]{
+            return _.map(this.Children, function (item) {
+                return item;
+            });
+        }
+        public getName():string{
+            return this.Name;
+        }
+        public isItem():boolean{
+            return this.getChildren().length === 0;
+        }
 
     }
 

@@ -32,6 +32,8 @@ var Utils;
     })();
     Utils.NumberFce = NumberFce;
 
+    
+
     var Signal = (function () {
         function Signal() {
             this.listeners = [];
@@ -84,5 +86,28 @@ var Utils;
         return Signal;
     })();
     Utils.Signal = Signal;
+
+    
+
+    var CompositeDotObject = (function () {
+        function CompositeDotObject() {
+        }
+        CompositeDotObject.Transform = function (component, obj) {
+            if (obj === undefined)
+                obj = {};
+            if (component.isItem()) {
+                obj[component.getName()] = component;
+            } else {
+                var children = component.getChildren();
+                var parent = obj[component.getName()] = component;
+                for (var comp in children) {
+                    CompositeDotObject.Transform(children[comp], parent);
+                }
+            }
+            return obj;
+        };
+        return CompositeDotObject;
+    })();
+    Utils.CompositeDotObject = CompositeDotObject;
 })(Utils || (Utils = {}));
 

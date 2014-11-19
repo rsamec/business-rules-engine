@@ -580,6 +580,24 @@ var Validation;
                 }, this);
             }
         };
+
+        AbstractValidationRule.prototype.add = function (child) {
+            throw "not implemented";
+        };
+        AbstractValidationRule.prototype.remove = function (child) {
+            throw "not implemented";
+        };
+        AbstractValidationRule.prototype.getChildren = function () {
+            return _.map(this.Children, function (item) {
+                return item;
+            });
+        };
+        AbstractValidationRule.prototype.getName = function () {
+            return this.Name;
+        };
+        AbstractValidationRule.prototype.isItem = function () {
+            return this.getChildren().length === 0;
+        };
         AbstractValidationRule.id = 0;
         return AbstractValidationRule;
     })();

@@ -1,4 +1,4 @@
-/*! business-rules-engine, v.1.2.3 05-11-2014 */
+/*! business-rules-engine, v.1.2.3 19-11-2014 */
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -580,6 +580,24 @@ var Validation;
                         validator.Validate(context);
                 }, this);
             }
+        };
+
+        AbstractValidationRule.prototype.add = function (child) {
+            throw "not implemented";
+        };
+        AbstractValidationRule.prototype.remove = function (child) {
+            throw "not implemented";
+        };
+        AbstractValidationRule.prototype.getChildren = function () {
+            return _.map(this.Children, function (item) {
+                return item;
+            });
+        };
+        AbstractValidationRule.prototype.getName = function () {
+            return this.Name;
+        };
+        AbstractValidationRule.prototype.isItem = function () {
+            return this.getChildren().length === 0;
         };
         AbstractValidationRule.id = 0;
         return AbstractValidationRule;
@@ -1565,6 +1583,8 @@ var Utils;
     })();
     Utils.NumberFce = NumberFce;
 
+    
+
     var Signal = (function () {
         function Signal() {
             this.listeners = [];
@@ -1617,6 +1637,29 @@ var Utils;
         return Signal;
     })();
     Utils.Signal = Signal;
+
+    
+
+    var CompositeDotObject = (function () {
+        function CompositeDotObject() {
+        }
+        CompositeDotObject.Transform = function (component, obj) {
+            if (obj === undefined)
+                obj = {};
+            if (component.isItem()) {
+                obj[component.getName()] = component;
+            } else {
+                var children = component.getChildren();
+                var parent = obj[component.getName()] = component;
+                for (var comp in children) {
+                    CompositeDotObject.Transform(children[comp], parent);
+                }
+            }
+            return obj;
+        };
+        return CompositeDotObject;
+    })();
+    Utils.CompositeDotObject = CompositeDotObject;
 })(Utils || (Utils = {}));
 
 

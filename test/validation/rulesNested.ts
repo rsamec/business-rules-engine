@@ -5,6 +5,7 @@
 
 var Validation = require('../../src/validation/Validation.js');
 var Validators = require('../../src/validation/BasicValidators.js');
+var Utils = require('../../src/validation/Utils.js');
 var expect = require('expect.js');
 var _:UnderscoreStatic = require('underscore');
 import Q = require('q');
@@ -244,6 +245,61 @@ describe('nested validation rules', function () {
                 done();
 
             }).done(null, done);
+        });
+    });
+
+    describe("Dot syntax", function () {
+        it('fill correct data - no errors', function (done) {
+
+            //when
+
+            //excercise
+            var result = this.MainValidator.Validate(this.Data);
+            var promiseResult = this.MainValidator.ValidateAsync(this.Data);
+
+            var compDotObject = Utils.CompositeDotObject.Transform(this.MainValidator);
+
+            //verify
+            promiseResult.then(function (response) {
+
+                //verify
+                expect(response.HasErrors).to.equal(false);
+                expect(compDotObject.Main.Person1.Contact.Rules["Email"].HasErrors).to.equal(false);
+                expect(compDotObject.Main.Person1.Contact.Mobile.Rules["CountryCode"].HasErrors).to.equal(false);
+
+                done();
+
+            }).done(null, done);
+        });
+
+        it('fill incorrect data - some errors', function (done) {
+
+            //when
+            //nested property error
+            this.Data.Person1.Contact.Email = "";
+
+            //async nested property error
+            this.Data.Person1.Contact.Mobile.CountryCode = "BLA";
+
+
+            //excercise
+            var result = this.MainValidator.Validate(this.Data);
+            var promiseResult = this.MainValidator.ValidateAsync(this.Data);
+
+            var compDotObject = Utils.CompositeDotObject.Transform(this.MainValidator);
+
+            //verify
+            promiseResult.then(function (response) {
+
+                //verify
+                expect(response.HasErrors).to.equal(true);
+                expect(compDotObject.Main.Person1.Contact.Rules["Email"].HasErrors).to.equal(true);
+                expect(compDotObject.Main.Person1.Contact.Mobile.Rules["CountryCode"].HasErrors).to.equal(true);
+
+                done();
+
+            }).done(null, done);
+
         });
     });
 });

@@ -19,7 +19,8 @@ It can be easily reused by different types of applications, libraries.
 +   It supports asynchronous validation rules (uses promises).
 +   It supports shared validation rules.
 +   It supports assigning validation rules to collection-based structures - arrays and lists.
-+   (NEW) It supports notification of errors changed via ErrorChanged dispatch event.
++   It supports notification of errors changed via ErrorChanged dispatch event.
++   It supports dot syntax to access to nested rules.
 +   It supports localization of error messages with TranslateArgs.
 +   It deploys as AMD, CommonJS or plain script module pattern.
 +   It offers basic build-in constrains validators. See list [basic build-in constraints](http://rsamec.github.io/business-rules-engine/docs/modules/_validation_basicvalidators_.html)

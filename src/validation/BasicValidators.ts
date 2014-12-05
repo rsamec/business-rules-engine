@@ -401,7 +401,7 @@ module Validators {
 
         isAcceptable(s:any) {
             if (!_.isNumber(s)) s = parseFloat(s);
-            return s.length >= this.Min && s.length <= this.Max;
+            return s >= this.Min && s <= this.Max;
         }
 
         /**

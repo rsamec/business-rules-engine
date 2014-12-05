@@ -326,7 +326,7 @@ define(["require", "exports", "q", "underscore"], function(require, exports, Q, 
             RangeValidator.prototype.isAcceptable = function (s) {
                 if (!_.isNumber(s))
                     s = parseFloat(s);
-                return s.length >= this.Min && s.length <= this.Max;
+                return s >= this.Min && s <= this.Max;
             };
 
             Object.defineProperty(RangeValidator.prototype, "Min", {

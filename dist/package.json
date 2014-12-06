@@ -33,6 +33,7 @@
     "grunt-docular": "^0.1.2",
     "grunt-mocha-cli": "~1.1.0",
     "grunt-ngdocs": "^0.2.2",
-    "grunt-typedoc": "^0.1.1"
+    "grunt-typedoc": "^0.1.1",
+    "sinon": "^1.12.1"
   }
 }

@@ -24,7 +24,7 @@
     "Q": "1.0.1",
     "axios": "^0.3.1",
     "hashmap": "^1.1.0",
-    "moment": "^2.7.0",
+    "moment": "2.5.0",
     "underscore": "^1.0.6",
     "underscore.string": "^2.3.3"
   },
@@ -45,6 +45,7 @@
     "grunt-run": "^0.2.3",
     "grunt-typedoc": "^0.1.1",
     "grunt-typescript": "^0.3.8",
+    "sinon": "^1.12.1",
     "typedoc": "^0.1.1"
   }
 }

@@ -1,12 +1,12 @@
 ///<reference path='../../typings/underscore/underscore.d.ts'/>
 ///<reference path='../../typings/q/Q.d.ts'/>
 ///<reference path='../../typings/node/node.d.ts'/>
-///<reference path='../../typings/business-rules-engine/business-rules-engine.d.ts'/>
+///<reference path='../../typings/business-rules-engine/Validation.d.ts'/>
 
 
 import Q = require("q");
 import _ = require("underscore");
-
+import Validation = require("./Validation");
 
 /**
  * Basic validation rules that enables to validate an value against common constraints.

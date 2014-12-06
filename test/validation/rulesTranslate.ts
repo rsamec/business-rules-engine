@@ -1,7 +1,7 @@
 ///<reference path='../../typings/mocha/mocha.d.ts'/>
 ///<reference path='../../typings/node/node.d.ts'/>
 ///<reference path='../../typings/underscore/underscore.d.ts'/>
-///<reference path='../../typings/q/q.d.ts'/>
+///<reference path='../../typings/Q/q.d.ts'/>
 
 
 var Validation = require('../../src/validation/Validation.js');

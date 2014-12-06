@@ -143,18 +143,7 @@ module.exports = function (grunt) {
               }
           },
           typings:{
-              src: ['src/validation/Validation.ts','src/validation/Utils.ts','src/validation/FormSchema.ts'],
-              dest: 'typings/<%= pkg.name %>',
-              options: {
-                  basePath: 'src/validation',
-                  module: 'commonjs',
-                  target: 'es5',
-                  declaration: true,
-                  comments:false
-              }
-          },
-          otherTypings: {
-              src: ['src/validation/BasicValidators.ts'],
+              src: ['src/validation/*.ts'],
               dest: 'typings/<%= pkg.name %>',
               options: {
                   basePath: 'src/validation',
@@ -243,29 +232,22 @@ module.exports = function (grunt) {
                   banner: '// Type definitions for <%= pkg.name %> - v<%= pkg.version %>\n' +
                       '// Project: https://github.com/rsamec/form\n' +
                       '// Definitions by: Roman Samec <https://github.com/rsamec>\n' +
-                      '// Definitions: https://github.com/borisyankov/DefinitelyTyped\n\n',
+                      '// Definitions: https://github.com/borisyankov/DefinitelyTyped\n\n' +
+                        '\n' +
+                        '/// <reference path="../../typings/q/Q.d.ts" />\n' +
+                        '/// <reference path="../../typings/underscore/underscore.d.ts" />\n' +
+                        '/// <reference path="../../typings/hashmap/hashmap.d.ts" />\n' +
+                        '/// <reference path="../../typings/node/node.d.ts" />\n',
+                  footer:'declare module "business-rule-engine" {export = Validation;}',
                   process: function(src, filepath) {
                       return '// Source: ' + filepath + '\n' +
-                          src.replace(/[ \t]*export = (\w*);?/g, 'declare module "business-rule-engine" {export = $1;}');
+                          src.replace(/.*<reference path=.*/g, '')//remove references
+                              .replace(/export.*/g, '')//remove exports
+                              .replace(/import.*/g, '');//  + //remove imports
                   }
               },
               files: {
-                  'typings/<%= pkg.name %>/<%= pkg.name %>.d.ts': ['typings/<%= pkg.name %>/Validation.d.ts']
-              }
-          },
-          otherTypings:{
-
-              options:{
-                  process: function(src, filepath) {
-                      return '// Source: ' + filepath + '\n' +
-                          src.replace(/[ \t]*export = (\w*);?/g, 'declare module "node-$1" {export = $1;}');
-                  }
-              },
-              files: {
-                  'typings/<%= pkg.name %>/BasicValidators.d.ts': ['typings/<%= pkg.name %>/BasicValidators.d.ts'],
-                  'typings/<%= pkg.name %>/Utils.d.ts': ['typings/<%= pkg.name %>/Utils.d.ts'],
-                  'typings/<%= pkg.name %>/FormSchema.d.ts': ['typings/<%= pkg.name %>/FormSchema.d.ts']
-
+                  'typings/<%= pkg.name %>/<%= pkg.name %>.d.ts': ['typings/<%= pkg.name %>/Utils.d.ts','typings/<%= pkg.name %>/Validation.d.ts','typings/<%= pkg.name %>/BasicValidators.d.ts','typings/<%= pkg.name %>/FormSchema.d.ts']
               }
           }
       }
@@ -286,8 +268,8 @@ module.exports = function (grunt) {
 
 
   grunt.registerTask('test', ['typescript:src','typescript:test', 'mochacli', 'watch']);
-  grunt.registerTask('ci', ['complexity', 'jshint', 'mochacli']);
+  //grunt.registerTask('ci', ['complexity', 'jshint', 'mochacli']);
   grunt.registerTask('dist', ['typescript:commonjs','typescript:amd','typescript:customValidatorsCommonjs','typescript:customValidatorsAmd','typescript:localCommonjs','typescript:localAmd','copy','concat:module','uglify:dist']);
-  grunt.registerTask('typings',['typescript:typings','concat:typings','typescript:otherTypings','concat:otherTypings']);
+  grunt.registerTask('typings',['typescript:typings','concat:typings']);
   grunt.registerTask('document', ['typedoc']);
 };

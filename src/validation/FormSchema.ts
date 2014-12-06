@@ -1,7 +1,7 @@
 ///<reference path='../../typings/q/Q.d.ts'/>
 ///<reference path='../../typings/underscore/underscore.d.ts'/>
 ///<reference path='../../typings/node/node.d.ts'/>
-///<reference path='../../typings/business-rules-engine/business-rules-engine.d.ts'/>
+///<reference path='../../typings/business-rules-engine/Validation.d.ts'/>
 
 import _ = require('underscore');
 import Q = require('q');

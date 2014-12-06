@@ -1,4 +1,4 @@
-/*! business-rules-engine, v.1.2.5 05-12-2014 */
+/*! business-rules-engine, v.1.2.5 06-12-2014 */
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }

@@ -161,6 +161,24 @@ var Validation;
             enumerable: true,
             configurable: true
         });
+
+        ValidationResult.prototype.add = function (child) {
+            this.add(child);
+            return true;
+        };
+        ValidationResult.prototype.remove = function (child) {
+            this.remove(child);
+            return true;
+        };
+        ValidationResult.prototype.getChildren = function () {
+            return this.Children;
+        };
+        ValidationResult.prototype.getName = function () {
+            return this.Name;
+        };
+        ValidationResult.prototype.isItem = function () {
+            return true;
+        };
         return ValidationResult;
     })();
     _Validation.ValidationResult = ValidationResult;
@@ -307,6 +325,24 @@ var Validation;
             for (var i = 0, len = node.Children.length; i < len; i++) {
                 this.traverse(node.Children[i], indent);
             }
+        };
+
+        CompositeValidationResult.prototype.add = function (child) {
+            this.add(child);
+            return true;
+        };
+        CompositeValidationResult.prototype.remove = function (child) {
+            this.remove(child);
+            return true;
+        };
+        CompositeValidationResult.prototype.getChildren = function () {
+            return this.Children;
+        };
+        CompositeValidationResult.prototype.getName = function () {
+            return this.Name;
+        };
+        CompositeValidationResult.prototype.isItem = function () {
+            return false;
         };
         return CompositeValidationResult;
     })();

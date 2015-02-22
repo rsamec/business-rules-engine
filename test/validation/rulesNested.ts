@@ -257,13 +257,22 @@ describe('nested validation rules', function () {
             var result = this.MainValidator.Validate(this.Data);
             var promiseResult = this.MainValidator.ValidateAsync(this.Data);
 
+
+
             var compDotObject = Utils.CompositeDotObject.Transform(this.MainValidator);
 
             //verify
             promiseResult.then(function (response) {
 
+                var dotResult = Utils.CompositeDotObject.Transform(result);
+
                 //verify
                 expect(response.HasErrors).to.equal(false);
+
+                expect(dotResult.Main.Person1.Contact.Email.HasErrors).to.equal(false);
+                expect(dotResult.Main.Person1.Contact.Mobile.CountryCode.HasErrors).to.equal(false);
+
+
                 expect(compDotObject.Main.Person1.Contact.Rules["Email"].HasErrors).to.equal(false);
                 expect(compDotObject.Main.Person1.Contact.Mobile.Rules["CountryCode"].HasErrors).to.equal(false);
 
@@ -290,9 +299,16 @@ describe('nested validation rules', function () {
 
             //verify
             promiseResult.then(function (response) {
+                var dotResult = Utils.CompositeDotObject.Transform(result);
 
                 //verify
                 expect(response.HasErrors).to.equal(true);
+
+
+                expect(dotResult.Main.Person1.Contact.Email.HasErrors).to.equal(true);
+                expect(dotResult.Main.Person1.Contact.Mobile.CountryCode.HasErrors).to.equal(true);
+
+
                 expect(compDotObject.Main.Person1.Contact.Rules["Email"].HasErrors).to.equal(true);
                 expect(compDotObject.Main.Person1.Contact.Mobile.Rules["CountryCode"].HasErrors).to.equal(true);
 

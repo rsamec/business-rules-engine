@@ -127,7 +127,7 @@ module Validation {
      * This class provides unit of information about error.
      * Implements composite design pattern to enable nesting of error information.
      */
-    export interface IValidationResult {
+    export interface IValidationResult extends Utils.IComponent {
 
         /**
          * The name of error collection.
@@ -520,6 +520,13 @@ module Validation {
         public get ErrorMessage(): string {
             return "";
         }
+
+        add(child:Utils.IComponent):boolean {this.add(child); return true; }
+        remove(child:Utils.IComponent):boolean {this.remove(child); return true;}
+        getChildren():Utils.IComponent[] {return this.Children;}
+        getName():string {return this.Name}
+        isItem():boolean {return true;}
+
     }
 
     /**
@@ -654,6 +661,12 @@ module Validation {
             }
 
         }
+
+        add(child:Utils.IComponent):boolean {this.add(child); return true; }
+        remove(child:Utils.IComponent):boolean {this.remove(child); return true;}
+        getChildren():Utils.IComponent[] {return this.Children;}
+        getName():string {return this.Name}
+        isItem():boolean {return false;}
     }
 
     /**

@@ -339,4 +339,6 @@ Others
 + Separate ValidationResult from execution of validation rules
 + Improve documentation + more examples
 
+## License
 
+The MIT License (MIT)
